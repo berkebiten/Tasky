@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Button} from 'react-native';
 import {ControlPanelView, HeaderView} from '../../components/views';
 import {SafeAreaView} from 'react-navigation';
-import {RootViewHelper, ServiceHelper} from '../../util/helpers';
+import {NavigationHelper, RootViewHelper, ServiceHelper} from '../../util/helpers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -12,6 +12,7 @@ import styles from './styles';
 import PersonalDescriptionItem from '../../components/items/PersonalDescriptionItem';
 import UserDetailItem from '../../components/items/UserDetailItem';
 import FooterTabView from '../../components/views/FooterTabView';
+import {SCREEN_ENUMS} from '../../util/constants/Enums'
 
 const drawerStyles = {
   drawer: {
@@ -60,7 +61,7 @@ export default class Main extends React.Component {
     const modules = [
       {
         iconName: 'user',
-        onPress: () => console.warn('Profile'),
+        onPress: () =>  NavigationHelper.navigate(SCREEN_ENUMS.PROFILE),
         menuTitle: 'Profile',
       },
       {
