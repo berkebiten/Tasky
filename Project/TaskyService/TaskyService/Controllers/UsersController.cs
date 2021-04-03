@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskyService.Models;
+using TaskyService.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskyService.Controllers
 {
@@ -20,8 +22,31 @@ namespace TaskyService.Controllers
             _context = context;
         }
 
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] Login model)
+        {
+            var user = _context.User.ToList().Where(x => x.Email == model.Email).FirstOrDefault();
+
+            //List<int> filteredList = myList.Where(x => x > 7).ToList();
+            //var user = await _context.User.FindAsync(x.Id);
+
+            if (user == null)
+                return NotFound(new { message = "User or password invalid" });
+
+            var token = TokenService.CreateToken(user);
+            user.Password = "";
+            return new
+            {
+                user = user,
+                token = token
+            };
+        }
+
         // GET: api/Users
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.User.ToListAsync();
@@ -29,7 +54,7 @@ namespace TaskyService.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _context.User.FindAsync(id);
 
@@ -99,7 +124,7 @@ namespace TaskyService.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
             var user = await _context.User.FindAsync(id);
             if (user == null)

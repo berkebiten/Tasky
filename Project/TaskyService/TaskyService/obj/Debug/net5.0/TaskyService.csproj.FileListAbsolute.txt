@@ -133,3 +133,5 @@ C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\obj\De
 C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\obj\Debug\net5.0\ref\TaskyService.dll
 C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\obj\Debug\net5.0\TaskyService.pdb
 C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\obj\Debug\net5.0\TaskyService.genruntimeconfig.cache
+C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\berbino\Documents\GitHub\Tasky\Project\TaskyService\TaskyService\obj\Debug\net5.0\TaskyService.csprojAssemblyReference.cache
