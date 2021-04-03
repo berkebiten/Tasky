@@ -27,7 +27,7 @@ namespace TaskyService.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody] Login model)
         {
-            var user = _context.User.ToList().Where(x => x.Email == model.Email).FirstOrDefault();
+            var user = _context.User.ToList().Where(x => x.Email == model.Email && x.Password == model.Password).FirstOrDefault();
 
             //List<int> filteredList = myList.Where(x => x > 7).ToList();
             //var user = await _context.User.FindAsync(x.Id);
