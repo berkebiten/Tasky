@@ -61,7 +61,7 @@ export default class GetStarted extends Component {
               style={styles.buttonlogin}
               onPress={() => NavigationHelper.navigate(SCREEN_ENUMS.SIGN_IN)}>
               <Text autoCapitalize="words" style={styles.loginbutton}>
-                Sign In
+                Login
               </Text>
             </TouchableHighlight>
             <TouchableHighlight
@@ -69,7 +69,7 @@ export default class GetStarted extends Component {
               style={styles.buttonsignup}
               onPress={() => NavigationHelper.navigate(SCREEN_ENUMS.SIGN_UP)}>
               <Text autoCapitalize="words" style={styles.signupbutton}>
-                Sign Up
+                Register
               </Text>
             </TouchableHighlight>
           </Form>

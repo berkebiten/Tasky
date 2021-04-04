@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   body: {
     flex: 2,
     alignItems: "center",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
 
   right: {
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: Metrics.WIDTH * 0.6,
     height: Metrics.WIDTH * 0.5,
-    backgroundColor: "transparent",
     resizeMode: "contain",
   },
   container: {
@@ -52,19 +51,18 @@ const styles = StyleSheet.create({
   buttondialogsignup: {
     backgroundColor: Colors.loginGreen,
     alignSelf: "center",
-    marginTop: Metrics.HEIGHT * 0.08,
+    marginTop: 20,
     borderRadius: 40,
     width: Metrics.WIDTH * 0.8,
     height: Metrics.HEIGHT * 0.07,
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
-  view2: {
-    marginTop: Metrics.HEIGHT * 0.01,
+  formContainer: {
+    marginTop: 20,
     borderRadius: 5,
     backgroundColor: "white",
-    height: Metrics.HEIGHT * 0.32,
-    width: Metrics.WIDTH * 0.8
+    width: Metrics.WIDTH * 0.8,
   },
 
   itememail: {
@@ -73,19 +71,12 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
 
-  inputemail: {
+  input: {
     marginLeft: -5,
     fontFamily: Fonts.type.SFUIDisplayRegular,
-    color: Colors.shadows
   },
 
-  inputpassword: {
-    marginLeft: -5,
-    fontFamily: Fonts.type.SFUIDisplayRegular,
-    color: Colors.shadows,
-    borderColor: "transparent"
-  },
-  buttonsignin: {
+  buttonSignUp: {
     alignSelf: "center",
     fontSize: 15,
     fontFamily: Fonts.type.SFUIDisplaySemibold,
@@ -102,10 +93,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: Metrics.WIDTH,
     justifyContent: "center",
-    marginTop: Metrics.HEIGHT * 0.12
+    marginTop: 20
   },
 
-  signInTxtBg: {
+  signUpTxt: {
     paddingLeft: Metrics.WIDTH * 0.01
   }
 });

@@ -8,11 +8,18 @@ import {
   StatusBar,
   Platform,
   TouchableOpacity,
-  BackHandler,
   I18nManager,
 } from 'react-native';
-import {Text, Form, Item, Input, Body, Header, Left, Right} from 'native-base';
-// Screen Styles
+import {
+  Text,
+  Item,
+  Input,
+  Body,
+  Header,
+  Left,
+  Right,
+  Toast,
+} from 'native-base';
 import styles from './styles';
 const {width, height} = Dimensions.get('window');
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,6 +27,7 @@ import {Colors} from '../../res/styles';
 import {NavigationHelper, ServiceHelper} from '../../util/helpers';
 import images from '../../res/styles/images';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
+import {REGISTER_SERVICE} from '../../util/constants/Services';
 
 export default class App extends Component {
   constructor(props) {
@@ -27,17 +35,52 @@ export default class App extends Component {
     this.state = {};
   }
 
-  signUp = () => {
-    let insertObj = {
-      firstname: this.state.fullName,
-      lastname: 'LASTNAME',
-      email: this.state.email,
-      password: this.state.password
+  componentWillUnmount(){
+    this.setState({})
+  }
+
+  signUp = async () => {
+    if (this.state.password !== this.state.confirmPassword) {
+      Toast.show({
+        text: 'Passwords does not match.',
+        type: 'danger',
+        duration: 7000,
+      });
+      return;
     }
-    ServiceHelper.serviceHandler(
-      '/User',
+    let insertObj = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      password: this.state.password,
+      profileImage: null,
+      activationStatus: true,
+      status: true,
+      registrationDate: new Date(),
+      firebaseToken: null,
+    };
+    const responseData = await ServiceHelper.serviceHandler(
+      REGISTER_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(insertObj), 'POST'),
     );
+    if (responseData && responseData.isSuccessful) {
+      Toast.show({
+        text:
+          responseData && responseData.message
+            ? responseData.message
+            : 'Registration is Successful.',
+        type: 'success',
+        duration: 7000,
+      });
+      NavigationHelper.navigate(SCREEN_ENUMS.SIGN_IN)
+    } else {
+      Toast.show({
+        text:
+          responseData && responseData.message ? responseData.message : 'Error',
+        type: 'danger',
+        duration: 7000,
+      });
+    }
   };
 
   render() {
@@ -52,10 +95,6 @@ export default class App extends Component {
         'https://images.unsplash.com/photo-1579389083046-e3df9c2b3325?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80',
     };
 
-    let logo13 = {
-      uri:
-        'http://antiqueruby.aliansoftware.net/Images/signin/ic_logo_mountifysthirteen.png',
-    };
     return (
       <ImageBackground source={pic} style={styles.screenBg}>
         <Header style={styles.header}>
@@ -75,14 +114,25 @@ export default class App extends Component {
         </Header>
         <View style={styles.container}>
           <Image source={images.taskyLogo} style={styles.logostyle} />
-          <View style={styles.view2}>
+          <View style={styles.formContainer}>
             <Item underline style={styles.itememail}>
               <Input
                 placeholderTextColor={Colors.lighttxt}
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
-                placeholder="Full Name"
-                style={styles.inputemail}
-                onChangeText={(text) => this.setState({fullName: text})}
+                placeholder="First Name"
+                style={styles.input}
+                onChangeText={(text) => this.setState({firstName: text})}
+                autoCapitalize="none"
+              />
+            </Item>
+            <Item underline style={styles.itememail}>
+              <Input
+                placeholderTextColor={Colors.lighttxt}
+                textAlign={I18nManager.isRTL ? 'right' : 'left'}
+                placeholder="Last Name"
+                style={styles.input}
+                onChangeText={(text) => this.setState({lastName: text})}
+                autoCapitalize="none"
               />
             </Item>
             <Item underline style={styles.itememail}>
@@ -90,8 +140,10 @@ export default class App extends Component {
                 placeholderTextColor={Colors.lighttxt}
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 placeholder="Email"
-                style={styles.inputemail}
+                style={styles.input}
                 onChangeText={(text) => this.setState({email: text})}
+                autoCapitalize="none"
+                keyboardType="email-address"
               />
             </Item>
             <Item underline style={styles.itememail}>
@@ -100,8 +152,9 @@ export default class App extends Component {
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 secureTextEntry={true}
                 placeholder="Password"
-                style={styles.inputpassword}
+                style={styles.input}
                 onChangeText={(text) => this.setState({password: text})}
+                autoCapitalize="none"
               />
             </Item>
             <Item underline style={styles.itememail}>
@@ -110,8 +163,9 @@ export default class App extends Component {
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 secureTextEntry={true}
                 placeholder="Confirm Password"
-                style={styles.inputpassword}
+                style={styles.input}
                 onChangeText={(text) => this.setState({confirmPassword: text})}
+                autoCapitalize="none"
               />
             </Item>
           </View>
@@ -119,8 +173,8 @@ export default class App extends Component {
             info
             style={styles.buttondialogsignup}
             onPress={() => this.signUp()}>
-            <Text autoCapitalize="words" style={styles.buttonsignin}>
-              Sign Up
+            <Text autoCapitalize="words" style={styles.buttonSignUp}>
+              Register
             </Text>
           </TouchableHighlight>
 
@@ -129,9 +183,9 @@ export default class App extends Component {
               Already have an account?
             </Text>
             <TouchableOpacity
-              style={styles.signInTxtBg}
+              style={styles.signUpTxt}
               onPress={() => NavigationHelper.navigate(SCREEN_ENUMS.SIGN_IN)}>
-              <Text style={styles.buttontext}>Sign In</Text>
+              <Text style={styles.buttontext}>Login</Text>
             </TouchableOpacity>
           </View>
         </View>

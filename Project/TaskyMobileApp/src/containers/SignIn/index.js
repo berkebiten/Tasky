@@ -153,14 +153,14 @@ export default class SignIn extends Component {
               <TouchableOpacity
                 style={styles.buttonSignIn}
                 onPress={() => this.signIn()}>
-                <Text style={styles.textWhite}>Sign In</Text>
+                <Text style={styles.textWhite}>Login</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.createAccount}>
               <Text style={styles.textWhite}>Don&apos;t have an account? </Text>
               <TouchableOpacity
                 onPress={() => NavigationHelper.navigate(SCREEN_ENUMS.SIGN_UP)}>
-                <Text style={styles.textSignUp}>Sign up</Text>
+                <Text style={styles.textSignUp}>Register</Text>
               </TouchableOpacity>
             </View>
           </View>
