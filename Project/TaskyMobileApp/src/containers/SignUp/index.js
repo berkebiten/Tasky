@@ -10,16 +10,7 @@ import {
   TouchableOpacity,
   I18nManager,
 } from 'react-native';
-import {
-  Text,
-  Item,
-  Input,
-  Body,
-  Header,
-  Left,
-  Right,
-  Toast,
-} from 'native-base';
+import {Text, Item, Input, Body, Header, Left, Right, Toast} from 'native-base';
 import styles from './styles';
 const {width, height} = Dimensions.get('window');
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -35,8 +26,8 @@ export default class App extends Component {
     this.state = {};
   }
 
-  componentWillUnmount(){
-    this.setState({})
+  componentWillUnmount() {
+    this.setState({});
   }
 
   signUp = async () => {
@@ -53,11 +44,6 @@ export default class App extends Component {
       lastName: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
-      profileImage: null,
-      activationStatus: true,
-      status: true,
-      registrationDate: new Date(),
-      firebaseToken: null,
     };
     const responseData = await ServiceHelper.serviceHandler(
       REGISTER_SERVICE,
@@ -72,7 +58,7 @@ export default class App extends Component {
         type: 'success',
         duration: 7000,
       });
-      NavigationHelper.navigate(SCREEN_ENUMS.SIGN_IN)
+      NavigationHelper.navigate(SCREEN_ENUMS.SIGN_IN);
     } else {
       Toast.show({
         text:

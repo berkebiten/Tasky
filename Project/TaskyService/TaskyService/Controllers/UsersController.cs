@@ -101,6 +101,9 @@ namespace TaskyService.Controllers
         [Route("Register")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            user.ActivationStatus = false;
+            user.Status = true;
+            user.RegistrationDate = DateTime.Now.Date;
             _context.User.Add(user);
             try
             {
