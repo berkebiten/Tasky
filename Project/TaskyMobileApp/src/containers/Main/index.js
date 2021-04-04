@@ -2,7 +2,11 @@ import React from 'react';
 import {View, Button} from 'react-native';
 import {ControlPanelView, HeaderView} from '../../components/views';
 import {SafeAreaView} from 'react-navigation';
-import {NavigationHelper, RootViewHelper, ServiceHelper} from '../../util/helpers';
+import {
+  NavigationHelper,
+  RootViewHelper,
+  ServiceHelper,
+} from '../../util/helpers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -12,7 +16,8 @@ import styles from './styles';
 import PersonalDescriptionItem from '../../components/items/PersonalDescriptionItem';
 import UserDetailItem from '../../components/items/UserDetailItem';
 import FooterTabView from '../../components/views/FooterTabView';
-import {SCREEN_ENUMS} from '../../util/constants/Enums'
+import {SCREEN_ENUMS} from '../../util/constants/Enums';
+import {loadUser} from '../../util/storage/AsyncStorage';
 
 const drawerStyles = {
   drawer: {
@@ -46,6 +51,15 @@ export default class Main extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.initialize();
+  }
+
+  initialize = async () => {
+    const user = await loadUser();
+    this.setState({userData: JSON.parse(user)});
+  };
+
   tweenHandler(ratio) {
     if (!this.state.tweenHandlerPreset) {
       return {};
@@ -61,7 +75,7 @@ export default class Main extends React.Component {
     const modules = [
       {
         iconName: 'user',
-        onPress: () =>  NavigationHelper.navigate(SCREEN_ENUMS.PROFILE),
+        onPress: () => NavigationHelper.navigate(SCREEN_ENUMS.PROFILE),
         menuTitle: 'Profile',
       },
       {
@@ -93,6 +107,7 @@ export default class Main extends React.Component {
                 this.drawer.close();
               }}
               modules={modules}
+              userData={this.state.userData ? this.state.userData : null}
             />
           }
           styles={drawerStyles}
@@ -125,13 +140,7 @@ export default class Main extends React.Component {
             />
             <SafeAreaView style={{flex: 1}}>
               <PersonalDescriptionItem
-                user={{
-                  fullName: 'Oğuz Kaan Yazan',
-                  profileImage: {
-                    uri:
-                      'https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/004/088/original/user.png',
-                  },
-                }}
+                user={this.state.userData ? this.state.userData : null}
               />
               <UserDetailItem
                 userData={{resolvedTasks: 76, openTasks: 14, totalProjects: 25}}

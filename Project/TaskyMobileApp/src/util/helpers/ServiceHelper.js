@@ -2,7 +2,7 @@ import {RootViewHelper} from '.';
 
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = 'https://jsonplaceholder.typicode.com';
+  static baseUrl = 'http://192.168.1.46:5001';
   static userId;
   static username;
   static password;
@@ -58,36 +58,14 @@ export default class ServiceHelper {
         console.log('WebService Error!', response.status);
         RootViewHelper.stopLoading();
         return;
-        // if (this.autoLoginEnabled) {
-        //   await this.serviceLoginInfolineFramework(
-        //     this.userId,
-        //     this.username,
-        //     this.password,
-        //     this.autoLoginEnabled,
-        //   );
-        //   return this.serviceHandler(url, options, message);
-        // } else {
-        //   throw new Error(response.status);
-        // }
       } else if (response.status === 200) {
-        const data = await response.json();
-        console.warn('DATA', data)
-        const result = {
-          isSuccessful: data.result,
-          message: message ? message : data.message,
-          data: data.objects,
-        };
-
+        const result = await response.json();
         console.log('WebService Response DATA!', baseUrl + url, result);
         RootViewHelper.stopLoading();
         return result;
       } else {
         console.log('WebService Error!', response.status);
-        const result = {
-          isSuccessful: false,
-          message: message ? message : 'Error (' + response.status + ')',
-          data: null,
-        };
+        const result = await response.json();
 
         console.log('WebService Response DATA!', baseUrl + url, result);
         RootViewHelper.stopLoading();

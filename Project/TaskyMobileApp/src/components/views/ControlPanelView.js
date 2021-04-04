@@ -4,12 +4,12 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import {Text} from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import TextTicker from 'react-native-text-ticker';
-import { Metrics, Fonts, Colors } from '../../res/styles';
+import {Metrics, Fonts, Colors} from '../../res/styles';
 
 export default class ControlPanelView extends Component {
   constructor(props) {
@@ -36,7 +36,10 @@ export default class ControlPanelView extends Component {
                 bounce
                 repeatSpacer={20}
                 marqueeDelay={2000}>
-                Oğuz Kaan Yazan
+                {this.props.userData &&
+                  this.props.userData.firstName +
+                    ' ' +
+                    this.props.userData.lastName}
               </TextTicker>
               <TextTicker
                 style={styles.addressTxt}
@@ -45,7 +48,7 @@ export default class ControlPanelView extends Component {
                 bounce
                 repeatSpacer={20}
                 marqueeDelay={2000}>
-                Software Developer
+                {this.props.userData && this.props.userData.email}
               </TextTicker>
             </View>
           </View>
@@ -59,23 +62,27 @@ export default class ControlPanelView extends Component {
                 <SimpleLineIcons name="home" size={20} color="#919cae" />
                 <Text style={styles.menuListItem}>Home</Text>
               </TouchableOpacity>
-              {this.props.modules ? this.props.modules.map((item, key) => {
-                return (
-                  <TouchableOpacity
-                    style={styles.menuListItemBg}
-                    key={key}
-                    onPress={() => {
-                      item.onPress();
-                    }}>
-                    <SimpleLineIcons
-                      name={item.iconName}
-                      size={20}
-                      color="#919cae"
-                    />
-                    <Text style={styles.menuListItem}>{item.menuTitle}</Text>
-                  </TouchableOpacity>
-                );
-              }) : null}
+              {this.props.modules
+                ? this.props.modules.map((item, key) => {
+                    return (
+                      <TouchableOpacity
+                        style={styles.menuListItemBg}
+                        key={key}
+                        onPress={() => {
+                          item.onPress();
+                        }}>
+                        <SimpleLineIcons
+                          name={item.iconName}
+                          size={20}
+                          color="#919cae"
+                        />
+                        <Text style={styles.menuListItem}>
+                          {item.menuTitle}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })
+                : null}
             </ScrollView>
           </View>
         </View>

@@ -11,12 +11,14 @@ export default class PersonalDescriptionItem extends React.PureComponent {
     return this.props.user ? (
       <View style={styles.main}>
         <Image
-          source={this.props.user.profileImage}
+          source={{uri: this.props.user.profileImage}}
           style={styles.profileImg}
         />
 
-        {this.props.user.fullName && (
-          <Text style={styles.nameTxt}>{this.props.user.fullName}</Text>
+        {this.props.user.firstName && this.props.user.lastName && (
+          <Text style={styles.nameTxt}>
+            {this.props.user.firstName + ' ' + this.props.user.lastName}
+          </Text>
         )}
       </View>
     ) : null;

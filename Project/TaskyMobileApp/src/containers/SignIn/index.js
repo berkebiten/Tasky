@@ -11,7 +11,7 @@ import {
   BackHandler,
   I18nManager,
 } from 'react-native';
-import {Container, Right, Header, Left, Body} from 'native-base';
+import {Container, Right, Header, Left, Body, Toast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CheckBox from 'react-native-check-box';
@@ -19,14 +19,52 @@ import styles from './styles';
 import images from '../../res/styles/images';
 import NavigationHelper from '../../util/helpers/NavigationHelper';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
+import {ServiceHelper} from '../../util/helpers';
+import {LOGIN_SERVICE} from '../../util/constants/Services';
+import {saveLoginObject, saveUser} from '../../util/storage/AsyncStorage';
 
 export default class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isChecked: true,
+      rememberMe: false,
     };
   }
+
+  signIn = async () => {
+    let loginObject = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+
+    const responseData = await ServiceHelper.serviceHandler(
+      LOGIN_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(loginObject), 'POST'),
+    );
+
+    if (responseData && responseData.isSuccessful) {
+      if (this.state.rememberMe) {
+        saveLoginObject(
+          JSON.stringify({
+            email: this.state.email,
+            password: this.state.password,
+          }),
+        );
+      }
+      if (responseData.data && responseData.data.user) {
+        saveUser(JSON.stringify(responseData.data.user));
+      }
+      NavigationHelper.navigate(SCREEN_ENUMS.HOME);
+    } else {
+      Toast.show({
+        text:
+          responseData && responseData.message ? responseData.message : 'Error',
+        type: 'danger',
+        duration: 7000,
+      });
+    }
+  };
+
   render() {
     StatusBar.setBarStyle('light-content', true);
     if (Platform.OS === 'android') {
@@ -66,6 +104,7 @@ export default class SignIn extends Component {
                 autoCapitalize="none"
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 keyboardType="email-address"
+                onChangeText={(text) => this.setState({email: text})}
               />
 
               <TextInput
@@ -77,6 +116,7 @@ export default class SignIn extends Component {
                 autoCapitalize="none"
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 keyboardType="default"
+                onChangeText={(text) => this.setState({password: text})}
               />
             </View>
             <View style={styles.chboxConatiner}>
@@ -84,10 +124,10 @@ export default class SignIn extends Component {
                 style={styles.chboxRemember}
                 onClick={() => {
                   this.setState({
-                    isChecked: !this.state.isChecked,
+                    rememberMe: !this.state.rememberMe,
                   });
                 }}
-                isChecked={this.state.isChecked}
+                isChecked={this.state.rememberMe}
                 checkedImage={
                   <Image
                     source={images.checkboxSelected}
@@ -112,7 +152,7 @@ export default class SignIn extends Component {
             <View style={styles.signInSec}>
               <TouchableOpacity
                 style={styles.buttonSignIn}
-                onPress={() => NavigationHelper.navigate(SCREEN_ENUMS.HOME)}>
+                onPress={() => this.signIn()}>
                 <Text style={styles.textWhite}>Sign In</Text>
               </TouchableOpacity>
             </View>
