@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TaskyService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace TaskyService.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody] Login model)
         {
@@ -33,27 +33,28 @@ namespace TaskyService.Controllers
             //var user = await _context.User.FindAsync(x.Id);
 
             if (user == null)
-                return NotFound(new { message = "User or password invalid" });
+                return NotFound(new {isSuccessful = false, message = "Email or Password is Invalid" });
 
             var token = TokenService.CreateToken(user);
             user.Password = "";
-            return new
+            return Ok(new
             {
-                user = user,
-                token = token
-            };
+                isSuccessful = true,
+                message = "Login is successful",
+                data = new { user = user, token = token }
+            });
         }
 
-        // GET: api/Users
         [HttpGet]
+        [Route("GetAll")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.User.ToListAsync();
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
+        [Route("GetById/{id}")]
+        [HttpGet]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _context.User.FindAsync(id);
@@ -66,9 +67,8 @@ namespace TaskyService.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("Update/{id}")]
         public async Task<IActionResult> PutUser(Guid id, User user)
         {
             if (id != user.Id)
@@ -97,9 +97,8 @@ namespace TaskyService.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("Insert")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             _context.User.Add(user);
@@ -122,8 +121,8 @@ namespace TaskyService.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var user = await _context.User.FindAsync(id);
