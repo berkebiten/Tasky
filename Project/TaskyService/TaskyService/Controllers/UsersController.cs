@@ -98,7 +98,7 @@ namespace TaskyService.Controllers
         }
 
         [HttpPost]
-        [Route("Insert")]
+        [Route("Register")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             _context.User.Add(user);
@@ -118,7 +118,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return Ok(new { isSuccessful = true, message = "Registration is Successful." });
         }
 
         [HttpDelete]
