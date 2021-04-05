@@ -1,38 +1,35 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  Image,
-  StatusBar,
-  Platform,
-  TouchableOpacity,
-  View,
-  BackHandler,
-  I18nManager,
-} from 'react-native';
-import {
-  Container,
-  Right,
-  Left,
-  Content,
-  Body,
-  Header,
-  Title,
-} from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Text, Image, StatusBar, Platform, View} from 'react-native';
+import {Container, Content} from 'native-base';
 import styles from './styles';
 import {HeaderView} from '../../components/views';
+import {loadUser} from '../../util/storage/AsyncStorage';
+import {RootViewHelper} from '../../util/helpers';
 
-const profileImg =
-  'https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/004/088/original/user.png';
-
-export default class ProfileAccountInfo extends Component {
+export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = async () => {
+    const user = await loadUser();
+    if (user) {
+      this.setState({userData: JSON.parse(user)});
+    }
+  };
+
   render() {
+    if (!this.state.userData) {
+      RootViewHelper.startLoading();
+      return null;
+    } else {
+      RootViewHelper.stopLoading();
+    }
     StatusBar.setBarStyle('light-content', true);
     if (Platform.OS === 'android') {
       StatusBar.setBackgroundColor('#2d324f', true);
@@ -43,8 +40,18 @@ export default class ProfileAccountInfo extends Component {
       <Container style={styles.main}>
         <HeaderView title="Profile" />
         <Content>
-          <Image source={{uri: profileImg}} style={styles.profileImg} />
-          <Text style={styles.nameTxt}>Oğuz Kaan Yazan</Text>
+          <Image
+            source={{
+              uri: this.state.userData && this.state.userData.profileImage,
+            }}
+            style={styles.profileImg}
+          />
+          <Text style={styles.nameTxt}>
+            {this.state.userData &&
+              this.state.userData.firstName +
+                ' ' +
+                this.state.userData.lastName}
+          </Text>
           <View style={styles.dividerHorizontal} />
           <View style={styles.accountInfoBg}>
             <Text style={styles.accountInfoTxt}>USER INFORMATION</Text>
@@ -52,8 +59,19 @@ export default class ProfileAccountInfo extends Component {
           <View style={styles.dividerHorizontal} />
           <View style={{flexDirection: 'column'}}>
             <View style={styles.infoFieldBg}>
-              <Text style={styles.infoFieldTitleTxt}>Name</Text>
-              <Text style={styles.infoFieldDetailTxt}>Oğuz Kaan Yazan</Text>
+              <Text style={styles.infoFieldTitleTxt}>First Name</Text>
+              <Text style={styles.infoFieldDetailTxt}>
+                {this.state.userData && this.state.userData.firstName}
+              </Text>
+            </View>
+            <View style={styles.fieldDivider} />
+          </View>
+          <View style={{flexDirection: 'column'}}>
+            <View style={styles.infoFieldBg}>
+              <Text style={styles.infoFieldTitleTxt}>Last Name</Text>
+              <Text style={styles.infoFieldDetailTxt}>
+                {this.state.userData && this.state.userData.lastName}
+              </Text>
             </View>
             <View style={styles.fieldDivider} />
           </View>
@@ -61,44 +79,26 @@ export default class ProfileAccountInfo extends Component {
             <View style={styles.infoFieldBg}>
               <Text style={styles.infoFieldTitleTxt}>Email</Text>
               <Text style={styles.infoFieldDetailTxt}>
-                oguz.yazan@isik.edu.tr
+                {this.state.userData && this.state.userData.email}
               </Text>
             </View>
             <View style={styles.fieldDivider} />
           </View>
-          <View style={{flexDirection: 'column'}}>
+          {/* <View style={{flexDirection: 'column'}}>
             <View style={styles.infoFieldBg}>
               <Text style={styles.infoFieldTitleTxt}>Phone</Text>
               <Text style={styles.infoFieldDetailTxt}>537 923 5986</Text>
             </View>
             <View style={styles.fieldDivider} />
-          </View>
-          <View style={styles.infoFieldBg}>
-            <Text style={styles.infoFieldTitleTxt}>Address</Text>
-            <Text style={styles.infoFieldDetailTxt}>İstanbul</Text>
-          </View>
-          <View style={styles.fieldDivider} />
+          </View> */}
           <View style={styles.infoFieldBg}>
             <Text style={styles.infoFieldTitleTxt}>Registration Date</Text>
-            <Text style={styles.infoFieldDetailTxt}>21/03/2021</Text>
+            <Text style={styles.infoFieldDetailTxt}>
+              {this.state.userData && this.state.userData.registrationDate}
+            </Text>
           </View>
         </Content>
       </Container>
     );
   }
-  _renderTruncatedFooter = (handlePress) => {
-    return (
-      <Text style={styles.viewMoreLessTxt} onPress={handlePress}>
-        View more
-      </Text>
-    );
-  };
-
-  _renderRevealedFooter = (handlePress) => {
-    return (
-      <Text style={styles.viewMoreLessTxt} onPress={handlePress}>
-        View less
-      </Text>
-    );
-  };
 }

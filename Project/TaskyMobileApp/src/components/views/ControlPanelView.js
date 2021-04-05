@@ -27,7 +27,12 @@ export default class ControlPanelView extends Component {
       <View style={styles.imgContainer}>
         <View style={styles.listProfileContainer}>
           <View style={styles.profileDataBg}>
-            <Image source={this.state.profileImage} style={styles.profileImg} />
+            <Image
+              source={{
+                uri: this.props.userData && this.props.userData.profileImage,
+              }}
+              style={styles.profileImg}
+            />
             <View style={styles.nameAddressTxt}>
               <TextTicker
                 style={styles.nameTxt}

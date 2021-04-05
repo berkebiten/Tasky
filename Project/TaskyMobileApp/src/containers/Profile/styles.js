@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
 
   accountInfoTxt: {
     color: "#adadad",
-    fontSize: Fonts.moderateScale(12),
+    fontSize: Fonts.moderateScale(14),
     width: Metrics.WIDTH * 0.82,
-    paddingTop: Metrics.HEIGHT * 0.035,
+    paddingTop: 25,
     paddingLeft: I18nManager.isRTL ? 0 : Metrics.WIDTH * 0.09,
     paddingRight: I18nManager.isRTL ? Metrics.WIDTH * 0.09 : 0,
     fontFamily: Fonts.type.SFUIDisplayRegular,
