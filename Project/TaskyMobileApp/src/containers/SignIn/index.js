@@ -22,6 +22,7 @@ import {SCREEN_ENUMS} from '../../util/constants/Enums';
 import {ServiceHelper} from '../../util/helpers';
 import {LOGIN_SERVICE} from '../../util/constants/Services';
 import {saveLoginObject, saveUser} from '../../util/storage/AsyncStorage';
+import {NavigationActions, StackActions} from 'react-navigation';
 
 export default class SignIn extends Component {
   constructor(props) {
@@ -54,7 +55,16 @@ export default class SignIn extends Component {
       if (responseData.data && responseData.data.user) {
         saveUser(JSON.stringify(responseData.data.user));
       }
-      NavigationHelper.navigate(SCREEN_ENUMS.HOME);
+      NavigationHelper.dispatch(
+        StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              routeName: SCREEN_ENUMS.APP,
+            }),
+          ],
+        }),
+      );
     } else {
       Toast.show({
         text:

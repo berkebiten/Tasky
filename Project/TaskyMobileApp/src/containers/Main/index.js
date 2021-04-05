@@ -1,15 +1,13 @@
 import React from 'react';
 import {View, Button} from 'react-native';
 import {ControlPanelView, HeaderView} from '../../components/views';
-import {SafeAreaView} from 'react-navigation';
+import {NavigationActions, SafeAreaView, StackActions} from 'react-navigation';
 import {
   NavigationHelper,
   RootViewHelper,
-  ServiceHelper,
 } from '../../util/helpers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Drawer from 'react-native-drawer';
 import tweens from './tweens';
 import styles from './styles';
@@ -85,7 +83,18 @@ export default class Main extends React.Component {
       },
       {
         iconName: 'logout',
-        onPress: () => console.warn('logout'),
+        onPress: () => {
+          NavigationHelper.dispatch(
+            StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({
+                  routeName: SCREEN_ENUMS.SIGN_IN,
+                }),
+              ],
+            }),
+          );
+        },
         menuTitle: 'Logout',
       },
     ];
@@ -152,16 +161,6 @@ export default class Main extends React.Component {
                   setTimeout(() => {
                     RootViewHelper.stopLoading();
                   }, 5000);
-                }}
-              />
-              <Button
-                title="Service Helper"
-                onPress={() => {
-                  console.warn('service helper');
-                  ServiceHelper.serviceHandler(
-                    '/posts',
-                    ServiceHelper.createOptionsForm(null, 'GET'),
-                  );
                 }}
               />
               <View style={styles.footerTab}>
