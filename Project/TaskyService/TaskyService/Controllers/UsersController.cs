@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskyService.Models;
 using TaskyService.Services;
 using Microsoft.AspNetCore.Authorization;
+using BC = BCrypt.Net.BCrypt;
 
 namespace TaskyService.Controllers
 {
@@ -27,10 +27,7 @@ namespace TaskyService.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody] Login model)
         {
-            var user = _context.User.ToList().Where(x => x.Email == model.Email && x.Password == model.Password).FirstOrDefault();
-
-            //List<int> filteredList = myList.Where(x => x > 7).ToList();
-            //var user = await _context.User.FindAsync(x.Id);
+            var user = _context.User.ToList().Where(x => x.Email == model.Email && BC.Verify(model.Password, x.Password)).FirstOrDefault();
 
             if (user == null)
                 return NotFound(new {isSuccessful = false, message = "Email or Password is Invalid" });
@@ -47,7 +44,6 @@ namespace TaskyService.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.User.ToListAsync();
@@ -104,6 +100,7 @@ namespace TaskyService.Controllers
             user.ActivationStatus = false;
             user.Status = true;
             user.RegistrationDate = DateTime.Now.Date;
+            user.Password = BC.HashPassword(user.Password);
             _context.User.Add(user);
             try
             {
