@@ -4,22 +4,9 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TouchableOpacity,
-  BackHandler,
-  I18nManager,
   TouchableHighlight,
 } from 'react-native';
-import {
-  Container,
-  Form,
-  Text,
-  Button,
-  Header,
-  Left,
-  Right,
-  Body,
-} from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Container, Form, Text, Header, Right, Body} from 'native-base';
 import styles from './styles';
 import images from '../../res/styles/images';
 import {NavigationHelper} from '../../util/helpers';
@@ -34,9 +21,8 @@ export default class GetStarted extends Component {
       StatusBar.setTranslucent(true);
     }
 
-    // Set image
     const pic =
-'https://images.unsplash.com/photo-1531584838419-d5d24b120bf6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80'
+      'https://images.unsplash.com/photo-1531584838419-d5d24b120bf6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80';
     return (
       <Container>
         <ImageBackground style={styles.backgroundImage} source={{uri: pic}}>

@@ -97,26 +97,11 @@ export default class ControlPanelView extends Component {
 }
 
 const styles = StyleSheet.create({
-  backArrow: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  drawercontainer: {
-    flex: 1,
-    backgroundColor: '#f1f1f1',
-  },
-
   menuListItem: {
     marginLeft: Metrics.WIDTH * 0.03,
     color: '#2d324f',
     fontSize: Fonts.moderateScale(18),
     fontFamily: Fonts.type.sfuiDisplayRegular,
-  },
-
-  container: {
-    height: Metrics.FILL,
-    width: Metrics.FILL,
   },
 
   imgContainer: {
@@ -179,25 +164,5 @@ const styles = StyleSheet.create({
   scrollBg: {
     flex: 1,
     backgroundColor: Colors.transparent,
-  },
-
-  versionText: {
-    fontSize: Fonts.moderateScale(15),
-    fontFamily: Fonts.type.sfuiDisplayLight,
-    color: Colors.lightGray,
-    alignSelf: 'flex-end',
-    marginEnd: Metrics.WIDTH * 0.1,
-  },
-
-  viewPagerView: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-
-  viewPagerText: {
-    textAlign: 'center',
-    marginTop: 50,
-    fontWeight: 'bold',
-    fontSize: 20,
   },
 });
