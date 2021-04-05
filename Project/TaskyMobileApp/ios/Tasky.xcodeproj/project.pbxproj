@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* MobileFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MobileFrameworkTests.m */; };
+		00E356F31AD99517003FC87E /* TaskyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TaskyTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* MobileFrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MobileFrameworkTests.m */; };
+		2DCD954D1E0B4F2C00145EB5 /* TaskyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TaskyTests.m */; };
 		38CB53151146419C981EEB1B /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 501BAD5077FA43AA8BCC82B2 /* Roboto_medium.ttf */; };
-		3C27349CFB66DB6F98B652A4 /* libPods-MobileFramework-MobileFrameworkTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D04C509E36D5C12DDE5563E1 /* libPods-MobileFramework-MobileFrameworkTests.a */; };
-		4B5E64EA5647541615C27043 /* libPods-MobileFramework-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 953CA6E34E52C81D4BA359FC /* libPods-MobileFramework-tvOS.a */; };
+		3C27349CFB66DB6F98B652A4 /* libPods-Tasky-TaskyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D04C509E36D5C12DDE5563E1 /* libPods-Tasky-TaskyTests.a */; };
+		4B5E64EA5647541615C27043 /* libPods-Tasky-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 953CA6E34E52C81D4BA359FC /* libPods-Tasky-tvOS.a */; };
 		763107DB5D54417599A187ED /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECB3914728514074B777861D /* Roboto.ttf */; };
 		79928AA326107ECA004A7864 /* Bariol_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79928A7E26107EC7004A7864 /* Bariol_Regular.ttf */; };
 		79928AA426107ECA004A7864 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79928A7F26107EC7004A7864 /* Roboto-Italic.ttf */; };
@@ -58,8 +58,8 @@
 		79928AC726107ECA004A7864 /* SFProText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79928AA226107ECA004A7864 /* SFProText-Medium.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8DA9F56AD67E422EA0086E4F /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9ADB7D30694F458E889AC1C3 /* rubicon-icon-font.ttf */; };
-		9D102C38F5153B968A302F59 /* libPods-MobileFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FA4FD54404F13E9783CEC /* libPods-MobileFramework.a */; };
-		A75AD8CE2A730CF44DBFB2D1 /* libPods-MobileFramework-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C433B74F6CB1F8013173E2EC /* libPods-MobileFramework-tvOSTests.a */; };
+		9D102C38F5153B968A302F59 /* libPods-Tasky.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 317FA4FD54404F13E9783CEC /* libPods-Tasky.a */; };
+		A75AD8CE2A730CF44DBFB2D1 /* libPods-Tasky-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C433B74F6CB1F8013173E2EC /* libPods-Tasky-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,46 +68,46 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = MobileFramework;
+			remoteInfo = Tasky;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "MobileFramework-tvOS";
+			remoteInfo = "Tasky-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* MobileFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* TaskyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* MobileFrameworkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileFrameworkTests.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* TaskyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskyTests.m; sourceTree = "<group>"; };
 		0597FB49A1E24626B071EE81 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		064C645CD36843698AAC903B /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		09AB29B197EDD531AFD3B5A3 /* Pods-MobileFramework-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MobileFramework-tvOSTests/Pods-MobileFramework-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* MobileFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MobileFramework/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MobileFramework/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MobileFramework/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MobileFramework/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MobileFramework/main.m; sourceTree = "<group>"; };
+		09AB29B197EDD531AFD3B5A3 /* Pods-Tasky-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Tasky-tvOSTests/Pods-Tasky-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Tasky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tasky.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Tasky/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Tasky/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Tasky/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tasky/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Tasky/main.m; sourceTree = "<group>"; };
 		1E3F9024CF464A69B843C33E /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		23F6513734F0424FB1CBC16B /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* MobileFramework-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MobileFramework-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* MobileFramework-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MobileFramework-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		300CB257D6CAACEE2EF9D0DC /* Pods-MobileFramework-MobileFrameworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-MobileFrameworkTests.release.xcconfig"; path = "Target Support Files/Pods-MobileFramework-MobileFrameworkTests/Pods-MobileFramework-MobileFrameworkTests.release.xcconfig"; sourceTree = "<group>"; };
-		317FA4FD54404F13E9783CEC /* libPods-MobileFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileFramework.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* Tasky-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tasky-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* Tasky-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tasky-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		300CB257D6CAACEE2EF9D0DC /* Pods-Tasky-TaskyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-TaskyTests.release.xcconfig"; path = "Target Support Files/Pods-Tasky-TaskyTests/Pods-Tasky-TaskyTests.release.xcconfig"; sourceTree = "<group>"; };
+		317FA4FD54404F13E9783CEC /* libPods-Tasky.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tasky.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31937E098EC34C3086086F7F /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		32005335CD1946E39297181F /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		3D7E989F34B04283A9597C1A /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		43BF88D1F7544D9FA256A7DC /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		46D7DEA4CFF64230B8DEFE43 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		47B3F1978673482EB30ECD92 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		4A2C8CC5BDBF74BAE131A640 /* Pods-MobileFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework.debug.xcconfig"; path = "Target Support Files/Pods-MobileFramework/Pods-MobileFramework.debug.xcconfig"; sourceTree = "<group>"; };
+		4A2C8CC5BDBF74BAE131A640 /* Pods-Tasky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky.debug.xcconfig"; path = "Target Support Files/Pods-Tasky/Pods-Tasky.debug.xcconfig"; sourceTree = "<group>"; };
 		501BAD5077FA43AA8BCC82B2 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
-		51EE553ECA5B60949E8F9BF0 /* Pods-MobileFramework-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MobileFramework-tvOSTests/Pods-MobileFramework-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		51EE553ECA5B60949E8F9BF0 /* Pods-Tasky-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Tasky-tvOSTests/Pods-Tasky-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		541D1BE099E542C080AE5DF8 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		61F63E7D65394D238AB00C25 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		635A8AF582B343BCB8239D3F /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -152,24 +152,24 @@
 		79928AA126107ECA004A7864 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Regular.ttf"; path = "../src/res/styles/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
 		79928AA226107ECA004A7864 /* SFProText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFProText-Medium.ttf"; path = "../src/res/styles/fonts/SFProText-Medium.ttf"; sourceTree = "<group>"; };
 		80D3514A962F4880A694A78E /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MobileFramework/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Tasky/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A6CECBC141F4FF088457843 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		8C9469A3DEE2463381669E5E /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		953CA6E34E52C81D4BA359FC /* libPods-MobileFramework-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileFramework-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		953CA6E34E52C81D4BA359FC /* libPods-Tasky-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tasky-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		981404AD949E41BA84B4068D /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		9ADB7D30694F458E889AC1C3 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		9B9B433A54304B258FA7F430 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		AB725A2069B21EF2C01D661C /* Pods-MobileFramework-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-MobileFramework-tvOS/Pods-MobileFramework-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		AB725A2069B21EF2C01D661C /* Pods-Tasky-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Tasky-tvOS/Pods-Tasky-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		ACCFC8AB9583465F9FC4160C /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		B1BC57B15C174C37B8C7BD28 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		B6453127A7CC496E81E4DDA9 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		BEBCF7244D7D14331EC051FD /* Pods-MobileFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework.release.xcconfig"; path = "Target Support Files/Pods-MobileFramework/Pods-MobileFramework.release.xcconfig"; sourceTree = "<group>"; };
+		BEBCF7244D7D14331EC051FD /* Pods-Tasky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky.release.xcconfig"; path = "Target Support Files/Pods-Tasky/Pods-Tasky.release.xcconfig"; sourceTree = "<group>"; };
 		C13041E2EA72458F8215ED34 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		C433B74F6CB1F8013173E2EC /* libPods-MobileFramework-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileFramework-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C433B74F6CB1F8013173E2EC /* libPods-Tasky-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tasky-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C53E8866B39947058711E26E /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		CB839453C28540B09212F9E7 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		D04C509E36D5C12DDE5563E1 /* libPods-MobileFramework-MobileFrameworkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileFramework-MobileFrameworkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D82E7F084DC8436C0153F661 /* Pods-MobileFramework-MobileFrameworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-MobileFrameworkTests.debug.xcconfig"; path = "Target Support Files/Pods-MobileFramework-MobileFrameworkTests/Pods-MobileFramework-MobileFrameworkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D04C509E36D5C12DDE5563E1 /* libPods-Tasky-TaskyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tasky-TaskyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D82E7F084DC8436C0153F661 /* Pods-Tasky-TaskyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-TaskyTests.debug.xcconfig"; path = "Target Support Files/Pods-Tasky-TaskyTests/Pods-Tasky-TaskyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E3B200B399294CE0BA84CC88 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		EA67CAEFFFD04B80BF022326 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		ECB3914728514074B777861D /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 		EED6BC709C4C4F28ACEADC7B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		EED8B90DA9234E4099315A6B /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		F94F80BA8B47475AB7CF3761 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		FCF29E0FB4275E33DDB9AD3C /* Pods-MobileFramework-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileFramework-tvOS.release.xcconfig"; path = "Target Support Files/Pods-MobileFramework-tvOS/Pods-MobileFramework-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		FCF29E0FB4275E33DDB9AD3C /* Pods-Tasky-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tasky-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Tasky-tvOS/Pods-Tasky-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,7 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C27349CFB66DB6F98B652A4 /* libPods-MobileFramework-MobileFrameworkTests.a in Frameworks */,
+				3C27349CFB66DB6F98B652A4 /* libPods-Tasky-TaskyTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D102C38F5153B968A302F59 /* libPods-MobileFramework.a in Frameworks */,
+				9D102C38F5153B968A302F59 /* libPods-Tasky.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,7 +202,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B5E64EA5647541615C27043 /* libPods-MobileFramework-tvOS.a in Frameworks */,
+				4B5E64EA5647541615C27043 /* libPods-Tasky-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,20 +210,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A75AD8CE2A730CF44DBFB2D1 /* libPods-MobileFramework-tvOSTests.a in Frameworks */,
+				A75AD8CE2A730CF44DBFB2D1 /* libPods-Tasky-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* MobileFrameworkTests */ = {
+		00E356EF1AD99517003FC87E /* TaskyTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* MobileFrameworkTests.m */,
+				00E356F21AD99517003FC87E /* TaskyTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = MobileFrameworkTests;
+			path = TaskyTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -234,7 +234,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* MobileFramework */ = {
+		13B07FAE1A68108700A75B9A /* Tasky */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -245,7 +245,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = MobileFramework;
+			name = Tasky;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -253,10 +253,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				317FA4FD54404F13E9783CEC /* libPods-MobileFramework.a */,
-				D04C509E36D5C12DDE5563E1 /* libPods-MobileFramework-MobileFrameworkTests.a */,
-				953CA6E34E52C81D4BA359FC /* libPods-MobileFramework-tvOS.a */,
-				C433B74F6CB1F8013173E2EC /* libPods-MobileFramework-tvOSTests.a */,
+				317FA4FD54404F13E9783CEC /* libPods-Tasky.a */,
+				D04C509E36D5C12DDE5563E1 /* libPods-Tasky-TaskyTests.a */,
+				953CA6E34E52C81D4BA359FC /* libPods-Tasky-tvOS.a */,
+				C433B74F6CB1F8013173E2EC /* libPods-Tasky-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -350,9 +350,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* MobileFramework */,
+				13B07FAE1A68108700A75B9A /* Tasky */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* MobileFrameworkTests */,
+				00E356EF1AD99517003FC87E /* TaskyTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				946929D424AA0B2FAF48E04C /* Pods */,
@@ -366,10 +366,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* MobileFramework.app */,
-				00E356EE1AD99517003FC87E /* MobileFrameworkTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* MobileFramework-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* MobileFramework-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Tasky.app */,
+				00E356EE1AD99517003FC87E /* TaskyTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* Tasky-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* Tasky-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -377,14 +377,14 @@
 		946929D424AA0B2FAF48E04C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4A2C8CC5BDBF74BAE131A640 /* Pods-MobileFramework.debug.xcconfig */,
-				BEBCF7244D7D14331EC051FD /* Pods-MobileFramework.release.xcconfig */,
-				D82E7F084DC8436C0153F661 /* Pods-MobileFramework-MobileFrameworkTests.debug.xcconfig */,
-				300CB257D6CAACEE2EF9D0DC /* Pods-MobileFramework-MobileFrameworkTests.release.xcconfig */,
-				AB725A2069B21EF2C01D661C /* Pods-MobileFramework-tvOS.debug.xcconfig */,
-				FCF29E0FB4275E33DDB9AD3C /* Pods-MobileFramework-tvOS.release.xcconfig */,
-				09AB29B197EDD531AFD3B5A3 /* Pods-MobileFramework-tvOSTests.debug.xcconfig */,
-				51EE553ECA5B60949E8F9BF0 /* Pods-MobileFramework-tvOSTests.release.xcconfig */,
+				4A2C8CC5BDBF74BAE131A640 /* Pods-Tasky.debug.xcconfig */,
+				BEBCF7244D7D14331EC051FD /* Pods-Tasky.release.xcconfig */,
+				D82E7F084DC8436C0153F661 /* Pods-Tasky-TaskyTests.debug.xcconfig */,
+				300CB257D6CAACEE2EF9D0DC /* Pods-Tasky-TaskyTests.release.xcconfig */,
+				AB725A2069B21EF2C01D661C /* Pods-Tasky-tvOS.debug.xcconfig */,
+				FCF29E0FB4275E33DDB9AD3C /* Pods-Tasky-tvOS.release.xcconfig */,
+				09AB29B197EDD531AFD3B5A3 /* Pods-Tasky-tvOSTests.debug.xcconfig */,
+				51EE553ECA5B60949E8F9BF0 /* Pods-Tasky-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -392,9 +392,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* MobileFrameworkTests */ = {
+		00E356ED1AD99517003FC87E /* TaskyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MobileFrameworkTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "TaskyTests" */;
 			buildPhases = (
 				DBA3D1FE8F2B4FF50B9F9ED1 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -407,14 +407,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = MobileFrameworkTests;
-			productName = MobileFrameworkTests;
-			productReference = 00E356EE1AD99517003FC87E /* MobileFrameworkTests.xctest */;
+			name = TaskyTests;
+			productName = TaskyTests;
+			productReference = 00E356EE1AD99517003FC87E /* TaskyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* MobileFramework */ = {
+		13B07F861A680F5B00A75B9A /* Tasky */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MobileFramework" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Tasky" */;
 			buildPhases = (
 				7E26114D6329517C3001DA60 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -428,14 +428,14 @@
 			);
 			dependencies = (
 			);
-			name = MobileFramework;
-			productName = MobileFramework;
-			productReference = 13B07F961A680F5B00A75B9A /* MobileFramework.app */;
+			name = Tasky;
+			productName = Tasky;
+			productReference = 13B07F961A680F5B00A75B9A /* Tasky.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* MobileFramework-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* Tasky-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MobileFramework-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Tasky-tvOS" */;
 			buildPhases = (
 				58472D95B28B9F035182C936 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -448,14 +448,14 @@
 			);
 			dependencies = (
 			);
-			name = "MobileFramework-tvOS";
-			productName = "MobileFramework-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* MobileFramework-tvOS.app */;
+			name = "Tasky-tvOS";
+			productName = "Tasky-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* Tasky-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* MobileFramework-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* Tasky-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MobileFramework-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Tasky-tvOSTests" */;
 			buildPhases = (
 				7415117820D57BF4491C380C /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -467,9 +467,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "MobileFramework-tvOSTests";
-			productName = "MobileFramework-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* MobileFramework-tvOSTests.xctest */;
+			name = "Tasky-tvOSTests";
+			productName = "Tasky-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* Tasky-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -498,7 +498,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MobileFramework" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Tasky" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -511,10 +511,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* MobileFramework */,
-				00E356ED1AD99517003FC87E /* MobileFrameworkTests */,
-				2D02E47A1E0B4A5D006451C7 /* MobileFramework-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* MobileFramework-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* Tasky */,
+				00E356ED1AD99517003FC87E /* TaskyTests */,
+				2D02E47A1E0B4A5D006451C7 /* Tasky-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* Tasky-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -637,7 +637,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MobileFramework-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Tasky-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -659,7 +659,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MobileFramework-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Tasky-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -681,7 +681,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MobileFramework-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Tasky-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -694,7 +694,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MobileFramework/Pods-MobileFramework-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Tasky/Pods-Tasky-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -735,7 +735,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileFramework/Pods-MobileFramework-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Tasky/Pods-Tasky-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A27470FACA5FEB1A1E731BAE /* [CP] Copy Pods Resources */ = {
@@ -744,7 +744,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MobileFramework-MobileFrameworkTests/Pods-MobileFramework-MobileFrameworkTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Tasky-TaskyTests/Pods-Tasky-TaskyTests-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -785,7 +785,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileFramework-MobileFrameworkTests/Pods-MobileFramework-MobileFrameworkTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Tasky-TaskyTests/Pods-Tasky-TaskyTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DBA3D1FE8F2B4FF50B9F9ED1 /* [CP] Check Pods Manifest.lock */ = {
@@ -803,7 +803,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MobileFramework-MobileFrameworkTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Tasky-TaskyTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -855,7 +855,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* MobileFrameworkTests.m in Sources */,
+				00E356F31AD99517003FC87E /* TaskyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,7 +881,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* MobileFrameworkTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* TaskyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,12 +890,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* MobileFramework */;
+			target = 13B07F861A680F5B00A75B9A /* Tasky */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* MobileFramework-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* Tasky-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -903,14 +903,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D82E7F084DC8436C0153F661 /* Pods-MobileFramework-MobileFrameworkTests.debug.xcconfig */;
+			baseConfigurationReference = D82E7F084DC8436C0153F661 /* Pods-Tasky-TaskyTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = MobileFrameworkTests/Info.plist;
+				INFOPLIST_FILE = TaskyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -920,17 +920,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileFramework.app/MobileFramework";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tasky.app/Tasky";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 300CB257D6CAACEE2EF9D0DC /* Pods-MobileFramework-MobileFrameworkTests.release.xcconfig */;
+			baseConfigurationReference = 300CB257D6CAACEE2EF9D0DC /* Pods-Tasky-TaskyTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = MobileFrameworkTests/Info.plist;
+				INFOPLIST_FILE = TaskyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -940,19 +940,19 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileFramework.app/MobileFramework";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tasky.app/Tasky";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A2C8CC5BDBF74BAE131A640 /* Pods-MobileFramework.debug.xcconfig */;
+			baseConfigurationReference = 4A2C8CC5BDBF74BAE131A640 /* Pods-Tasky.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = MobileFramework/Info.plist;
+				INFOPLIST_FILE = Tasky/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -960,7 +960,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = MobileFramework;
+				PRODUCT_NAME = Tasky;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -969,12 +969,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BEBCF7244D7D14331EC051FD /* Pods-MobileFramework.release.xcconfig */;
+			baseConfigurationReference = BEBCF7244D7D14331EC051FD /* Pods-Tasky.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = MobileFramework/Info.plist;
+				INFOPLIST_FILE = Tasky/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -982,7 +982,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = MobileFramework;
+				PRODUCT_NAME = Tasky;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -990,7 +990,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB725A2069B21EF2C01D661C /* Pods-MobileFramework-tvOS.debug.xcconfig */;
+			baseConfigurationReference = AB725A2069B21EF2C01D661C /* Pods-Tasky-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1001,14 +1001,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MobileFramework-tvOS/Info.plist";
+				INFOPLIST_FILE = "Tasky-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MobileFramework-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Tasky-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1018,7 +1018,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCF29E0FB4275E33DDB9AD3C /* Pods-MobileFramework-tvOS.release.xcconfig */;
+			baseConfigurationReference = FCF29E0FB4275E33DDB9AD3C /* Pods-Tasky-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1029,14 +1029,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MobileFramework-tvOS/Info.plist";
+				INFOPLIST_FILE = "Tasky-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MobileFramework-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Tasky-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1046,7 +1046,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 09AB29B197EDD531AFD3B5A3 /* Pods-MobileFramework-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 09AB29B197EDD531AFD3B5A3 /* Pods-Tasky-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1056,24 +1056,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MobileFramework-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "Tasky-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MobileFramework-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Tasky-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileFramework-tvOS.app/MobileFramework-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tasky-tvOS.app/Tasky-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51EE553ECA5B60949E8F9BF0 /* Pods-MobileFramework-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 51EE553ECA5B60949E8F9BF0 /* Pods-Tasky-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1083,17 +1083,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MobileFramework-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "Tasky-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MobileFramework-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Tasky-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MobileFramework-tvOS.app/MobileFramework-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tasky-tvOS.app/Tasky-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -1214,7 +1214,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MobileFrameworkTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "TaskyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -1223,7 +1223,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MobileFramework" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Tasky" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -1232,7 +1232,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MobileFramework-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Tasky-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -1241,7 +1241,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MobileFramework-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Tasky-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -1250,7 +1250,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MobileFramework" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Tasky" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

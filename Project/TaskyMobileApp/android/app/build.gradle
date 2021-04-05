@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mobileframework"
+        applicationId "com.tasky"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "MobileFramework-tvOS.app"
-               BlueprintName = "MobileFramework-tvOS"
-               ReferencedContainer = "container:MobileFramework.xcodeproj">
+               BuildableName = "Tasky-tvOS.app"
+               BlueprintName = "Tasky-tvOS"
+               ReferencedContainer = "container:Tasky.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "MobileFramework-tvOSTests.xctest"
-               BlueprintName = "MobileFramework-tvOSTests"
-               ReferencedContainer = "container:MobileFramework.xcodeproj">
+               BuildableName = "Tasky-tvOSTests.xctest"
+               BlueprintName = "Tasky-tvOSTests"
+               ReferencedContainer = "container:Tasky.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "MobileFramework-tvOS.app"
-            BlueprintName = "MobileFramework-tvOS"
-            ReferencedContainer = "container:MobileFramework.xcodeproj">
+            BuildableName = "Tasky-tvOS.app"
+            BlueprintName = "Tasky-tvOS"
+            ReferencedContainer = "container:Tasky.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "MobileFramework-tvOS.app"
-            BlueprintName = "MobileFramework-tvOS"
-            ReferencedContainer = "container:MobileFramework.xcodeproj">
+            BuildableName = "Tasky-tvOS.app"
+            BlueprintName = "Tasky-tvOS"
+            ReferencedContainer = "container:Tasky.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
