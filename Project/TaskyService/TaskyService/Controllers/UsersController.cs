@@ -95,6 +95,7 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("Register")]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             user.ActivationStatus = false;

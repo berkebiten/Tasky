@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { ServiceHelper } from "../../util/helpers";
 import { LOGIN_SERVICE } from "../../util/constants/Services";
+import { Navbar as NB, Nav, Form, FormControl, Button } from "react-bootstrap";
+import Navbar from "../../components/Navbar";
 export default class SignIn extends Component {
   signIn = async () => {
     let loginObject = {
@@ -12,7 +14,7 @@ export default class SignIn extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(loginObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        this.props.history.push("/sign-up");
+        this.props.history.push("/projects");
       } else {
         console.log("başarısız");
       }
@@ -22,55 +24,62 @@ export default class SignIn extends Component {
   render() {
     return (
       <div>
-        <h3>Sign In</h3>
+        <Navbar />
+        <div className="auth-wrapper">
+          <div className="auth-inner">
+            
+            
+            <h3>Login</h3>
 
-        <div className="form-group">
-          <label>Email address</label>
-          <input
-            className="form-control"
-            placeholder="Enter email"
-            onChange={(event) =>
-              this.setState({
-                email: event.target.value,
-              })
-            }
-          />
-        </div>
+             <div className="form-group">
+              <label className="form-label">Email address</label>
+              <input
+                className="form-control"
+                placeholder="Enter email"
+                onChange={(event) =>
+                  this.setState({
+                    email: event.target.value,
+                  })
+                }
+              />
+            </div>
 
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter password"
-            onChange={(event) =>
-              this.setState({
-                password: event.target.value,
-              })
-            }
-          />
-        </div>
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                onChange={(event) =>
+                  this.setState({
+                    password: event.target.value,
+                  })
+                }
+              />
+            </div>
 
-        <div className="form-group">
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customCheck1"
-            />
-            <label className="custom-control-label" htmlFor="customCheck1">
-              Remember me
-            </label>
+            <div className="form-group">
+              <div className="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  className="custom-control-input"
+                  id="customCheck1"
+                />
+                <label className="custom-control-label" htmlFor="customCheck1">
+                  Remember me
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              onClick={this.signIn}
+              className="btn btn-dark btn-block"
+            >
+              Login
+            </button> 
           </div>
         </div>
-
-        <button
-          type="submit"
-          onClick={this.signIn}
-          className="btn btn-primary btn-block"
-        >
-          Submit
-        </button>
       </div>
     );
   }
