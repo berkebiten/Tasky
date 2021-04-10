@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
-import SignUp from '../SignUp'
 import { ServiceHelper } from "../../util/helpers";
 import { LOGIN_SERVICE } from "../../util/constants/Services";
 export default class SignIn extends Component {
@@ -9,35 +7,26 @@ export default class SignIn extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-
-    const responseData = await ServiceHelper.serviceHandler(
+    await ServiceHelper.serviceHandler(
       LOGIN_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(loginObject), "POST")
-    );
-    console.warn(responseData)
-    if (responseData && responseData.isSuccessful) {
-      
-      this.props.history.push("/sign-up");
-      
-    } else {
-      console.log("başarısız");
-    }
-    /*alert("adxs")
-    this.props.history.push("/sign-up");*/
-    
-    
-    
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        this.props.history.push("/sign-up");
+      } else {
+        console.log("başarısız");
+      }
+    });
   };
+
   render() {
     return (
-      
-      <form>
+      <div>
         <h3>Sign In</h3>
 
         <div className="form-group">
           <label>Email address</label>
           <input
-            type="email"
             className="form-control"
             placeholder="Enter email"
             onChange={(event) =>
@@ -82,10 +71,7 @@ export default class SignIn extends Component {
         >
           Submit
         </button>
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
-      </form>
+      </div>
     );
   }
 }

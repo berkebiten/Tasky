@@ -1,7 +1,6 @@
-
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = 'https://localhost:5001/';
+  static baseUrl = "http://192.168.1.51:5001";
   static userId;
   static username;
   static password;
@@ -10,8 +9,8 @@ export default class ServiceHelper {
     const options = {
       method: method,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "*/*",
+        "Content-Type": "application/json",
       },
       body: requestBody,
     };
@@ -23,8 +22,8 @@ export default class ServiceHelper {
     const options = {
       method: method,
       headers: {
-        Accept: 'application/x-www-form-urlencoded',
-        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: requestBody,
     };
@@ -43,32 +42,31 @@ export default class ServiceHelper {
 
   static serviceHandler = async (url, options, message) => {
     try {
-      
       const baseUrl = this.baseUrl;
       if (!baseUrl) {
-        throw new Error('Please call setBaseUrl to initialize base url');
+        throw new Error("Please call setBaseUrl to initialize base url");
       }
 
-      console.log('WebService Request!', baseUrl + url, options);
+      console.log("WebService Request!", baseUrl + url, options);
       const response = await fetch(baseUrl + url, options);
-      console.log('WebService Response!', baseUrl + url, response);
+      console.log("WebService Response!", baseUrl + url, response);
 
       if (response.status === 401) {
-        console.log('WebService Error!', response.status);
+        console.log("WebService Error!", response.status);
         return;
       } else if (response.status === 200) {
         const result = await response.json();
-        console.log('WebService Response DATA!', baseUrl + url, result);
+        console.log("WebService Response DATA!", baseUrl + url, result);
         return result;
       } else {
-        console.log('WebService Error!', response.status);
+        console.log("WebService Error!", response.status);
         const result = await response.json();
 
-        console.log('WebService Response DATA!', baseUrl + url, result);
+        console.log("WebService Response DATA!", baseUrl + url, result);
         return result;
       }
     } catch (error) {
-      console.log('WebService Error!', url, error);
+      console.log("WebService Error!", url, error);
 
       return {
         isSuccessful: false,
