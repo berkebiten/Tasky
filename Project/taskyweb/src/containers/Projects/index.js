@@ -11,8 +11,32 @@ import {
 } from "react-bootstrap";
 import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
+import ProjectForm from "../../components/forms/ProjectForm";
+import CustomModal from "../../components/modals/CustomModal";
 
 export default class Projects extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      projectFormVisibility: false,
+    };
+  }
+
+  onSubmit = (data) => {
+    console.log(data);
+  };
+
+  createProjectForm = () => {
+    return (
+      <CustomModal
+        isVisible={this.state.projectFormVisibility}
+        onClose={() => this.setState({ projectFormVisibility: false })}
+        content={<ProjectForm onSubmit={this.onSubmit} initialValues={null} />}
+        title={'PROJECT FORM'}
+      />
+    );
+  };
+
   render() {
     return (
       <div>
@@ -23,18 +47,23 @@ export default class Projects extends Component {
               <h1 class="mx-auto">YOUR PROJECTS</h1>
             </Row>
             <Row className="mt-4">
-                <Form inline className="mx-auto">
-                  <FormControl
-                    type="text"
-                    placeholder="Search Project"
-                    className=" mr-sm-2"
+              <Form inline className="mx-auto">
+                <FormControl
+                  type="text"
+                  placeholder="Search Project"
+                  className=" mr-sm-2"
+                />
+                <Button variant="outline-light" className="mr-sm-2">
+                  <BsSearch />
+                </Button>
+                <Button variant="outline-light" className="mr-sm-2">
+                  <BsPlus
+                    onClick={() =>
+                      this.setState({ projectFormVisibility: true })
+                    }
                   />
-                  <Button variant="outline-light" className="mr-sm-2">
-                    <BsSearch />
-                  </Button>
-                  <Button variant="outline-light" className="mr-sm-2"><BsPlus/></Button>
-                </Form>
-                
+                </Button>
+              </Form>
             </Row>
             <Row className="mt-5">
               <Col md={3}>
@@ -156,6 +185,7 @@ export default class Projects extends Component {
                 />
               </div>
             </Row>
+            {this.createProjectForm()}
           </Container>
         </div>
       </div>
