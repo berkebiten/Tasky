@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FiSettings, FiUser, FiLogOut } from "react-icons/fi";
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Navbar, Nav, Form, FormControl, Button, InputGroup } from "react-bootstrap";
 import { Avatar, Dropdown } from "rsuite";
 import logo from "../res/images/tasky-logo-md.png";
 
@@ -19,20 +19,34 @@ class NavbarLogged extends Component {
           />
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/projects"><h3>Projects</h3></Nav.Link>
-          <Nav.Link href="/tasks"><h3>Tasks</h3></Nav.Link>
-          <Nav.Link href="/activities"><h3>Activities</h3></Nav.Link>
+          <Nav.Link href="/projects">
+            <h3>Projects</h3>
+          </Nav.Link>
+          <Nav.Link href="/tasks">
+            <h3>Tasks</h3>
+          </Nav.Link>
+          <Nav.Link href="/activities">
+            <h3>Activities</h3>
+          </Nav.Link>
         </Nav>
         <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="outline-info" className="mr-sm-2">
-            <BsSearch />
-          </Button>
+          <InputGroup className="mr-sm-2">
+            <FormControl
+              type="text"
+              placeholder="Search"
+            />
+            <InputGroup.Append>
+              <Button variant="outline-light">
+                <BsSearch />
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
         </Form>
         <Dropdown
           placement="bottomEnd"
           className="mr-sm-2 "
-          trigger="hover"W
+          trigger="hover"
+          W
           noCaret
           icon={
             <Avatar

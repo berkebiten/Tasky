@@ -63,7 +63,7 @@ export function CustomForm(props) {
               />
             );
           })}
-          <Button type="submit">Submit form</Button>
+          <Button className="centered" variant="primary" type="submit">Create</Button>
         </Form>
       )}
     </Formik>

@@ -8,6 +8,7 @@ import {
   Form,
   FormControl,
   Button,
+  InputGroup,
 } from "react-bootstrap";
 import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
@@ -32,7 +33,7 @@ export default class Projects extends Component {
         isVisible={this.state.projectFormVisibility}
         onClose={() => this.setState({ projectFormVisibility: false })}
         content={<ProjectForm onSubmit={this.onSubmit} initialValues={null} />}
-        title={'PROJECT FORM'}
+        title={"CREATE NEW PROJECT"}
       />
     );
   };
@@ -44,24 +45,28 @@ export default class Projects extends Component {
         <div className="auth-wrapper">
           <Container>
             <Row className="mt-4">
-              <h1 class="mx-auto">YOUR PROJECTS</h1>
+              <h1 class="text-dark mx-auto">YOUR PROJECTS</h1>
             </Row>
             <Row className="mt-4">
               <Form inline className="mx-auto">
-                <FormControl
-                  type="text"
-                  placeholder="Search Project"
-                  className=" mr-sm-2"
-                />
-                <Button variant="outline-light" className="mr-sm-2">
-                  <BsSearch />
-                </Button>
-                <Button variant="outline-light" className="mr-sm-2">
-                  <BsPlus
-                    onClick={() =>
-                      this.setState({ projectFormVisibility: true })
-                    }
+                <InputGroup className="mr-sm-2">
+                  <FormControl
+                    type="text"
+                    placeholder="Search Project"
                   />
+                  <InputGroup.Append>
+                    <Button variant="outline-dark">
+                      <BsSearch />
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+
+                <Button
+                  variant="primary"
+                  className="mr-sm-2"
+                  onClick={() => this.setState({ projectFormVisibility: true })}
+                >
+                  <BsPlus />
                 </Button>
               </Form>
             </Row>
