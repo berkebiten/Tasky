@@ -36,6 +36,15 @@ body, html, .App, #root, .auth-wrapper {
   transition: all .3s;
 }
 
+.projects-inner{
+  width: 900px;
+  margin: auto;
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
+  background-color:red;
+}
+
 .auth-wrapper .form-control:focus {
   border-color: #343A40;
   box-shadow: none;

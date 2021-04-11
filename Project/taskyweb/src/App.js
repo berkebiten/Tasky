@@ -6,6 +6,7 @@ import Projects from "./containers/Projects";
 import Navbar from "./components/Navbar";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import '../node_modules/rsuite/dist/styles/rsuite-dark.css';
+import 'semantic-ui-css/semantic.min.css'
 
 
 function App() {

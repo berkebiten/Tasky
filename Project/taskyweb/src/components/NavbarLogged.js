@@ -19,9 +19,9 @@ class NavbarLogged extends Component {
           />
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/projects">Projects</Nav.Link>
-          <Nav.Link href="/tasks">Tasks</Nav.Link>
-          <Nav.Link href="/activities">Activities</Nav.Link>
+          <Nav.Link href="/projects"><h3>Projects</h3></Nav.Link>
+          <Nav.Link href="/tasks"><h3>Tasks</h3></Nav.Link>
+          <Nav.Link href="/activities"><h3>Activities</h3></Nav.Link>
         </Nav>
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -32,7 +32,7 @@ class NavbarLogged extends Component {
         <Dropdown
           placement="bottomEnd"
           className="mr-sm-2 "
-          trigger="hover"
+          trigger="hover"W
           noCaret
           icon={
             <Avatar
