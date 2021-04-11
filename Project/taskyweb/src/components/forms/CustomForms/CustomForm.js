@@ -63,9 +63,9 @@ export function CustomForm(props) {
                 />
               );
             })}
-            <Button className="centered" variant="primary" type="submit">
-              {props.buttonTitle}
-            </Button>
+              <Button variant='dark' size='lg' type="submit" block>
+                {props.buttonTitle}
+              </Button>
           </Form>
         );
       }}

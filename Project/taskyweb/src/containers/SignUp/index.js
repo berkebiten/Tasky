@@ -4,6 +4,9 @@ import { REGISTER_SERVICE } from "../../util/constants/Services";
 import Navbar from "../../components/Navbar";
 import RegisterForm from "../../components/forms/RegisterForm";
 import { toast } from "react-toastify";
+import { Col, Row } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
+import logo from "../../res/images/tasky-logo.png";
 
 export default class SignUp extends Component {
   signUp = async (data) => {
@@ -30,8 +33,14 @@ export default class SignUp extends Component {
       <div>
         <Navbar />
         <div className="auth-wrapper">
-          <div className="auth-inner">
-            <h3>Register</h3>
+          <div className="auth-inner mt-5">
+            <Row>
+              <Col xs={6} md={2} />
+              <Col xs={6} md={8}>
+                <Image src={logo} width="100%" className="mb-5" />
+              </Col>
+              <Col xs={6} md={2} />
+            </Row>
             <RegisterForm onSubmit={this.signUp} initialValues={null} />
             <p className="forgot-password text-right">
               Already registered? <a href="sign-in">Login</a>

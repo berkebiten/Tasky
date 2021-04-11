@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FiSettings, FiUser, FiLogOut } from "react-icons/fi";
-import { Navbar, Nav, Form, FormControl, Button, InputGroup } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Button,
+  InputGroup,
+} from "react-bootstrap";
 import { Avatar, Dropdown } from "rsuite";
 import logo from "../res/images/tasky-logo-md.png";
 
@@ -19,24 +26,25 @@ class NavbarLogged extends Component {
           />
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/projects">
-            <h3>Projects</h3>
+          <Nav.Link href="/projects" className="nav-link-tasky ml-5">
+            Projects
           </Nav.Link>
-          <Nav.Link href="/tasks">
-            <h3>Tasks</h3>
+          <Nav.Link href="/tasks" className="nav-link-tasky ml-2">
+            Tasks
           </Nav.Link>
-          <Nav.Link href="/activities">
-            <h3>Activities</h3>
+          <Nav.Link href="/activities" className="nav-link-tasky ml-2">
+            Activities
           </Nav.Link>
         </Nav>
         <Form inline>
-          <InputGroup className="mr-sm-2">
+          <InputGroup className='mr-sm-5'>
             <FormControl
+              className="input-search-tasky"
               type="text"
               placeholder="Search"
             />
             <InputGroup.Append>
-              <Button variant="outline-light">
+              <Button variant="dark" className="border-b">
                 <BsSearch />
               </Button>
             </InputGroup.Append>

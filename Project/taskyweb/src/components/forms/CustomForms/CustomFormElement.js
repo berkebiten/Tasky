@@ -13,6 +13,7 @@ export default class CustomFormElement extends Component {
           <Form.Group>
             <Form.Label>{element.label}</Form.Label>
             <Form.Control
+              className="form-input-tasky"
               type={element.control.type}
               name={element.control.name}
               value={
@@ -47,6 +48,7 @@ export default class CustomFormElement extends Component {
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
         <Form.Control
+          className="form-input-tasky"
           as={element.control.type}
           name={element.control.name}
           value={
@@ -73,6 +75,7 @@ export default class CustomFormElement extends Component {
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
         <Form.File
+          className="form-file-upload-tasky"
           multiple={element.control.multiple}
           name={element.control.name}
           onChange={this.props.handleChange}
