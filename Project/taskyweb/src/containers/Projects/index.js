@@ -32,7 +32,15 @@ export default class Projects extends Component {
       <CustomModal
         isVisible={this.state.projectFormVisibility}
         onClose={() => this.setState({ projectFormVisibility: false })}
-        content={<ProjectForm onSubmit={this.onSubmit} initialValues={null} />}
+        content={
+          <div>
+            <ProjectForm
+              submit={(submit) => (this.submitProjectForm = submit)}
+              onSubmit={this.onSubmit}
+              initialValues={null}
+            />
+          </div>
+        }
         title={"CREATE NEW PROJECT"}
       />
     );
@@ -50,10 +58,7 @@ export default class Projects extends Component {
             <Row className="mt-4">
               <Form inline className="mx-auto">
                 <InputGroup className="mr-sm-2">
-                  <FormControl
-                    type="text"
-                    placeholder="Search Project"
-                  />
+                  <FormControl type="text" placeholder="Search Project" />
                   <InputGroup.Append>
                     <Button variant="outline-dark">
                       <BsSearch />

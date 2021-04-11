@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import { ServiceHelper } from "../../util/helpers";
 import { LOGIN_SERVICE } from "../../util/constants/Services";
-import { Navbar as NB, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
+import LoginForm from "../../components/forms/LoginForm";
 export default class SignIn extends Component {
-  signIn = async () => {
+  signIn = async (data) => {
     let loginObject = {
-      email: this.state.email,
-      password: this.state.password,
+      email: data.email,
+      password: data.password,
     };
     await ServiceHelper.serviceHandler(
       LOGIN_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(loginObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
+        toast("Login is Successful", { type: "success" });
         this.props.history.push("/projects");
       } else {
-        console.log("başarısız");
+        toast(response.message, { type: "error" });
       }
     });
   };
@@ -27,37 +29,8 @@ export default class SignIn extends Component {
         <Navbar />
         <div className="auth-wrapper">
           <div className="auth-inner">
-            
-            
             <h3>Login</h3>
-
-             <div className="form-group">
-              <label className="form-label">Email address</label>
-              <input
-                className="form-control"
-                placeholder="Enter email"
-                onChange={(event) =>
-                  this.setState({
-                    email: event.target.value,
-                  })
-                }
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Enter password"
-                onChange={(event) =>
-                  this.setState({
-                    password: event.target.value,
-                  })
-                }
-              />
-            </div>
-
+            <LoginForm onSubmit={this.signIn} initialValues={null} />
             <div className="form-group">
               <div className="custom-control custom-checkbox">
                 <input
@@ -65,19 +38,11 @@ export default class SignIn extends Component {
                   className="custom-control-input"
                   id="customCheck1"
                 />
-                <label className="custom-control-label" htmlFor="customCheck1">
+                {/* <label className="custom-control-label" htmlFor="customCheck1">
                   Remember me
-                </label>
+                </label> */}
               </div>
             </div>
-
-            <button
-              type="submit"
-              onClick={this.signIn}
-              className="btn btn-dark btn-block"
-            >
-              Login
-            </button> 
           </div>
         </div>
       </div>

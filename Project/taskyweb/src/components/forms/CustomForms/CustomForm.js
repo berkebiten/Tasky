@@ -19,7 +19,6 @@ export function CustomForm(props) {
           .required("Required Field!");
     }
   };
-
   let elements = {};
 
   props.formElements.map((item, key) => {
@@ -47,25 +46,29 @@ export function CustomForm(props) {
         touched,
         isValid,
         errors,
-      }) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          {props.formElements.map((item, key) => {
-            return (
-              <CustomFormElement
-                handleSubmit={handleSubmit}
-                handleChange={handleChange}
-                handleBlur={handleBlur}
-                values={values}
-                touched={touched}
-                isValid={isValid}
-                errors={errors}
-                element={item}
-              />
-            );
-          })}
-          <Button className="centered" variant="primary" type="submit">Create</Button>
-        </Form>
-      )}
+      }) => {
+        return (
+          <Form noValidate onSubmit={handleSubmit}>
+            {props.formElements.map((item, key) => {
+              return (
+                <CustomFormElement
+                  handleSubmit={handleSubmit}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  values={values}
+                  touched={touched}
+                  isValid={isValid}
+                  errors={errors}
+                  element={item}
+                />
+              );
+            })}
+            <Button className="centered" variant="primary" type="submit">
+              {props.buttonTitle}
+            </Button>
+          </Form>
+        );
+      }}
     </Formik>
   );
 }

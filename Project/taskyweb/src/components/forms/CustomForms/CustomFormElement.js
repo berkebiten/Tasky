@@ -1,8 +1,7 @@
 import { Component } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 
 export default class CustomFormElement extends Component {
-    
   createElement = () => {
     let element = this.props.element;
     let values = this.props.values;
@@ -38,6 +37,8 @@ export default class CustomFormElement extends Component {
         return this.createTextArea(element, values);
       case "file":
         return this.createFilePicker(element);
+      case "button":
+        return this.createButton(element);
     }
   };
 
@@ -85,6 +86,19 @@ export default class CustomFormElement extends Component {
           {this.props.errors[element.control.name]}
         </Form.Control.Feedback>
       </Form.Group>
+    );
+  };
+
+  createButton = (element) => {
+    return (
+      <Button
+        className="centered"
+        variant={element.control.variant}
+        type="submit"
+        onSubmit={this.props.handleSubmit}
+      >
+        {element.label}
+      </Button>
     );
   };
 

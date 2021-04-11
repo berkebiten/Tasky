@@ -1,22 +1,18 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { CustomForm } from "./CustomForms/CustomForm";
-function ProjectForm(props) {
+function LoginForm(props) {
   const formElements = [
     {
-      label: "Project Name",
-      control: { type: "text", name: "name" },
+      label: "Email",
+      control: { type: "text", name: "email" },
     },
     {
-      label: "Project Description",
+      label: "Password",
       control: {
-        type: "textarea",
-        name: "description",
+        type: "password",
+        name: "password",
       },
-    },
-    {
-      label: "Project Files",
-      control: { type: "file", name: "file", multiple: false },
     },
   ];
 
@@ -25,8 +21,8 @@ function ProjectForm(props) {
       formElements={formElements}
       onSubmit={props.onSubmit}
       initialValues={props.initialValues ? props.initialValues : {}}
-      buttonTitle='Create'
+      buttonTitle='Login'
     />
   );
 }
-export default withRouter(ProjectForm);
+export default withRouter(LoginForm);
