@@ -1,6 +1,6 @@
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = "http://192.168.1.51:5001";
+  static baseUrl = "http://192.168.0.11:5001";
   static userId;
   static username;
   static password;

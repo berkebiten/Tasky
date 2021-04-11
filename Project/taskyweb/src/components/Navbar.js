@@ -4,7 +4,7 @@ import { BsSearch } from "react-icons/bs";
 import { FiSettings, FiUser, FiLogOut } from "react-icons/fi";
 import { Navbar as NB, ButtonGroup, Form, Button } from "react-bootstrap";
 import { Avatar, Dropdown } from "rsuite";
-import logo from "../res/images/tasky-logo.png";
+import logo from "../res/images/tasky-logo-md.png";
 
 class Navbar extends Component {
   render() {
@@ -14,7 +14,7 @@ class Navbar extends Component {
           <img
             src={logo}
             width="80"
-            height="40"
+            height="30"
             className="d-inline-block align-top"
           />
         </NB.Brand>
