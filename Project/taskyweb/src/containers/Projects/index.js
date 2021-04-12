@@ -14,6 +14,9 @@ import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
 import ProjectForm from "../../components/forms/ProjectForm";
 import CustomModal from "../../components/modals/CustomModal";
+import { RootViewHelper, ServiceHelper } from "../../util/helpers";
+import { INSERT_PROJECT_SERVICE } from "../../util/constants/Services";
+import { toast } from "react-toastify";
 
 export default class Projects extends Component {
   constructor(props) {
@@ -23,10 +26,29 @@ export default class Projects extends Component {
     };
   }
 
-  onSubmit = (data) => {
-    console.log(data);
-  };
+  onSubmit = async (data) => {
+    let projectObject = {
+      name: data.name,
+      description: data.description,
+    };
 
+    await ServiceHelper.serviceHandler(
+      INSERT_PROJECT_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(projectObject), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Project is Created", {
+          type: "success",
+        });
+        this.setState({ projectFormVisibility: false });
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+    RootViewHelper.stopLoading()
+  };
   createProjectForm = () => {
     return (
       <CustomModal

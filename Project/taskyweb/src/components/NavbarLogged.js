@@ -73,7 +73,7 @@ class NavbarLogged extends Component {
             <FiUser className="mr-sm-2" />
             Preferences
           </Dropdown.Item>
-          <Dropdown.Item onSelect={() => this.props.history.push("/logout")}>
+          <Dropdown.Item onSelect={() => this.props.history.push("/")}>
             <FiLogOut className="mr-sm-2" />
             Logout
           </Dropdown.Item>
