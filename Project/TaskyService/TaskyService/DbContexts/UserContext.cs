@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TaskyService.Models;
 
-namespace TaskyService.Models
+namespace TaskyService.DbContexts
 {
     public class UserContext : DbContext
     {

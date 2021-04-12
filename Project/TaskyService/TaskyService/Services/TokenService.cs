@@ -22,13 +22,22 @@ namespace TaskyService.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email.ToString())
+                    new Claim(ClaimTypes.Email, user.Email.ToString()),
+                    new Claim(ClaimTypes.PrimarySid, user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(EXPIRE_HOURS),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(descriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static String GetUserId(String token)
+        {
+            var stream = token;
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadJwtToken(token);
+            return jsonToken.Claims.ToList().Where(claim => claim.Type == "primarysid").ToList().FirstOrDefault().ToString();
         }
     }
 }

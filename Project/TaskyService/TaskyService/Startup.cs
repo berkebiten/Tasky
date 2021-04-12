@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using TaskyService.Models;
+using TaskyService.DbContexts;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +29,10 @@ namespace TaskyService
             services.AddCors();
             services.AddDbContext<UserContext>(opt =>
                                                opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            services.AddDbContext<ProjectContext>(opt =>
+                                               opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            services.AddDbContext<ProjectParticipantContext>(opt =>
+                                   opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
