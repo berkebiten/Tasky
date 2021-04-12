@@ -37,7 +37,7 @@ namespace TaskyService.Controllers
 
         [HttpGet]
         [Route("GetMyProjects")]
-        public async Task<ActionResult<dynamic>> GetMyProjects([FromHeader(Name = "Authorization")] String token)
+        public async Task<ActionResult<dynamic>> GetMyProjects([FromHeader(Name = "Authorization")] string token)
         {
             token = token.Remove(0,7);
             Guid id = Guid.Parse(TokenService.GetUserId(token).Remove(0,11));
@@ -166,6 +166,6 @@ namespace TaskyService.Controllers
     public class Participant
     {
         public string email { get; set; }
-        public int role { get; set; }
+        public Byte role { get; set; }
     }
 }
