@@ -19,11 +19,13 @@ namespace TaskyService.Controllers
     {
         private readonly ProjectContext _context;
         private readonly ProjectParticipantContext _participantContext;
+        private readonly UserContext _userContext;
 
-        public ProjectsController(ProjectContext context, ProjectParticipantContext participantContext)
+        public ProjectsController(ProjectContext context, ProjectParticipantContext participantContext, UserContext userContext)
         {
             _context = context;
             _participantContext = participantContext;
+            _userContext = userContext;
         }
 
         [HttpGet]
@@ -95,20 +97,32 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("Insert")]
-        public async Task<ActionResult<Project>> PostProject(Project project, [FromHeader(Name = "Authorization")] String token)
+        public async Task<ActionResult<Project>> PostProject(ProjectInsertObject project, [FromHeader(Name = "Authorization")] String token)
         {
             token = token.Remove(0, 7);
             Guid userId = Guid.Parse(TokenService.GetUserId(token).Remove(0,11));
             project.Status = true;
             project.ProjectManagerId = userId;
-            ProjectParticipant participant = new ProjectParticipant();
-            participant.Id = new Guid();
-            participant.ProjectId = project.Id;
-            participant.UserId = userId;
+            ProjectParticipant manager = new ProjectParticipant();
+            manager.Id = new Guid();
+            manager.ProjectId = project.Id;
+            manager.UserId = userId;
             _context.Add(project);
-            participant.ProjectId = project.Id;
-            participant.Role = 1;
-            _participantContext.Add(participant);
+            manager.ProjectId = project.Id;
+            manager.Role = 1;
+            _participantContext.Add(manager);
+            var userList = _userContext.User.ToList();
+
+
+            foreach(Participant participantObj in project.participants){
+                var participant = new ProjectParticipant();
+                participant.ProjectId = project.Id;
+                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
+                participant.UserId = participantId;
+                participant.Role = participantObj.role;
+                _participantContext.Add(participant);
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -142,5 +156,16 @@ namespace TaskyService.Controllers
         {
             return _context.Project.Any(e => e.Id == id);
         }
+    }
+
+    public class ProjectInsertObject : Project
+    {
+        public List<Participant> participants { get; set; }
+    }
+
+    public class Participant
+    {
+        public string email { get; set; }
+        public int role { get; set; }
     }
 }
