@@ -1,9 +1,16 @@
+import { RootViewHelper } from ".";
+
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = "http://192.168.0.11:5001";
+  static baseUrl = "http://192.168.1.37:5001";
   static userId;
   static username;
   static password;
+  static token;
+
+  static setToken = (token) => {
+    this.token = token;
+  };
 
   static createOptionsJson = (requestBody, method) => {
     const options = {
@@ -11,6 +18,7 @@ export default class ServiceHelper {
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
+        Authorization: "Bearer " + this.token,
       },
       body: requestBody,
     };
@@ -46,7 +54,7 @@ export default class ServiceHelper {
       if (!baseUrl) {
         throw new Error("Please call setBaseUrl to initialize base url");
       }
-
+      RootViewHelper.startLoading();
       console.log("WebService Request!", baseUrl + url, options);
       const response = await fetch(baseUrl + url, options);
       console.log("WebService Response!", baseUrl + url, response);

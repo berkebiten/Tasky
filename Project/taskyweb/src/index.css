@@ -60,6 +60,8 @@ html,
   transition: all 0.3s;
   background-color: var(--main-light-blue);
   border: 2px solid var(--bs-dark);
+  border-radius: 10px;
+  border-color: var(--main-light-blue)
 }
 
 .projects-inner {

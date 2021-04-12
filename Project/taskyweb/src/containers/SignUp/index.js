@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ServiceHelper } from "../../util/helpers";
+import { RootViewHelper, ServiceHelper } from "../../util/helpers";
 import { REGISTER_SERVICE } from "../../util/constants/Services";
 import Navbar from "../../components/Navbar";
 import RegisterForm from "../../components/forms/RegisterForm";
@@ -27,6 +27,7 @@ export default class SignUp extends Component {
         toast(response.message, { type: "error" });
       }
     });
+    RootViewHelper.stopLoading()
   };
   render() {
     return (

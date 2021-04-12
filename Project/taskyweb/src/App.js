@@ -3,7 +3,10 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./containers/SignUp";
 import SignIn from "./containers/SignIn";
 import Projects from "./containers/Projects";
+import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import { RootViewHelper } from "./util/helpers";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/rsuite/dist/styles/rsuite-dark.css";
 import "semantic-ui-css/semantic.min.css";
@@ -11,25 +14,42 @@ import "../node_modules/antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const [loading, setLoading] = useState(false);
+
+  const startLoading = () => {
+    setLoading(true);
+  };
+
+  const stopLoading = () => {
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    RootViewHelper.setStartLoading(startLoading);
+    RootViewHelper.setStopLoading(stopLoading);
+  }, []);
+
   return (
-    <Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={7000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        draggable
-        pauseOnHover
-      />
-      <Switch>
-        <Route exact path="/" component={SignIn} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/sign-in" component={SignIn} />
-        <Route path="/sign-up" component={SignUp} />
-      </Switch>
-    </Router>
+    <Spin spinning={loading} size="large">
+      <Router>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={7000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          draggable
+          pauseOnHover
+        />
+        <Switch>
+          <Route exact path="/" component={SignIn} />
+          <Route path="/projects" component={Projects} />
+          <Route path="/sign-in" component={SignIn} />
+          <Route path="/sign-up" component={SignUp} />
+        </Switch>
+      </Router>
+    </Spin>
   );
 }
 

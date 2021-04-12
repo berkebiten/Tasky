@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ServiceHelper } from "../../util/helpers";
+import { RootViewHelper, ServiceHelper } from "../../util/helpers";
 import { LOGIN_SERVICE } from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
@@ -18,12 +18,18 @@ export default class SignIn extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(loginObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Login is Successful", { type: "success", position: toast.POSITION.BOTTOM_RIGHT });
+        ServiceHelper.setToken(response.data.token);
+        toast("Login is Successful", {
+          type: "success",
+        });
         this.props.history.push("/projects");
       } else {
-        toast(response.message, { type: "error" , position: toast.POSITION.BOTTOM_RIGHT});
+        toast(response.message, {
+          type: "error",
+        });
       }
     });
+    RootViewHelper.stopLoading();
   };
 
   render() {
