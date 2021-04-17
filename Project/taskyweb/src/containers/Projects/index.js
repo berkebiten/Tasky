@@ -147,7 +147,9 @@ export default class Projects extends Component {
                 <Card.Body>
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    Project Owner
+                    {item.projectManagerFirstName +
+                      " " +
+                      item.projectManagerLastName}
                   </Card.Subtitle>
                   <Card.Text>Project Description: {item.description}</Card.Text>
                 </Card.Body>
