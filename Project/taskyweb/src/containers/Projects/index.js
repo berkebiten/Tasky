@@ -17,6 +17,7 @@ import CustomModal from "../../components/modals/CustomModal";
 import { RootViewHelper, ServiceHelper } from "../../util/helpers";
 import { INSERT_PROJECT_SERVICE } from "../../util/constants/Services";
 import { toast } from "react-toastify";
+import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 
 export default class Projects extends Component {
   constructor(props) {
@@ -27,11 +28,17 @@ export default class Projects extends Component {
   }
 
   onSubmit = async (data) => {
-    let projectObject = {
-      name: data.name,
-      description: data.description,
-    };
-
+    let participants = [];
+    for (let i = 0; i < Object.keys(data).length / 2; i++) {
+      let participantObj = {
+        email: data["participantEmail" + i.toString()],
+        role: parseInt(data["role" + i.toString()]),
+      };
+      participants.push(participantObj);
+    }
+    let projectObject = this.state.formObject;
+    projectObject.participants = participants;
+    console.log(participants);
     await ServiceHelper.serviceHandler(
       INSERT_PROJECT_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(projectObject), "POST")
@@ -47,8 +54,18 @@ export default class Projects extends Component {
         });
       }
     });
-    RootViewHelper.stopLoading()
+    RootViewHelper.stopLoading();
   };
+
+  submitProjectForm = (data) => {
+    let projectObject = {
+      name: data.name,
+      description: data.description,
+    };
+    this.setState({ formObject: projectObject });
+    this.submitParticipants();
+  };
+
   createProjectForm = () => {
     return (
       <CustomModal
@@ -57,10 +74,26 @@ export default class Projects extends Component {
         content={
           <div>
             <ProjectForm
-              submit={(submit) => (this.submitProjectForm = submit)}
-              onSubmit={this.onSubmit}
+              handleSubmit={(submit) => (this.submitProjectForm = submit)}
+              onSubmit={this.submitProjectForm}
               initialValues={null}
             />
+            <InviteParticipantView
+              onSubmit={this.onSubmit}
+              handleSubmit={(submit) => {
+                this.submitParticipants = submit;
+              }}
+            />
+            <Button
+              variant="dark"
+              size="lg"
+              onClick={() => {
+                this.submitProjectForm();
+              }}
+              block
+            >
+              Create
+            </Button>
           </div>
         }
         title={"CREATE NEW PROJECT"}

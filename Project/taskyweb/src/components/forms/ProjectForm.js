@@ -21,12 +21,15 @@ function ProjectForm(props) {
   ];
 
   return (
+    <div>
+
     <CustomForm
       formElements={formElements}
       onSubmit={props.onSubmit}
       initialValues={props.initialValues ? props.initialValues : {}}
-      buttonTitle='Create'
-    />
+      handleSubmit={props.handleSubmit}
+      />
+      </div>
   );
 }
 export default withRouter(ProjectForm);
