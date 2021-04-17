@@ -2,8 +2,17 @@ import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import CustomFormElement from "./CustomFormElement";
+import { useEffect } from "react";
 
 export function CustomForm(props) {
+  let formRef;
+
+  useEffect(() => {
+    if (props.handleSubmit) {
+      props.handleSubmit(formRef.handleSubmit);
+    }
+  }, []);
+
   const getValidation = (type) => {
     switch (type) {
       case "text":
@@ -34,6 +43,7 @@ export function CustomForm(props) {
   let schema = yup.object().shape(elements);
   return (
     <Formik
+      innerRef={(ref) => (formRef = ref)}
       validationSchema={schema}
       onSubmit={props.onSubmit}
       initialValues={props.initialValues ? props.initialValues : {}}
@@ -63,9 +73,11 @@ export function CustomForm(props) {
                 />
               );
             })}
-              <Button variant='dark' size='lg' type="submit" block>
+            {props.buttonTitle ? (
+              <Button variant="dark" size="lg" type="submit" block>
                 {props.buttonTitle}
               </Button>
+            ) : null}
           </Form>
         );
       }}

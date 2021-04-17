@@ -26,7 +26,10 @@ export default class CustomFormElement extends Component {
                 this.props.touched[element.control.name] &&
                 !this.props.errors[element.control.name]
               }
-              isInvalid={!!this.props.errors[element.control.name]}
+              isInvalid={
+                this.props.touched[element.control.name] &&
+                !!this.props.errors[element.control.name]
+              }
               row={3}
             />
             <Form.Control.Feedback type="invalid">
