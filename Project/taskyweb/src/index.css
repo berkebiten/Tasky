@@ -101,6 +101,10 @@ html,
   font-weight:500;
 }
 
+.plus-icon-tasky{
+  margin-top:4vh;
+}
+
 .custom-control-label {
   font-weight: 400;
   color: #343a40;
