@@ -65,7 +65,7 @@ namespace TaskyService.Controllers
 
             }
 
-            return Ok(new { isSuccessful = true, data = new {projects = data, projectCount = 10 } });
+            return Ok(new { isSuccessful = true, data = new {projects = data, projectCount = dataSize } });
 
         }
 
