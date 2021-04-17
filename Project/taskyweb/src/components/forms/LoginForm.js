@@ -5,7 +5,7 @@ function LoginForm(props) {
   const formElements = [
     {
       label: "Email",
-      control: { type: "text", name: "email" },
+      control: { type: "email", name: "email" },
     },
     {
       label: "Password",
