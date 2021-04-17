@@ -32,12 +32,13 @@ namespace TaskyService.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public static String GetUserId(String token)
+        public static Guid getUserId(String token)
         {
-            var stream = token;
+            var stream = token.Remove(0, 7);
             var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadJwtToken(token);
-            return jsonToken.Claims.ToList().Where(claim => claim.Type == "primarysid").ToList().FirstOrDefault().ToString();
+            var jsonToken = handler.ReadJwtToken(stream);
+            var userId = jsonToken.Claims.ToList().Where(claim => claim.Type == "primarysid").ToList().FirstOrDefault().ToString();
+            return Guid.Parse(userId.Remove(0, 11));
         }
     }
 }

@@ -46,8 +46,7 @@ namespace TaskyService.Controllers
                 startIndex = requestBody.startIndex;
                 count = requestBody.count;
             }
-            token = token.Remove(0,7);
-            Guid id = Guid.Parse(TokenService.GetUserId(token).Remove(0,11));
+            Guid id = TokenService.getUserId(token);
             var myProjects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == id).ToList();
             var myProjectIds = new ArrayList();
             foreach (ProjectParticipant projectParticipant in myProjects)
@@ -55,12 +54,12 @@ namespace TaskyService.Controllers
                 myProjectIds.Add(projectParticipant.ProjectId);
             }
 
-            var data = _context.Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
+            var data = _context.VW_Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
             var dataSize = data.Count();
 
             if (startIndex != -1 && count != -1)
             {
-                data = _context.Project.Skip(startIndex)
+                data = _context.VW_Project.Skip(startIndex)
                .Take(count).ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
 
             }
@@ -117,8 +116,7 @@ namespace TaskyService.Controllers
         [Route("Insert")]
         public async Task<ActionResult<Project>> PostProject(ProjectInsertObject project, [FromHeader(Name = "Authorization")] String token)
         {
-            token = token.Remove(0, 7);
-            Guid userId = Guid.Parse(TokenService.GetUserId(token).Remove(0,11));
+            Guid userId = TokenService.getUserId(token);
             project.Status = true;
             project.ProjectManagerId = userId;
             ProjectParticipant manager = new ProjectParticipant();
