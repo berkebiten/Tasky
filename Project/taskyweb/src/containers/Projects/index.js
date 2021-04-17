@@ -15,9 +15,15 @@ import { BsSearch, BsPlus } from "react-icons/bs";
 import ProjectForm from "../../components/forms/ProjectForm";
 import CustomModal from "../../components/modals/CustomModal";
 import { RootViewHelper, ServiceHelper } from "../../util/helpers";
-import { INSERT_PROJECT_SERVICE } from "../../util/constants/Services";
+import {
+  INSERT_PROJECT_SERVICE,
+  GET_PROJECTS_SERVICE,
+} from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
+
+const startIndex = 0;
+const count = 8;
 
 export default class Projects extends Component {
   constructor(props) {
@@ -26,6 +32,32 @@ export default class Projects extends Component {
       projectFormVisibility: false,
     };
   }
+
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = () => {
+    this.getProjects(1);
+  };
+
+  getProjects = async (page) => {
+    let reqBody = { startIndex: startIndex + (page - 1) * count, count: count };
+    await ServiceHelper.serviceHandler(
+      GET_PROJECTS_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
+    ).then((response) => {
+      let update = {};
+      if (response && response.data && response.isSuccessful) {
+        update.projects = response.data.projects;
+        if (!this.state.projectCount) {
+          update.projectCount = response.data.projectCount;
+        }
+        this.setState(update);
+      }
+    });
+    RootViewHelper.stopLoading();
+  };
 
   onSubmit = async (data) => {
     let participants = [];
@@ -101,6 +133,32 @@ export default class Projects extends Component {
     );
   };
 
+  handlePaginationChange = (e, { activePage }) => {
+    this.getProjects(activePage);
+  };
+
+  renderProjectCards = () => {
+    return (
+      <Row className="mt-5">
+        {this.state.projects.map((item, key) => {
+          return (
+            <Col md={3}>
+              <Card bg="dark" text="light">
+                <Card.Body>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    Project Owner
+                  </Card.Subtitle>
+                  <Card.Text>Project Description: {item.description}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
+    );
+  };
+
   render() {
     return (
       <div>
@@ -130,126 +188,24 @@ export default class Projects extends Component {
                 </Button>
               </Form>
             </Row>
-            <Row className="mt-5">
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-            <Row className="mt-5">
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
-                <Card bg="dark" text="light">
-                  <Card.Body>
-                    <Card.Title>Project Name</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Project Owner
-                    </Card.Subtitle>
-                    <Card.Text>
-                      Project Description: Lorem ipsum dolor sit amet.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-            <Row className="mt-5">
-              <div class="mx-auto">
-                <Pagination
-                  defaultActivePage={1}
-                  firstItem={null}
-                  lastItem={null}
-                  pointing
-                  secondary
-                  totalPages={3}
-                />
-              </div>
-            </Row>
+            {this.state.projects &&
+              this.state.projects.length > 0 &&
+              this.renderProjectCards()}
+            {this.state.projects && this.state.projects.length > 0 && (
+              <Row className="mt-5">
+                <div class="mx-auto">
+                  <Pagination
+                    defaultActivePage={1}
+                    firstItem={null}
+                    lastItem={null}
+                    pointing
+                    secondary
+                    totalPages={this.state.projectCount / 8}
+                    onPageChange={this.handlePaginationChange}
+                  />
+                </div>
+              </Row>
+            )}
             {this.createProjectForm()}
           </Container>
         </div>
