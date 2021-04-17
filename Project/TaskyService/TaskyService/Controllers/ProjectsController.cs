@@ -35,10 +35,17 @@ namespace TaskyService.Controllers
             return await _context.Project.ToListAsync();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetMyProjects")]
-        public async Task<ActionResult<dynamic>> GetMyProjects([FromHeader(Name = "Authorization")] string token)
+        public async Task<ActionResult<dynamic>> GetMyProjects([FromHeader(Name = "Authorization")] string token, [FromBody] Filter requestBody = null)
         {
+            int startIndex = -1;
+            int count = -1;
+            if(requestBody != null)
+            {
+                startIndex = requestBody.startIndex;
+                count = requestBody.count;
+            }
             token = token.Remove(0,7);
             Guid id = Guid.Parse(TokenService.GetUserId(token).Remove(0,11));
             var myProjects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == id).ToList();
@@ -48,7 +55,18 @@ namespace TaskyService.Controllers
                 myProjectIds.Add(projectParticipant.ProjectId);
             }
 
-            return _context.Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
+            var data = _context.Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
+            var dataSize = data.Count();
+
+            if (startIndex != -1 && count != -1)
+            {
+                data = _context.Project.Skip(startIndex)
+               .Take(count).ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
+
+            }
+
+            return Ok(new { isSuccessful = true, data = new {projects = data, projectCount = 10 } });
+
         }
 
         [Route("GetById/{id}")]
