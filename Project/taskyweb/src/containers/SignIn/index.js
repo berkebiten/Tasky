@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { RootViewHelper, ServiceHelper } from "../../util/helpers";
+import {
+  RootViewHelper,
+  ServiceHelper,
+  SessionHelper,
+} from "../../util/helpers";
 import { LOGIN_SERVICE } from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
@@ -22,6 +26,7 @@ export default class SignIn extends Component {
         toast("Login is Successful", {
           type: "success",
         });
+        SessionHelper.saveUser(response.data.user);
         this.props.history.push("/projects");
       } else {
         toast(response.message, {
