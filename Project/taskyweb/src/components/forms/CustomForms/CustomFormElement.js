@@ -73,15 +73,21 @@ export default class CustomFormElement extends Component {
     );
   };
 
+  handleFileSubmit = (data) => {
+    let x = this.filePickerRef.current
+    console.log(data);
+  };
+
   createFilePicker = (element) => {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
         <Form.File
+        ref={(ref) => this.filePickerRef = ref}
           className="form-file-upload-tasky"
           multiple={element.control.multiple}
           name={element.control.name}
-          onChange={this.props.handleChange}
+          onChange={this.handleFileSubmit}
           isValid={
             this.props.touched[element.control.name] &&
             !this.props.errors[element.control.name]
