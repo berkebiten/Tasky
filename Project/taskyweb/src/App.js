@@ -12,8 +12,9 @@ import "../node_modules/rsuite/dist/styles/rsuite-dark.css";
 import "semantic-ui-css/semantic.min.css";
 import "../node_modules/antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
+import ProjectDetail from "./containers/ProjectDetail";
 
-function App() {
+function App(props) {
   const [loading, setLoading] = useState(false);
 
   const startLoading = () => {
@@ -47,6 +48,7 @@ function App() {
           <Route path="/projects" component={Projects} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
+          <Route path="/project" component={ProjectDetail} />
         </Switch>
       </Router>
     </Spin>
