@@ -26,6 +26,8 @@ export function CustomForm(props) {
           .string()
           .email("Please Write a Valid Email!")
           .required("Required Field!");
+      case "file":
+        yup.string().required("Required Field!");
     }
   };
   let elements = {};

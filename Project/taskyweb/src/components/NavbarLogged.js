@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { Avatar, Dropdown } from "rsuite";
 import logo from "../res/images/tasky-logo-md.png";
+import { SessionHelper } from "../util/helpers";
 
 class NavbarLogged extends Component {
   render() {
@@ -73,7 +74,10 @@ class NavbarLogged extends Component {
             <FiUser className="mr-sm-2" />
             Preferences
           </Dropdown.Item>
-          <Dropdown.Item onSelect={() => this.props.history.push("/")}>
+          <Dropdown.Item onSelect={() => {
+            SessionHelper.removeUser()
+            this.props.history.push("/")
+            }}>
             <FiLogOut className="mr-sm-2" />
             Logout
           </Dropdown.Item>

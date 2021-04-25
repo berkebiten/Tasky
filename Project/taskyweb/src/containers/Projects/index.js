@@ -14,7 +14,11 @@ import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
 import ProjectForm from "../../components/forms/ProjectForm";
 import CustomModal from "../../components/modals/CustomModal";
-import { RootViewHelper, ServiceHelper } from "../../util/helpers";
+import {
+  RootViewHelper,
+  ServiceHelper,
+  SessionHelper,
+} from "../../util/helpers";
 import {
   INSERT_PROJECT_SERVICE,
   GET_PROJECTS_SERVICE,
@@ -31,6 +35,9 @@ export default class Projects extends Component {
     this.state = {
       projectFormVisibility: false,
     };
+    if (!SessionHelper.checkIsSessionLive()) {
+      props.history.push("/");
+    }
   }
 
   componentDidMount = () => {
@@ -137,13 +144,24 @@ export default class Projects extends Component {
     this.getProjects(activePage);
   };
 
+  onClickCard = (project) => {
+    this.props.history.push({
+      pathname: "/project",
+      state: { project: project },
+    });
+  };
+
   renderProjectCards = () => {
     return (
       <Row className="mt-5">
         {this.state.projects.map((item, key) => {
           return (
             <Col md={3}>
-              <Card bg="dark" text="light">
+              <Card
+                bg="dark"
+                text="light"
+                onClick={() => this.onClickCard(item)}
+              >
                 <Card.Body>
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
