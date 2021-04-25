@@ -9,6 +9,8 @@ using TaskyService.DbContexts;
 using TaskyService.Services;
 using Microsoft.AspNetCore.Authorization;
 using BC = BCrypt.Net.BCrypt;
+using System.Collections;
+
 
 namespace TaskyService.Controllers
 {
@@ -17,10 +19,12 @@ namespace TaskyService.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserContext _context;
+        private readonly MailTemplateContext _mailTemplateContext;
 
-        public UsersController(UserContext context)
+        public UsersController(UserContext context, MailTemplateContext mailTemplateContext)
         {
             _context = context;
+            _mailTemplateContext = mailTemplateContext;
         }
 
         [HttpPost]
@@ -119,6 +123,10 @@ namespace TaskyService.Controllers
                     throw;
                 }
             }
+            Hashtable ht = new Hashtable();
+            string response = new MailService(_mailTemplateContext).SendMailFromTemplate("register_activation", user.Email, "", ht);
+            
+            
 
             return Ok(new { isSuccessful = true, message = "Registration is Successful." });
         }
