@@ -124,6 +124,8 @@ namespace TaskyService.Controllers
                 }
             }
             Hashtable ht = new Hashtable();
+            ht.Add("[FIRSTNAME]", user.FirstName);
+            ht.Add("[LINK]", "instagram.com/berkebiten");
             string response = new MailService(_mailTemplateContext).SendMailFromTemplate("register_activation", user.Email, "", ht);
             
             

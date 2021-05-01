@@ -15,6 +15,8 @@ namespace TaskyService.Services
         private readonly MailboxAddress from = new MailboxAddress("Tasky", "taskydev@gmail.com");
         private readonly string authId = "taskydev@gmail.com";
         private readonly string authPw = "12122012aA";
+        private readonly bool UseTestEmail = true;
+        private readonly string TestEmail = "volkan.davsan@isik.edu.tr";
 
         private readonly MailTemplateContext _context;
 
@@ -28,8 +30,17 @@ namespace TaskyService.Services
         {
             #region fill email
             MimeMessage message = new MimeMessage();
+            MailboxAddress mailTo;
+            if (UseTestEmail)
+            {
+                mailTo = new MailboxAddress("User", TestEmail);
 
-            MailboxAddress mailTo = new MailboxAddress("User", to);
+            }
+            else
+            {
+                mailTo = new MailboxAddress("User", to);
+
+            }
 
 
             message.From.Add(from);
@@ -58,6 +69,7 @@ namespace TaskyService.Services
             message.Subject = mailSubject;
             #endregion
 
+            #region smtpclient
             string response = "";
             try
             {
@@ -68,17 +80,14 @@ namespace TaskyService.Services
                 client.Disconnect(true);
                 client.Dispose();
 
-                response = "Activation email sent.";
+                response = "Email sent.";
 
             }
             catch (Exception e)
             {
                 response = "Failed to send email.";
             }
-            #region client
-
             #endregion
-
             return response;
         }
     }
