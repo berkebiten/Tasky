@@ -35,7 +35,7 @@ namespace TaskyService.Controllers
             var user = _context.User.ToList().Where(x => x.Email == model.Email && BC.Verify(model.Password, x.Password)).FirstOrDefault();
 
             if (user == null)
-                return NotFound(new {isSuccessful = false, message = "Email or Password is Invalid" });
+                return NotFound(new { isSuccessful = false, message = "Email or Password is Invalid" });
 
             var token = TokenService.CreateToken(user);
             user.Password = "";
@@ -127,8 +127,8 @@ namespace TaskyService.Controllers
             ht.Add("[FIRSTNAME]", user.FirstName);
             ht.Add("[LINK]", "instagram.com/berkebiten");
             string response = new MailService(_mailTemplateContext).SendMailFromTemplate("register_activation", user.Email, "", ht);
-            
-            
+
+
 
             return Ok(new { isSuccessful = true, message = "Registration is Successful." });
         }
@@ -149,9 +149,27 @@ namespace TaskyService.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("GetProfile")]
+        public async Task<ActionResult<dynamic>> GetProfile([FromHeader(Name = "Authorization")] string token)
+        {
+            Guid id = TokenService.getUserId(token);
+
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { isSuccessful = true, data = new { user = user} });
+
+        }
+
         private bool UserExists(Guid id)
         {
             return _context.User.Any(e => e.Id == id);
         }
+
+
     }
 }

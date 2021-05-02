@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./containers/SignUp";
 import SignIn from "./containers/SignIn";
 import Projects from "./containers/Projects";
+import ProjectDetail from "./containers/ProjectDetail";
+import Profile from "./containers/Profile";
 import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -12,7 +14,6 @@ import "../node_modules/rsuite/dist/styles/rsuite-dark.css";
 import "semantic-ui-css/semantic.min.css";
 import "../node_modules/antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
-import ProjectDetail from "./containers/ProjectDetail";
 
 function App(props) {
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,7 @@ function App(props) {
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
           <Route path="/project" component={ProjectDetail} />
+          <Route path="/profile" component={Profile} />
         </Switch>
       </Router>
     </Spin>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
-import { FiSettings, FiUser, FiLogOut } from "react-icons/fi";
+import { FiSettings, FiUser, FiLogOut, FiSliders } from "react-icons/fi";
 import {
   Navbar,
   Nav,
@@ -38,7 +38,7 @@ class NavbarLogged extends Component {
           </Nav.Link>
         </Nav>
         <Form inline>
-          <InputGroup className='mr-sm-5'>
+          <InputGroup className="mr-sm-5">
             <FormControl
               className="input-search-tasky"
               type="text"
@@ -64,6 +64,10 @@ class NavbarLogged extends Component {
             />
           }
         >
+          <Dropdown.Item onSelect={() => this.props.history.push("/profile")}>
+            <FiUser className="mr-sm-2" />
+            Profile
+          </Dropdown.Item>
           <Dropdown.Item onSelect={() => this.props.history.push("/settings")}>
             <FiSettings className="mr-sm-2" />
             Settings
@@ -71,13 +75,15 @@ class NavbarLogged extends Component {
           <Dropdown.Item
             onSelect={() => this.props.history.push("/preferences")}
           >
-            <FiUser className="mr-sm-2" />
+            <FiSliders className="mr-sm-2" />
             Preferences
           </Dropdown.Item>
-          <Dropdown.Item onSelect={() => {
-            SessionHelper.removeUser()
-            this.props.history.push("/")
-            }}>
+          <Dropdown.Item
+            onSelect={() => {
+              SessionHelper.removeUser();
+              this.props.history.push("/");
+            }}
+          >
             <FiLogOut className="mr-sm-2" />
             Logout
           </Dropdown.Item>
