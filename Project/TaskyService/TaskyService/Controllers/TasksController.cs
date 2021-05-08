@@ -71,7 +71,7 @@ namespace TaskyService.Controllers
         {
             if (id != task.Id)
             {
-                return BadRequest();
+                return NotFound(new { isSuccessful = false, message = "Task is Not Found!" });
             }
 
             _context.Entry(task).State = EntityState.Modified;
@@ -92,13 +92,15 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new { isSuccessful = true, message = "Task is Updated Successfuly" });
         }
 
         [HttpPost]
         [Route("Insert")]
         public async Task<ActionResult<Models.Task>> PostProject(Models.Task task, [FromHeader(Name = "Authorization")] String token)
         {
+            task.CreatedDate = DateTime.Now.Date;
+            task.Status = 0;
 
             _context.Add(task);
 

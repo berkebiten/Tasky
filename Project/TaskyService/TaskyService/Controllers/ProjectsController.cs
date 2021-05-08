@@ -168,6 +168,15 @@ namespace TaskyService.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("GetProjectParticipants/{id}")]
+        public async Task<IActionResult> GetProjectParticipants(Guid id)
+        {
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id).ToList();
+
+            return Ok(new { isSuccessful = true, data = participants });
+        }
+
         private bool ProjectExists(Guid id)
         {
             return _context.Project.Any(e => e.Id == id);
