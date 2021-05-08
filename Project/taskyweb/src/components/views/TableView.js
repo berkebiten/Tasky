@@ -9,20 +9,9 @@ export default class TableView extends Component {
     };
   }
 
-  fetchTaskList = () => {};
-
-  componentDidMount = () => {
-    this.initialize();
-  };
-
-  initialize = async () => {
-    let tableData = await this.props.fetchTableData();
-    this.setState({ tableData: tableData ? tableData : [] });
-  };
-
   render() {
     return (
-      <Table columns={this.props.columns} dataSource={this.state.tableData} />
+      <Table columns={this.props.columns} dataSource={this.props.tableData} />
     );
   }
 }
