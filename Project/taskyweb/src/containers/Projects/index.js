@@ -48,6 +48,12 @@ export default class Projects extends Component {
     this.getProjects(1);
   };
 
+  componentDidUpdate = () => {
+    if (!this.state.projects) {
+      this.getProjects(1);
+    }
+  };
+
   getProjects = async (page) => {
     let reqBody = { startIndex: startIndex + (page - 1) * count, count: count };
     await ServiceHelper.serviceHandler(

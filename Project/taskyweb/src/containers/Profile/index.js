@@ -18,6 +18,7 @@ import {
   SessionHelper,
 } from "../../util/helpers";
 import { GET_PROFILE_SERVICE } from "../../util/constants/Services";
+import moment from "moment";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -77,7 +78,7 @@ export default class Profile extends Component {
                     </Card.Title>
                     <Card.Text>{this.state.user.email}</Card.Text>
                     <Card.Text>
-                      {"Member since: " + this.state.user.registrationDate}
+                      {"Member since: " +  moment(this.state.user.registrationDate).format('DD/MM/YYYY')}
                     </Card.Text>
                   </Card.Body>
                 </Card>
