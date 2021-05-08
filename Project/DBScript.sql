@@ -109,7 +109,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_Task]
-AS SELECT c.Id, c.ProjectId, c.Title, c.Description, c.Status, c.DueDate, a.FirstName as AssigneeFirstName, a.LastName as AssigneeLastName, b.FirstName as ReporterFirstName, b.LastName as ReporterLastName
+AS SELECT c.Id, c.ProjectId, c.Title, c.Description, c.Status, c.DueDate, c.AssigneeId, c.ReporterId, c.Priority, c.CreatedDate, a.FirstName as AssigneeFirstName, a.LastName as AssigneeLastName, b.FirstName as ReporterFirstName, b.LastName as ReporterLastName
 FROM [dbo].[User] a,[dbo].[User] b, [dbo].[Task] c
 WHERE a.Id=c.AssigneeId AND b.Id=c.ReporterId ;
 GO
@@ -123,6 +123,17 @@ CREATE VIEW [dbo].[VW_Project]
 AS SELECT b.Id, b.Name, b.Description, b.Status, a.FirstName as ProjectManagerFirstName, a.LastName as ProjectManagerLastName
 FROM [dbo].[User] a, Project b
 WHERE a.Id=b.ProjectManagerId;
+GO
+
+--VW_PROJECTPARTICIPANT CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_ProjectParticipant]
+AS SELECT b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName
+FROM [dbo].[User] a,[dbo].[ProjectParticipant] b
+WHERE a.Id=b.UserId;
 GO
 
 --MAILTEMPLATE TABLE CREATION
