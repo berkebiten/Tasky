@@ -18,6 +18,7 @@ export function CustomForm(props) {
       case "text":
       case "textarea":
       case "password":
+      case "picker":
         return yup.string().required("Required Field!");
       case "checkbox":
         return yup.bool().required("Required Field!");
@@ -28,6 +29,8 @@ export function CustomForm(props) {
           .required("Required Field!");
       case "file":
         yup.string().required("Required Field!");
+      case "date":
+        yup.date().required("Required Field!");
     }
   };
   let elements = {};

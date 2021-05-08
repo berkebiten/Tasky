@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Form, Button } from "react-bootstrap";
+import DatePicker from "react-datepicker";
 
 export default class CustomFormElement extends Component {
   createElement = () => {
@@ -43,6 +44,10 @@ export default class CustomFormElement extends Component {
         return this.createFilePicker(element);
       case "button":
         return this.createButton(element);
+      case "picker":
+        return this.createPicker(element, values);
+      case "date":
+        return this.createDatePicker(element, values);
     }
   };
 
@@ -74,7 +79,7 @@ export default class CustomFormElement extends Component {
   };
 
   handleFileSubmit = (data) => {
-    let x = this.filePickerRef.current
+    let x = this.filePickerRef.current;
     console.log(data);
   };
 
@@ -83,7 +88,7 @@ export default class CustomFormElement extends Component {
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
         <Form.File
-        ref={(ref) => this.filePickerRef = ref}
+          ref={(ref) => (this.filePickerRef = ref)}
           className="form-file-upload-tasky"
           multiple={element.control.multiple}
           name={element.control.name}
@@ -111,6 +116,64 @@ export default class CustomFormElement extends Component {
       >
         {element.label}
       </Button>
+    );
+  };
+
+  createPicker = (element, values) => {
+    return (
+      <Form.Group>
+        <Form.Label>{element.label}</Form.Label>
+        <Form.Control
+          as="select"
+          custom
+          className="form-input-tasky"
+          name={element.control.name}
+          value={
+            values && values[element.control.name]
+              ? values[element.control.name]
+              : null
+          }
+          onChange={this.props.handleChange}
+          isValid={
+            this.props.touched[element.control.name] &&
+            !this.props.errors[element.control.name]
+          }
+          isInvalid={
+            this.props.touched[element.control.name] &&
+            !!this.props.errors[element.control.name]
+          }
+        >
+          {element.control.options.map((item, key) => {
+            return (
+              <option value={item[element.control.key]}>
+                {item[element.control.displayKey]}
+              </option>
+            );
+          })}
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {this.props.errors[element.control.name]}
+        </Form.Control.Feedback>
+      </Form.Group>
+    );
+  };
+
+  createDatePicker = (element, values) => {
+    return (
+      <Form.Group>
+        <Form.Label>{element.label}</Form.Label>
+        <DatePicker
+          selected={
+            values && values[element.control.name]
+              ? values[element.control.name]
+              : null
+          }
+          onSelect={element.control.onChange}
+        />
+        <Form.Control.Feedback type="invalid">
+          {this.props.errors[element.control.name]}
+        </Form.Control.Feedback>
+      </Form.Group>
     );
   };
 
