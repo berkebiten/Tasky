@@ -14,6 +14,7 @@ import "../node_modules/rsuite/dist/styles/rsuite-dark.css";
 import "semantic-ui-css/semantic.min.css";
 import "../node_modules/antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
+import "../node_modules/react-datepicker/dist/react-datepicker.css"
 
 function App(props) {
   const [loading, setLoading] = useState(false);
