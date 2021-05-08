@@ -27,7 +27,7 @@ export default class SignUp extends Component {
         toast(response.message, { type: "error" });
       }
     });
-    RootViewHelper.stopLoading()
+    // RootViewHelper.stopLoading()
   };
   render() {
     return (

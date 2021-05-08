@@ -54,7 +54,7 @@ export default class ServiceHelper {
       if (!baseUrl) {
         throw new Error("Please call setBaseUrl to initialize base url");
       }
-      RootViewHelper.startLoading();
+      // RootViewHelper.startLoading();
       console.log("WebService Request!", baseUrl + url, options);
       const response = await fetch(baseUrl + url, options);
       console.log("WebService Response!", baseUrl + url, response);
