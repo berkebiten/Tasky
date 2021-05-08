@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
@@ -8,8 +8,15 @@ import { Tag } from "antd";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
   GET_PROJECTS_SERVICE,
+  GET_PROJECT_PARTICIPANTS_SERVICE,
   GET_TASKS_SERVICE,
+  INSERT_TASK_SERVICE,
+  UPDATE_TASK_SERVICE,
 } from "../../util/constants/Services";
+import { BsSearch, BsPlus } from "react-icons/bs";
+import CustomModal from "../../components/modals/CustomModal";
+import TaskForm from "../../components/forms/TaskForm";
+import { toast } from "react-toastify";
 
 const menuItems = [
   {
@@ -139,6 +146,7 @@ export default class ProjectDetail extends Component {
     super(props);
     this.state = {
       activePage: "Overview",
+      taskFormVisibility: false,
       project:
         this.props.location &&
         this.props.location.state &&
@@ -153,15 +161,126 @@ export default class ProjectDetail extends Component {
     }
   }
 
-  onCardDragEnd = (board, card, source, destination) => {
-    console.log(board);
+  componentDidMount = () => {
+    this.initialize();
   };
 
-  createOverview = () => {};
+  initialize = async () => {
+    this.getProjectParticipants();
+    this.fetchTaskList();
+  };
+
+  getProjectParticipants = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_PROJECT_PARTICIPANTS_SERVICE + "/" + this.state.project.id,
+      ServiceHelper.createOptionsJson(null, "GET")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        this.setState({ projectParticipants: response.data });
+      }
+    });
+  };
+
+  submitTaskForm = async (data) => {
+    let insertObject = {
+      projectId: this.state.project.id,
+      priority: 0,
+      dueDate: this.state.dueDate,
+      ...data,
+    };
+    await ServiceHelper.serviceHandler(
+      INSERT_TASK_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Task is Created Successfuly.", {
+          type: "success",
+        });
+        this.setState({ taskFormVisibility: false });
+        this.fetchTaskList();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createProjectForm = () => {
+    return (
+      <CustomModal
+        isVisible={this.state.taskFormVisibility}
+        onClose={() => this.setState({ taskFormVisibility: false })}
+        content={
+          <div>
+            <TaskForm
+              handleSubmit={(submit) => (this.submitTaskForm = submit)}
+              onSubmit={this.submitTaskForm}
+              initialValues={null}
+              onChangeDueDate={(date) => this.setState({ dueDate: date })}
+              participants={
+                this.state.projectParticipants &&
+                this.state.projectParticipants.length > 0
+                  ? this.state.projectParticipants
+                  : []
+              }
+            />
+          </div>
+        }
+        title={"CREATE NEW PROJECT"}
+      />
+    );
+  };
+
+  onCardDragEnd = async (board, card, source, destination) => {
+    let taskObject = {
+      id: card.id,
+      projectId: card.projectId,
+      title: card.title,
+      description: card.description,
+      assigneeId: card.assigneeId,
+      reporterId: card.reporterId,
+      priority: card.priority,
+      dueDate: card.dueDate,
+      createdDate: card.createdDate,
+      status: destination.toColumnId,
+    }
+
+    await ServiceHelper.serviceHandler(
+      UPDATE_TASK_SERVICE + '/' + card.id,
+      ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Task is Updated Successfuly.", {
+          type: "success",
+        });
+        this.fetchTaskList()
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+
+  };
+
+  createOverview = () => {
+    return (
+      <Button
+        variant="primary"
+        className="mr-sm-2"
+        onClick={() => this.setState({ taskFormVisibility: true })}
+      >
+        <BsPlus />
+      </Button>
+    );
+  };
+
   createBoard = () => {
     return (
       <KanbanBoardView
-        fetchBoardData={() => this.fetchTaskList()}
+        boardData={this.state.boardData ? this.state.boardData : []}
+        refresh={(refresh) => (this.onKanbanRefresh = refresh)}
         onCardDragEnd={this.onCardDragEnd}
         boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
       />
@@ -172,7 +291,7 @@ export default class ProjectDetail extends Component {
       <TableView
         columns={columns}
         dataSource={data}
-        fetchTableData={() => this.fetchTaskList()}
+        tableData={this.state.tableData}
       />
     );
   };
@@ -219,22 +338,28 @@ export default class ProjectDetail extends Component {
   };
 
   fetchTaskList = async () => {
-    let data = [];
     let reqBody = { projectId: "e1160e77-c729-4907-3fcb-08d90701c3f7" };
     await ServiceHelper.serviceHandler(
       GET_TASKS_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
     ).then((response) => {
       if (response && response.data && response.isSuccessful) {
-        data = response.data.tasks;
+        let boardData = this.taskBoardExtractor(response.data.tasks);
+        this.setState({
+          boardData: boardData,
+          tableData: response.data.tasks ? response.data.tasks : [],
+        });
       }
     });
-    return data;
   };
 
   onMenuItemSelect = (item) => {
     this.setState({ activePage: menuItems[parseInt(item)].title });
   };
+
+  // createTaskDetail = () => {
+
+  // }
 
   render() {
     return (
@@ -251,7 +376,10 @@ export default class ProjectDetail extends Component {
               onMenuItemSelect={this.onMenuItemSelect}
             />
           </Col>
-          <Col md={10}>{this.createContent()}</Col>
+          <Col md={10}>
+            {this.createContent()}
+            {this.createProjectForm()}
+          </Col>
         </Row>
       </div>
     );
