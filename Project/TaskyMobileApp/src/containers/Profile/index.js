@@ -5,6 +5,7 @@ import styles from './styles';
 import {HeaderView} from '../../components/views';
 import {loadUser} from '../../util/storage/AsyncStorage';
 import {RootViewHelper} from '../../util/helpers';
+import moment from 'moment'
 
 export default class Profile extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ export default class Profile extends Component {
           <View style={styles.infoFieldBg}>
             <Text style={styles.infoFieldTitleTxt}>Registration Date</Text>
             <Text style={styles.infoFieldDetailTxt}>
-              {this.state.userData && this.state.userData.registrationDate}
+              {this.state.userData && moment(this.state.userData.registrationDate).format('DD/MM/YYYY')}
             </Text>
           </View>
         </Content>
