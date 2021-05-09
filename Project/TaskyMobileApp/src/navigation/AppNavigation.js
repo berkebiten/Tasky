@@ -1,6 +1,13 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import {GetStartedScreen, MainScreen, SignInScreen, SignUpScreen, ProfileScreen} from '../screens';
+import {
+  GetStartedScreen,
+  MainScreen,
+  SignInScreen,
+  SignUpScreen,
+  ProfileScreen,
+  TaskScreen,
+} from '../screens';
 import {SCREEN_ENUMS} from '../util/constants/Enums';
 
 const ScreenStack = createStackNavigator(
@@ -10,6 +17,9 @@ const ScreenStack = createStackNavigator(
     },
     [SCREEN_ENUMS.PROFILE]: {
       screen: ProfileScreen,
+    },
+    [SCREEN_ENUMS.TASK]: {
+      screen: TaskScreen,
     },
   },
   {headerMode: null},
