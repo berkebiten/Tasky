@@ -6,7 +6,7 @@
   --main-md-blue: #59b3d7;
   --main-light-blue: #e4f7ff;
   --toast-error: #ec6f75;
-  --toast-success: #78ce8e;
+  --toast-success: #20eb74;
   --toast-info: #59b3d7;
   --bs-dark: #343a40;
   --bs-light: #f8f9fa;
@@ -14,32 +14,32 @@
   --tasky-project-orange: #dfce3b;
 }
 
-.t-t-primary{
-  color: var(--main-blue)
+.t-t-primary {
+  color: var(--main-blue);
 }
-.t-t-dark{
-  color: var(--bs-dark)
+.t-t-dark {
+  color: var(--bs-dark);
 }
-.t-t-success{
-  color:var(--toast-success)
+.t-t-success {
+  color: var(--toast-success);
 }
-.t-t-error{
-  color:var(--toast-error)
+.t-t-error {
+  color: var(--toast-error);
 }
-.t-bg-primary{
+.t-bg-primary {
   background-color: var(--main-md-blue) !important;
-  font-weight:bold;
-  color:var(--bs-dark);
+  font-weight: bold;
+  color: var(--bs-dark);
 }
-.t-bg-success{
+.t-bg-success {
   background-color: var(--toast-success) !important;
-  font-weight:bold;
-  color:var(--bs-dark);
+  font-weight: bold;
+  color: var(--bs-dark);
 }
-.t-bg-orange{
+.t-bg-orange {
   background-color: var(--tasky-project-orange) !important;
-  font-weight:bold;
-  color:var(--bs-dark);
+  font-weight: bold;
+  color: var(--bs-dark);
 }
 
 .ant-modal-content,
@@ -56,6 +56,23 @@ body {
   display: flex;
   font-weight: 400;
   font-family: "Fira Sans", sans-serif;
+}
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--bs-dark);
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--main-blue);
+  border-radius: 50px;
+}
+.navbar {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 h1,
@@ -91,7 +108,7 @@ html,
   background-color: var(--main-light-blue);
   border: 2px solid var(--bs-dark);
   border-radius: 10px;
-  border-color: var(--main-light-blue)
+  border-color: var(--main-light-blue);
 }
 
 .projects-inner {
@@ -116,9 +133,22 @@ html,
 }
 
 .form-label {
-  font-weight:500;
+  font-weight: 500;
   color: var(--bs-dark);
 }
+
+.text-centered {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
 .form-input-tasky {
   border-top: 0 !important;
   border-left: 0 !important;
@@ -128,11 +158,11 @@ html,
   border-radius: 0 !important;
 }
 .form-file-upload-tasky {
-  font-weight:500;
+  font-weight: 500;
 }
 
-.plus-icon-tasky{
-  margin-top:4vh;
+.plus-icon-tasky {
+  margin-top: 4vh;
 }
 
 .custom-control-label {
@@ -140,7 +170,7 @@ html,
   color: #343a40;
 }
 
-.forgot-password{
+.forgot-password {
   text-align: right;
   font-size: 13px;
   padding-top: 10px;
@@ -164,60 +194,179 @@ html,
   background-color: var(--toast-info) !important;
 }
 
-.nav-link-tasky{
-  font-weight:500 !important;
-  font-size:18px !important;
+.nav-link-tasky {
+  font-weight: 500 !important;
+  font-size: 18px !important;
   color: var(--main-light-blue) !important;
 }
 
-.nav-link-tasky:hover{
+.nav-link-tasky:hover {
   color: var(--main-md-blue) !important;
 }
 
-.input-search-tasky{
+.input-search-tasky {
   background-color: transparent !important;
-  border:0 !important;
+  border: 0 !important;
   border-bottom: 1px solid var(--bs-light) !important;
   border-radius: 0 !important;
   color: var(--bs-light) !important;
 }
-.input-search-tasky::-webkit-input-placeholder{
+.input-search-tasky::-webkit-input-placeholder {
   color: var(--bs-light) !important;
-  opacity:0.5 !important;
+  opacity: 0.5 !important;
 }
 
-.input-search-tasky:focus{
+.input-search-tasky:focus {
   border-color: inherit !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
 
-.border-b{
+.border-b {
   border-bottom: 1px solid var(--bs-light) !important;
 }
 
-.tasky-profile-card{
+.tasky-profile-card {
   border-radius: 0 !important;
-  text-align:center;
+  text-align: center;
 }
-.dark-profile-container{
+.dark-profile-container {
   background-color: var(--bs-dark);
   border: 1px solid var(--bs-dark);
   color: var(--bs-light);
 }
 
-.tasky-profile-stat-col{
+.tasky-project-sidenav {
+  height: 100vh !important;
+  background-color: var(--bs-dark) !important;
+}
+
+.tasky-project-sidenav .sidenav-header {
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--tasky-dark);
+  color: var(--main-light-blue);
+}
+
+.tasky-project-sidenav .sidenav-header-text {
+  padding: 9px;
+}
+
+.rs-nav-item-content {
+  color: var(--main-light-blue) !important;
+}
+
+.rs-nav-item-active .rs-nav-item-content {
+  font-weight: bold;
+  color: var(--main-md-blue) !important;
+}
+
+.rs-nav-item:hover .rs-nav-item-content {
+  color: var(--main-blue) !important;
+}
+
+.tasky-profile-stat-col {
   padding: 3px !important;
 }
 
-.tasky-profile-stat-card{
-  background-color:var(--tasky-dark) !important;
-  text-align:center;
-  height:100%;
+.tasky-profile-stat-card {
+  background-color: var(--tasky-dark) !important;
+  text-align: center;
+  height: 100%;
 }
 
-.tasky-profile-image{
+.tasky-profile-image {
   border: 5px solid var(--main-blue);
   border-radius: 100% 100% 100% 100% !important;
   padding: 5px;
+}
+
+.dark-overview-container {
+  border-top: 2px solid var(--main-blue);
+  color: var(--bs-light);
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.project-detail-left {
+  padding: 0 !important;
+  border-right: 2px solid var(--main-blue);
+  border-top: 2px solid var(--main-blue);
+  background-color: var(--bs-dark);
+}
+.project-detail-right {
+  padding: 0 !important;
+}
+.project-detail-row {
+  width: 95%;
+  background-color: var(--main-bg-color);
+  color: var(--bs-dark);
+  border-radius: 2px;
+}
+.project-detail-card {
+  width: 100%;
+  background-color: transparent!important;
+  color: var(--bs-dark);
+}
+.project-detail-card .card-header {
+  font-weight: bold;
+  font-size: x-large;
+}
+.project-detail-card .card-text {
+  font-weight: bold;
+  font-style: italic;
+  font-size: medium;
+}
+.project-detail-stat-col {
+  height: 100%;
+}
+
+.stat-badge {
+  height: 20px;
+  width: 20px;
+  border-radius: 100% !important;
+  padding: 0 !important;
+  position: absolute;
+  top: 50%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+}
+
+.stat-number {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.padding-none {
+  padding: 0 !important;
+}
+.stat-footer {
+  width: 100% !important;
+}
+
+.centered {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.project-participant-card{
+  display: inline-block;
+}
+
+.project-participant-image{
+  width:50px !important;
+  border-radius: 100%;
+  border: 2px solid var(--main-blue);
+}
+
+.project-participant-name{
+  font-weight:bold;
+}
+
+.rounded{
+  border-radius:100% !important;
 }

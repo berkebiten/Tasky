@@ -103,6 +103,30 @@ ALTER TABLE [dbo].[Task]  WITH CHECK ADD FOREIGN KEY([ReporterId])
 REFERENCES [dbo].[User] ([Id])
 GO
 
+--MAILTEMPLATE TABLE CREATION
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[MailTemplate](
+	[Code] [nvarchar](50) NOT NULL,
+	[Subject] [nvarchar](max) NOT NULL,
+	[Body] [nvarchar](max) NOT NULL,
+	[To] [nvarchar](max) NULL,
+	[Cc] [nvarchar](max) NULL,
+	[Parameters] [nvarchar](max) NULL,
+	[ValidityDuration] [int] NULL,
+ CONSTRAINT [PK_MailTemplate] PRIMARY KEY CLUSTERED 
+(
+	[Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
 --VW_TASK CREATION
 SET ANSI_NULLS ON
 GO
@@ -136,26 +160,4 @@ FROM [dbo].[User] a,[dbo].[ProjectParticipant] b
 WHERE a.Id=b.UserId;
 GO
 
---MAILTEMPLATE TABLE CREATION
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[MailTemplate](
-	[Code] [nvarchar](50) NOT NULL,
-	[Subject] [nvarchar](max) NOT NULL,
-	[Body] [nvarchar](max) NOT NULL,
-	[To] [nvarchar](max) NULL,
-	[Cc] [nvarchar](max) NULL,
-	[Parameters] [nvarchar](max) NULL,
-	[ValidityDuration] [int] NULL,
- CONSTRAINT [PK_MailTemplate] PRIMARY KEY CLUSTERED 
-(
-	[Code] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
 

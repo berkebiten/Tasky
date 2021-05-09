@@ -1,9 +1,20 @@
 import React, { Component } from "react";
-import { Row, Col, Button } from "react-bootstrap";
 import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
+import {
+  Card,
+  Col,
+  Row,
+  Container,
+  Badge,
+  Image,
+  Form,
+  FormControl,
+  Button,
+  InputGroup,
+} from "react-bootstrap";
 import { Tag } from "antd";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
@@ -227,7 +238,7 @@ export default class ProjectDetail extends Component {
             />
           </div>
         }
-        title={"CREATE NEW PROJECT"}
+        title={"ADD NEW TASK"}
       />
     );
   };
@@ -244,35 +255,166 @@ export default class ProjectDetail extends Component {
       dueDate: card.dueDate,
       createdDate: card.createdDate,
       status: destination.toColumnId,
-    }
+    };
 
     await ServiceHelper.serviceHandler(
-      UPDATE_TASK_SERVICE + '/' + card.id,
+      UPDATE_TASK_SERVICE + "/" + card.id,
       ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
     ).then((response) => {
       if (response && response.isSuccessful) {
         toast("Task is Updated Successfuly.", {
           type: "success",
         });
-        this.fetchTaskList()
+        this.fetchTaskList();
       } else {
         toast(response.message, {
           type: "error",
         });
       }
     });
-
   };
 
   createOverview = () => {
+    var overview_participants =
+      this.state.projectParticipants &&
+      this.state.projectParticipants.length > 0
+        ? this.state.projectParticipants
+        : [];
+    var overview_tasks = this.state.boardData;
+    var total_tasks = 0;
+    if (overview_tasks) {
+      for (var i = 0; i < overview_tasks.columns.length; i++) {
+        total_tasks += overview_tasks.columns[i].cards.length;
+      }
+    }
+
     return (
-      <Button
-        variant="primary"
-        className="mr-sm-2"
-        onClick={() => this.setState({ taskFormVisibility: true })}
-      >
-        <BsPlus />
-      </Button>
+      <Container className="dark-overview-container">
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Card className="project-detail-card">
+            <Card.Header>About</Card.Header>
+            <Card.Body>
+              <Card.Text>{this.state.project.description}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Row>
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Card className="project-detail-card">
+            <Card.Header>Stats</Card.Header>
+            <Card.Body>
+              <Row>
+                <Col md={3}></Col>
+                <Col md={8}>
+                  <Row>
+                    <Col md={3} className="text-right">
+                      <Row>
+                        <Col md={6} className="padding-none">
+                          <Badge className="stat-badge" variant="warning">
+                            {" "}
+                          </Badge>
+                        </Col>
+                        <Col md={5} className="padding-none ml-1">
+                          <div className="stat-number text-left">
+                            {total_tasks}
+                          </div>
+                        </Col>
+                        <div className="stat-footer text-center padding-none">
+                          Tasks Created
+                        </div>
+                      </Row>
+
+                      <Row>
+                        <Col md={6} className="padding-none">
+                          <Badge className="stat-badge" variant="danger">
+                            {" "}
+                          </Badge>
+                        </Col>
+                        <Col md={5} className="padding-none ml-1">
+                          <div className="stat-number text-left">0</div>
+                        </Col>
+                        <div className="stat-footer text-center padding-none">
+                          Work Logs
+                        </div>
+                      </Row>
+                    </Col>
+                    <Col md={3} className="text-left">
+                      <Row>
+                        <Col md={5} className="padding-none mr-2">
+                          <Badge className="stat-badge" variant="success">
+                            {" "}
+                          </Badge>
+                        </Col>
+                        <Col md={6} className="padding-none">
+                          <div className="stat-number text-left">
+                            {overview_tasks
+                              ? overview_tasks.columns[3].cards.length
+                              : ""}
+                          </div>
+                        </Col>
+                        <div className="stat-footer text-center padding-none mr-2">
+                          Tasks Completed
+                        </div>
+                      </Row>
+                      <Row>
+                        <Col md={5} className="padding-none mr-2">
+                          <Badge className="stat-badge" variant="primary">
+                            {" "}
+                          </Badge>
+                        </Col>
+                        <Col md={6} className="padding-none">
+                          <div className="stat-number text-left">
+                            {overview_tasks
+                              ? overview_tasks.columns[1].cards.length
+                              : ""}
+                          </div>
+                        </Col>
+                        <div className="stat-footer text-center padding-none mr-2">
+                          Active Tasks
+                        </div>
+                      </Row>
+                    </Col>
+                    <Col md={6}></Col>
+                  </Row>
+                </Col>
+                <Col md={1}>
+                  {/*<Button className="rounded">Project Report</Button>*/}
+                  <Button
+                    className="rounded centered"
+                    variant="dark"
+                    onClick={() => this.setState({ taskFormVisibility: true })}
+                  >
+                    Add Task
+                  </Button>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Row>
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Card className="project-detail-card">
+            <Card.Header>Participants</Card.Header>
+            <Card.Body>
+              {overview_participants.map((item, key) => {
+                console.log(item);
+                return (
+                  <div className="project-participant-card ml-3">
+                    <Image
+                      className="project-participant-image"
+                      src="https://lh3.googleusercontent.com/proxy/LgS4MkdQqxnAzelcX4yAYNsq0O2Suqw4GZwyPQfUnM_dTRvCLu3ck-cmKCGfi__AwMECtRbAPD-hAySW6FzdCqI98d_rPFRzg40DdzYJ7gbjqGEln_fjvfg"
+                    ></Image>
+                    <div className="project-participant-name text-center">
+                      {item.firstName}
+                    </div>
+                    <div className="project-participant-name text-center">
+                      {item.lastName}
+                    </div>
+                  </div>
+                );
+              })}
+            </Card.Body>
+          </Card>
+        </Row>
+      </Container>
     );
   };
 
@@ -298,6 +440,7 @@ export default class ProjectDetail extends Component {
   createActivities = () => {};
 
   createContent = () => {
+    console.log(this.state.activePage);
     switch (this.state.activePage) {
       case "Board":
         return this.createBoard();
@@ -338,7 +481,9 @@ export default class ProjectDetail extends Component {
   };
 
   fetchTaskList = async () => {
-    let reqBody = { projectId: "e1160e77-c729-4907-3fcb-08d90701c3f7" };
+    let reqBody = {
+      projectId: this.state.project ? this.state.project.id : null,
+    };
     await ServiceHelper.serviceHandler(
       GET_TASKS_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
@@ -366,7 +511,7 @@ export default class ProjectDetail extends Component {
       <div>
         <NavbarLogged />
         <Row>
-          <Col md={2}>
+          <Col className="project-detail-left" md={2}>
             <SideBar
               menuItems={menuItems}
               title={
@@ -376,7 +521,7 @@ export default class ProjectDetail extends Component {
               onMenuItemSelect={this.onMenuItemSelect}
             />
           </Col>
-          <Col md={10}>
+          <Col className="project-detail-right" md={10}>
             {this.createContent()}
             {this.createProjectForm()}
           </Col>
