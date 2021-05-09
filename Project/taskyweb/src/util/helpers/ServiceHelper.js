@@ -1,15 +1,15 @@
+import Cookies from "js-cookie";
 import { RootViewHelper } from ".";
 
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = "http://192.168.1.37:5001";
+  static baseUrl = "http://192.168.1.41:5001";
   static userId;
   static username;
   static password;
-  static token;
 
   static setToken = (token) => {
-    this.token = token;
+    Cookies.set("token", token);
   };
 
   static createOptionsJson = (requestBody, method) => {
@@ -18,7 +18,7 @@ export default class ServiceHelper {
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + this.token,
+        Authorization: "Bearer " + Cookies.get("token"),
       },
       body: requestBody,
     };
