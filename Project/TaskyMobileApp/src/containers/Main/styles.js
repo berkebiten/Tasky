@@ -107,9 +107,28 @@ const styles = StyleSheet.create({
   },
 
   footerTab:{
-    flex: 1,
     justifyContent:'flex-end'
-  }
+  },
+
+
+  modelTopBar: {
+    width: Metrics.WIDTH * 0.97,
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.silver,
+    paddingHorizontal: 10,
+    backgroundColor: Colors.lightgrey,
+    borderRadius: 15,
+    marginHorizontal: Metrics.WIDTH * 0.015,
+    marginTop: 10,
+  },
+
+  modelTitle: {
+    fontSize: Fonts.moderateScale(12),
+    flex: 1,
+  },
 });
 
 export default styles;

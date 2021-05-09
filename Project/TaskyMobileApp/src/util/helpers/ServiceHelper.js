@@ -2,10 +2,16 @@ import {RootViewHelper} from '.';
 
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = 'http://192.168.1.46:5001';
+  static baseUrl = 'http://192.168.1.37:5001';
   static userId;
   static username;
   static password;
+  static authToken;
+  static token;
+
+  static setAuthToken = (token) => {
+    this.authToken = token;
+  };
 
   static createOptionsJson = (requestBody, method) => {
     const options = {
@@ -13,6 +19,7 @@ export default class ServiceHelper {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: "Bearer " + this.authToken,
       },
       body: requestBody,
     };
