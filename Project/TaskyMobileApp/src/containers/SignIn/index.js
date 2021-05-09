@@ -55,6 +55,9 @@ export default class SignIn extends Component {
       if (responseData.data && responseData.data.user) {
         saveUser(JSON.stringify(responseData.data.user));
       }
+      if (responseData.data && responseData.data.token) {
+        ServiceHelper.setAuthToken(responseData.data.token);
+      }
       NavigationHelper.dispatch(
         StackActions.reset({
           index: 0,
