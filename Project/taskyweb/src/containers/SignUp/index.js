@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { RootViewHelper, ServiceHelper } from "../../util/helpers";
+import {
+  RootViewHelper,
+  ServiceHelper,
+  SessionHelper,
+} from "../../util/helpers";
 import { REGISTER_SERVICE } from "../../util/constants/Services";
 import Navbar from "../../components/Navbar";
 import RegisterForm from "../../components/forms/RegisterForm";
@@ -9,6 +13,13 @@ import Image from "react-bootstrap/Image";
 import logo from "../../res/images/tasky-logo.png";
 
 export default class SignUp extends Component {
+  constructor(props) {
+    super(props);
+    let a = SessionHelper.checkIsSessionLive();
+    if (a) {
+      props.history.push("/projects");
+    }
+  }
   signUp = async (data) => {
     let registerObject = {
       firstname: data.firstname,

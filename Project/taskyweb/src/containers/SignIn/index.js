@@ -12,6 +12,13 @@ import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import logo from "../../res/images/tasky-logo.png";
 export default class SignIn extends Component {
+  constructor(props) {
+    super(props);
+    let a = SessionHelper.checkIsSessionLive();
+    if (a) {
+      props.history.push("/projects");
+    }
+  }
   signIn = async (data) => {
     let loginObject = {
       email: data.email,
