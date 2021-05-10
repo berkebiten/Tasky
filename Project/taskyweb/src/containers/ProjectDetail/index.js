@@ -24,7 +24,6 @@ import {
   INSERT_TASK_SERVICE,
   UPDATE_TASK_SERVICE,
 } from "../../util/constants/Services";
-import { BsSearch, BsPlus } from "react-icons/bs";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
@@ -66,10 +65,14 @@ const columns = [
     dataIndex: "statusTitle",
     render: (status) => {
       let color;
-      if (status === "to-do") {
-        color = "volcano";
+      if (status === "ToDo") {
+        color = "#7ea4b3";
+      } else if (status === "Resolved") {
+        color = "#fdca96";
+      } else if (status === "Closed") {
+        color = "#00b300";
       } else {
-        color = "green";
+        color = "#aadd77";
       }
       return (
         <>
@@ -166,7 +169,6 @@ export default class ProjectDetail extends Component {
           : null,
     };
     let a = SessionHelper.checkIsSessionLive();
-    console.log(a);
     if (!a) {
       props.history.push("/");
     }
@@ -204,7 +206,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Task is Created Successfuly.", {
+        toast("Task is Created Successfully.", {
           type: "success",
         });
         this.setState({ taskFormVisibility: false });
@@ -215,6 +217,10 @@ export default class ProjectDetail extends Component {
         });
       }
     });
+  };
+
+  onChangeDueDate = (date) => {
+    this.setState({ dueDate: date });
   };
 
   createProjectForm = () => {
@@ -228,7 +234,8 @@ export default class ProjectDetail extends Component {
               handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={this.submitTaskForm}
               initialValues={null}
-              onChangeDueDate={(date) => this.setState({ dueDate: date })}
+              onChangeDueDate={(date) => this.onChangeDueDate(date)}
+              dateValue={this.state.dueDate}
               participants={
                 this.state.projectParticipants &&
                 this.state.projectParticipants.length > 0
@@ -262,7 +269,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Task is Updated Successfuly.", {
+        toast("Task is Updated Successfully.", {
           type: "success",
         });
         this.fetchTaskList();
