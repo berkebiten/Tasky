@@ -15,6 +15,12 @@ import logo from "../res/images/tasky-logo-md.png";
 import { SessionHelper } from "../util/helpers";
 
 class NavbarLogged extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: SessionHelper.loadUser(),
+    };
+  }
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -60,7 +66,11 @@ class NavbarLogged extends Component {
           icon={
             <Avatar
               circle
-              src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+              src={
+                this.state.user.profileImage
+                  ? this.state.user.profileImage
+                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+              }
             />
           }
         >

@@ -10,15 +10,11 @@ import {
   Container,
   Badge,
   Image,
-  Form,
-  FormControl,
   Button,
-  InputGroup,
 } from "react-bootstrap";
 import { Tag } from "antd";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
-  GET_PROJECTS_SERVICE,
   GET_PROJECT_PARTICIPANTS_SERVICE,
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
@@ -407,7 +403,11 @@ export default class ProjectDetail extends Component {
                   <div className="project-participant-card ml-3">
                     <Image
                       className="project-participant-image"
-                      src="https://lh3.googleusercontent.com/proxy/LgS4MkdQqxnAzelcX4yAYNsq0O2Suqw4GZwyPQfUnM_dTRvCLu3ck-cmKCGfi__AwMECtRbAPD-hAySW6FzdCqI98d_rPFRzg40DdzYJ7gbjqGEln_fjvfg"
+                      src={
+                        item.profileImage
+                          ? item.profileImage
+                          : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                      }
                     ></Image>
                     <div className="project-participant-name text-center">
                       {item.firstName}

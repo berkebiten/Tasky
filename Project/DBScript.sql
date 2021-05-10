@@ -155,7 +155,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_ProjectParticipant]
-AS SELECT b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName
+AS SELECT b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage
 FROM [dbo].[User] a,[dbo].[ProjectParticipant] b
 WHERE a.Id=b.UserId;
 GO

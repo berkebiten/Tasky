@@ -69,7 +69,7 @@ export default class Profile extends Component {
                   <Card.Img
                     className="tasky-profile-image"
                     variant="top"
-                    src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+                    src={this.state.user.profileImage ? this.state.user.profileImage : 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png'}
                     size="small"
                   />
                   <Card.Body className="mt-2">
