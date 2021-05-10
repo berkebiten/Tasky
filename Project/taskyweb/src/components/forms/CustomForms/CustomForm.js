@@ -29,19 +29,19 @@ export function CustomForm(props) {
           .required("Required Field!");
       case "file":
         yup.string().required("Required Field!");
-      case "date":
-        yup.date().required("Required Field!");
     }
   };
   let elements = {};
 
   props.formElements.map((item, key) => {
-    elements[item.control.name] = getValidation(item.control.type);
-    if (item.control.validation) {
-      elements[item.control.name] = elements[item.control.name].matches(
-        item.control.validation,
-        item.control.validationMessage
-      );
+    if (item.control.type !== 'date') {
+      elements[item.control.name] = getValidation(item.control.type);
+      if (item.control.validation) {
+        elements[item.control.name] = elements[item.control.name].matches(
+          item.control.validation,
+          item.control.validationMessage
+        );
+      }
     }
   });
 
@@ -75,6 +75,7 @@ export function CustomForm(props) {
                   isValid={isValid}
                   errors={errors}
                   element={item}
+                  dateValue={props.dateValue ? props.dateValue : null}
                 />
               );
             })}

@@ -31,7 +31,7 @@ function TaskForm(props) {
         key: "userId",
         options: [
           { userId: -20, firstName: "Please Select an Assignee!" },
-          ...props.participants
+          ...props.participants,
         ],
       },
     },
@@ -44,7 +44,7 @@ function TaskForm(props) {
         key: "userId",
         options: [
           { userId: -20, firstName: "Please Select an Reporter!" },
-          ...props.participants
+          ...props.participants,
         ],
       },
     },
@@ -57,7 +57,8 @@ function TaskForm(props) {
         onSubmit={props.onSubmit}
         initialValues={props.initialValues ? props.initialValues : {}}
         handleSubmit={props.handleSubmit}
-        buttonTitle='Save'
+        buttonTitle="Save"
+        dateValue={props.dateValue ? props.dateValue : null}
       />
     </div>
   );
