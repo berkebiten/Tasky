@@ -10,6 +10,13 @@ using TaskyService.DbContexts;
 using System.Collections;
 using TaskyService.Services;
 
+enum RoleTitles
+{
+    TeamMember = 0,
+    ProjectManager = 1,
+    Watcher = 2,
+}
+
 namespace TaskyService.Controllers
 {
     [Route("[controller]")]
@@ -173,6 +180,11 @@ namespace TaskyService.Controllers
         public async Task<IActionResult> GetProjectParticipants(Guid id)
         {
             var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id).ToList();
+            foreach (VW_ProjectParticipant item in participants)
+            {
+                item.RoleTitle = Enum.GetName(typeof(RoleTitles), item.Role);
+
+            }
 
             return Ok(new { isSuccessful = true, data = participants });
         }

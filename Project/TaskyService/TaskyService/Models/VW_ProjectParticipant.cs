@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskyService.Models
 {
@@ -11,5 +12,10 @@ namespace TaskyService.Models
         public Guid UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string profileImage { get; set; }
+        public Byte Role { get; set; }
+        [NotMapped]
+        public string RoleTitle { get; set; }
+
     }
 }
