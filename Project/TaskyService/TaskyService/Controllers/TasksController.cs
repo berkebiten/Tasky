@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using TaskyService.DbContexts;
 using Newtonsoft.Json.Linq;
+using TaskyService.Services;
 
 enum TaskStatuses
 {
@@ -130,6 +131,21 @@ namespace TaskyService.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("GetMyTasks")]
+        public async Task<ActionResult<dynamic>> GetMyTasks([FromHeader(Name = "Authorization")] string token)
+        {
+            var userId = TokenService.getUserId(token);
+            var data = _context.VW_Task.ToList().Where(item => item.AssigneeId == userId).ToList();
+            foreach (Models.VW_Task item in data)
+            {
+                item.StatusTitle = Enum.GetName(typeof(TaskStatuses), item.Status);
+
+            }
+            return Ok(new { isSuccessful = true, data = new { tasks = data } });
+
         }
 
         private bool TaskExists(Guid id)

@@ -13,6 +13,7 @@ namespace TaskyService.Models
         public Guid ReporterId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Project_Title { get; set; }
         public Int16 Status { get; set; }
         public Int16 Priority { get; set; }
         public string AssigneeFirstName { get; set; }
