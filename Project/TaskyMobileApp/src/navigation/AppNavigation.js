@@ -7,6 +7,7 @@ import {
   SignUpScreen,
   ProfileScreen,
   TaskScreen,
+  ProjectScreen
 } from '../screens';
 import {SCREEN_ENUMS} from '../util/constants/Enums';
 
@@ -20,6 +21,9 @@ const ScreenStack = createStackNavigator(
     },
     [SCREEN_ENUMS.TASK]: {
       screen: TaskScreen,
+    },
+    [SCREEN_ENUMS.PROJECT]: {
+      screen: ProjectScreen,
     },
   },
   {headerMode: null},

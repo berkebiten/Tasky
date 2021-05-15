@@ -125,7 +125,16 @@ export default class Main extends React.Component {
   _renderItem = (item) => {
     switch (this.state.activeTab) {
       case 'Projects':
-        return <ProjectItem item={item.item} />;
+        return (
+          <ProjectItem
+            item={item.item}
+            onPress={() => {
+              NavigationHelper.navigate(SCREEN_ENUMS.PROJECT, {
+                project: item.item,
+              });
+            }}
+          />
+        );
       case 'My Tasks':
         return (
           <TaskItem
@@ -205,7 +214,7 @@ export default class Main extends React.Component {
       <View style={styles.modelTopBar}>
         <TextInput
           style={styles.modelTitle}
-          placeholder="Lütfen bir arama kelimesi giriniz."
+          placeholder="Search..."
           placeholderTextColor={Colors.blacktxt}
           underlineColorAndroid="transparent"
           value={this.state.keyword}
