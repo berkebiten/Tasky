@@ -79,14 +79,14 @@ namespace TaskyService.Controllers
         [HttpGet]
         public async Task<ActionResult<Project>> GetProject( Guid id)
         {
-            var user = await _context.Project.FindAsync(id);
+            var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
 
-            if (user == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return Ok(new { isSuccessful = true, data = project});
         }
 
         [HttpPut]
