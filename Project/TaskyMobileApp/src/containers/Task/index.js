@@ -7,7 +7,7 @@ import moment from 'moment';
 import {Item, Label} from 'native-base';
 import {Colors, Fonts, Metrics} from '../../res/styles';
 
-export default class SignIn extends Component {
+export default class Task extends Component {
   constructor(props) {
     super(props);
     this.state = {
