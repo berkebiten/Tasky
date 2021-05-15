@@ -11,7 +11,9 @@ export default class ProjectItem extends React.PureComponent {
 
   render() {
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => this.props.onPress()}>
         <View style={{flex: 1, flexDirection: 'row'}}>
           <FontAwesome
             name="briefcase"
