@@ -20,6 +20,7 @@ import {
 import { GET_PROFILE_SERVICE } from "../../util/constants/Services";
 import moment from "moment";
 export default class Profile extends Component {
+
   constructor(props) {
     super(props);
     this.state = {

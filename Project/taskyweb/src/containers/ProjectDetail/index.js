@@ -4,6 +4,14 @@ import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
 import {
+  PieChart,
+  Pie,
+  Sector,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import {
   Card,
   Col,
   Row,
@@ -195,7 +203,7 @@ export default class ProjectDetail extends Component {
 
   getProjectParticipants = async () => {
     await ServiceHelper.serviceHandler(
-      GET_PROJECT_PARTICIPANTS_SERVICE + "/" + this.state.project.id,
+      GET_PROJECT_PARTICIPANTS_SERVICE + "/" + this.state.projectId,
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
       if (response && response.isSuccessful) {
@@ -291,6 +299,25 @@ export default class ProjectDetail extends Component {
     });
   };
 
+  getParticipantRoleName = (participant) => {
+    var roleName;
+    switch (participant.role) {
+      case 0:
+        roleName = "member";
+        break;
+      case 1:
+        roleName = "owner";
+        break;
+      case 2:
+        roleName = "watcher";
+        break;
+      default:
+        roleName = "unknown";
+        break;
+    }
+    return roleName;
+  };
+
   createOverview = () => {
     var overview_participants =
       this.state.projectParticipants &&
@@ -304,7 +331,36 @@ export default class ProjectDetail extends Component {
         total_tasks += overview_tasks.columns[i].cards.length;
       }
     }
+    var to_do_tasks = overview_tasks
+      ? overview_tasks.columns[0].cards.length
+      : 0;
+    var active_tasks = overview_tasks
+      ? overview_tasks.columns[1].cards.length
+      : 0;
+    var resolved_tasks = overview_tasks
+      ? overview_tasks.columns[2].cards.length
+      : 0;
+    var closed_tasks = overview_tasks
+      ? overview_tasks.columns[3].cards.length
+      : 0;
+    const chart_data = [
+      { name: "To-Do", value: to_do_tasks },
+      {
+        name: "Active",
+        value: active_tasks,
+      },
+      {
+        name: "Resolved",
+        value: resolved_tasks,
+      },
+      {
+        name: "Closed",
+        value: closed_tasks,
+      },
+    ];
+    const chart_colors = ["#464a50", "#0275d8", "#9C64B3", "#5cb85c"];
 
+    console.log(closed_tasks);
     return (
       <Container className="dark-overview-container">
         <Row className="mt-4 project-detail-row mx-auto">
@@ -322,9 +378,31 @@ export default class ProjectDetail extends Component {
             <Card.Header>Stats</Card.Header>
             <Card.Body>
               <Row>
-                <Col md={3}></Col>
+                <Col md={3}>
+                  <PieChart height={225} width={300}>
+                    <Pie
+                      dataKey="value"
+                      nameKey="name"
+                      isAnimationActive={false}
+                      data={chart_data}
+                      outerRadius={80}
+                      cx="50%"
+                      cy="50%"
+                      fill="#8884d8"
+                      label
+                    >
+                      {chart_data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={chart_colors[index % chart_colors.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </Col>
                 <Col md={8}>
-                  <Row>
+                  <Row className="mt-5">
                     <Col md={3} className="text-right">
                       <Row>
                         <Col md={6} className="padding-none">
@@ -414,11 +492,15 @@ export default class ProjectDetail extends Component {
             <Card.Header>Participants</Card.Header>
             <Card.Body>
               {overview_participants.map((item, key) => {
-                console.log(item);
+                var roleName =
+                  this.getParticipantRoleName(item).toString() + "";
+                console.log(roleName);
                 return (
                   <div className="project-participant-card ml-3">
                     <Image
-                      className="project-participant-image"
+                      className={
+                        "project-participant-image " + roleName + "-border"
+                      }
                       src={
                         item.profileImage
                           ? item.profileImage
@@ -505,7 +587,9 @@ export default class ProjectDetail extends Component {
 
   fetchTaskList = async () => {
     let reqBody = {
-      projectId: this.state.project ? this.state.project.id : null,
+      projectId: this.state.project
+        ? this.state.project.id
+        : this.state.projectId,
     };
     await ServiceHelper.serviceHandler(
       GET_TASKS_SERVICE,

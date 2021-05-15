@@ -32,6 +32,8 @@ function App(props) {
     RootViewHelper.setStopLoading(stopLoading);
   }, []);
 
+  
+
   return (
     <Spin spinning={loading} size="large">
       <Router>
@@ -51,7 +53,7 @@ function App(props) {
           <Route path="/projects" component={Projects} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
-          <Route path="/ProjectDetail/:id" component={ProjectDetail} />
+          <Route path="/project/:id" render={(props) => <ProjectDetail {...props} />} />
           <Route path="/profile" component={Profile} />
         </Switch>
       </Router>

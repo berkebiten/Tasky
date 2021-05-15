@@ -12,6 +12,11 @@
   --bs-light: #f8f9fa;
   --tasky-dark: #464a50;
   --tasky-project-orange: #dfce3b;
+  --tasky-owner: #f16413;
+  --to-do:#464a50;
+  --active:#0275d8;
+  --resolved:#9C64B3;
+  --closed:#5cb85c;
 }
 
 .t-t-primary {
@@ -353,6 +358,14 @@ html,
   transform: translate(-50%, -50%);
 }
 
+.vert-centered {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 .project-participant-card{
   display: inline-block;
 }
@@ -360,7 +373,7 @@ html,
 .project-participant-image{
   width:50px !important;
   border-radius: 100%;
-  border: 2px solid var(--main-blue);
+  border: 2px solid;
 }
 
 .project-participant-name{
@@ -369,4 +382,16 @@ html,
 
 .rounded{
   border-radius:100% !important;
+}
+
+.owner-border{
+  border-color: var(--tasky-owner) !important;
+}
+
+.member-border{
+  border-color: var(--main-blue) !important;
+}
+
+.watcher-border{
+  border-color: var(--tasky-dark) !important;
 }

@@ -8,4 +8,6 @@ export default class ServiceHelper {
   static setStopLoading = (loadingFunct) => {
     this.stopLoading = loadingFunct;
   };
+
+  
 }

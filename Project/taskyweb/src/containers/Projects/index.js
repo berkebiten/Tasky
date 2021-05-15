@@ -152,7 +152,7 @@ export default class Projects extends Component {
 
   onClickCard = (project) => {
     this.props.history.push({
-      pathname: "/ProjectDetail/?id=" + project.id,
+      pathname: "/project/" + project.id,
       state: { project: project },
     });
   };
