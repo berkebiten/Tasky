@@ -8,3 +8,4 @@ export const GET_PROJECT_PARTICIPANTS_SERVICE =
   "/Projects/GetProjectParticipants";
 export const INSERT_TASK_SERVICE = "/Tasks/Insert";
 export const UPDATE_TASK_SERVICE = "/Tasks/Update";
+export const GET_PROJECT_DETAIL = "/Projects/GetById/"

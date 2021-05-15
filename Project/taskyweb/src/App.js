@@ -51,7 +51,7 @@ function App(props) {
           <Route path="/projects" component={Projects} />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
-          <Route path="/project" component={ProjectDetail} />
+          <Route path="/ProjectDetail/:id" component={ProjectDetail} />
           <Route path="/profile" component={Profile} />
         </Switch>
       </Router>

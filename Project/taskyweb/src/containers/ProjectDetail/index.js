@@ -15,6 +15,7 @@ import {
 import { Tag } from "antd";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
+  GET_PROJECT_DETAIL,
   GET_PROJECT_PARTICIPANTS_SERVICE,
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
@@ -157,11 +158,12 @@ export default class ProjectDetail extends Component {
     this.state = {
       activePage: "Overview",
       taskFormVisibility: false,
-      project:
-        this.props.location &&
-        this.props.location.state &&
-        this.props.location.state.project
-          ? this.props.location.state.project
+      projectId:
+        props.match && props.match.params
+          ? props.match.params.id.slice(
+              props.match.params.id.indexOf("=") + 1,
+              props.match.params.id.length
+            )
           : null,
     };
     let a = SessionHelper.checkIsSessionLive();
@@ -175,8 +177,20 @@ export default class ProjectDetail extends Component {
   };
 
   initialize = async () => {
-    this.getProjectParticipants();
-    this.fetchTaskList();
+    this.getProjectDetail();
+  };
+
+  getProjectDetail = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_PROJECT_DETAIL + this.state.projectId,
+      ServiceHelper.createOptionsJson(null, "GET")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        this.setState({ project: response.data });
+        this.getProjectParticipants();
+        this.fetchTaskList();
+      }
+    });
   };
 
   getProjectParticipants = async () => {
@@ -297,7 +311,9 @@ export default class ProjectDetail extends Component {
           <Card className="project-detail-card">
             <Card.Header>About</Card.Header>
             <Card.Body>
-              <Card.Text>{this.state.project.description}</Card.Text>
+              <Card.Text>
+                {this.state.project ? this.state.project.description : null}
+              </Card.Text>
             </Card.Body>
           </Card>
         </Row>
