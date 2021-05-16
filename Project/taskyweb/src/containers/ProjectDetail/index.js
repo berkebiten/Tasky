@@ -3,14 +3,7 @@ import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
-import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   Card,
   Col,
@@ -32,6 +25,7 @@ import {
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const menuItems = [
   {
@@ -213,11 +207,12 @@ export default class ProjectDetail extends Component {
   };
 
   submitTaskForm = async (data) => {
+    let date = moment(data.dueDate).format("YYYY-MM-DD");
     let insertObject = {
       projectId: this.state.project.id,
       priority: 0,
-      dueDate: this.state.dueDate,
       ...data,
+      dueDate: date,
     };
     await ServiceHelper.serviceHandler(
       INSERT_TASK_SERVICE,
@@ -237,10 +232,6 @@ export default class ProjectDetail extends Component {
     });
   };
 
-  onChangeDueDate = (date) => {
-    this.setState({ dueDate: date });
-  };
-
   createProjectForm = () => {
     return (
       <CustomModal
@@ -252,8 +243,6 @@ export default class ProjectDetail extends Component {
               handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={this.submitTaskForm}
               initialValues={null}
-              onChangeDueDate={(date) => this.onChangeDueDate(date)}
-              dateValue={this.state.dueDate}
               participants={
                 this.state.projectParticipants &&
                 this.state.projectParticipants.length > 0
@@ -360,7 +349,6 @@ export default class ProjectDetail extends Component {
     ];
     const chart_colors = ["#464a50", "#0275d8", "#9C64B3", "#5cb85c"];
 
-    console.log(closed_tasks);
     return (
       <Container className="dark-overview-container">
         <Row className="mt-4 project-detail-row mx-auto">
@@ -494,7 +482,6 @@ export default class ProjectDetail extends Component {
               {overview_participants.map((item, key) => {
                 var roleName =
                   this.getParticipantRoleName(item).toString() + "";
-                console.log(roleName);
                 return (
                   <div className="project-participant-card ml-3">
                     <Image
@@ -545,7 +532,6 @@ export default class ProjectDetail extends Component {
   createActivities = () => {};
 
   createContent = () => {
-    console.log(this.state.activePage);
     switch (this.state.activePage) {
       case "Board":
         return this.createBoard();

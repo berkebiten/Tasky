@@ -83,7 +83,6 @@ export default class Projects extends Component {
     }
     let projectObject = this.state.formObject;
     projectObject.participants = participants;
-    console.log(participants);
     await ServiceHelper.serviceHandler(
       INSERT_PROJECT_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(projectObject), "POST")

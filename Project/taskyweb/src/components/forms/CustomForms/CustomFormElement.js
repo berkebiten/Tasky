@@ -162,10 +162,21 @@ export default class CustomFormElement extends Component {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
+        <br/>
         <DatePicker
-          onChange={element.control.onChange}
-          selected={this.props.dateValue}
-          value={this.props.dateValue}
+          onChange={(value) =>
+            this.props.setFieldValue(element.control.name, value)
+          }
+          value={
+            values && values[element.control.name]
+              ? values[element.control.name]
+              : null
+          }
+          selected={
+            values && values[element.control.name]
+              ? values[element.control.name]
+              : null
+          }
         />
       </Form.Group>
     );

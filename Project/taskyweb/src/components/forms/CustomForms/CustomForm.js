@@ -19,6 +19,7 @@ export function CustomForm(props) {
       case "textarea":
       case "password":
       case "picker":
+      case "date":
         return yup.string().required("Required Field!");
       case "checkbox":
         return yup.bool().required("Required Field!");
@@ -34,14 +35,12 @@ export function CustomForm(props) {
   let elements = {};
 
   props.formElements.map((item, key) => {
-    if (item.control.type !== 'date') {
-      elements[item.control.name] = getValidation(item.control.type);
-      if (item.control.validation) {
-        elements[item.control.name] = elements[item.control.name].matches(
-          item.control.validation,
-          item.control.validationMessage
-        );
-      }
+    elements[item.control.name] = getValidation(item.control.type);
+    if (item.control.validation) {
+      elements[item.control.name] = elements[item.control.name].matches(
+        item.control.validation,
+        item.control.validationMessage
+      );
     }
   });
 
@@ -61,6 +60,7 @@ export function CustomForm(props) {
         touched,
         isValid,
         errors,
+        setFieldValue
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>
@@ -75,6 +75,7 @@ export function CustomForm(props) {
                   isValid={isValid}
                   errors={errors}
                   element={item}
+                  setFieldValue={setFieldValue}
                   dateValue={props.dateValue ? props.dateValue : null}
                 />
               );
