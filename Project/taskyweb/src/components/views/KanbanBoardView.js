@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Board from "@lourenci/react-kanban";
-import "@lourenci/react-kanban/dist/styles.css";
+import "../../res/styles/kanban-board.css";
 
 export default class KanbanBoardView extends Component {
   constructor(props) {

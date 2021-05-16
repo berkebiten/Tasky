@@ -3,6 +3,7 @@ import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
+import { BsFillPlusCircleFill } from "react-icons/bs";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   Card,
@@ -463,13 +464,6 @@ export default class ProjectDetail extends Component {
                 </Col>
                 <Col md={1}>
                   {/*<Button className="rounded">Project Report</Button>*/}
-                  <Button
-                    className="rounded centered"
-                    variant="dark"
-                    onClick={() => this.setState({ taskFormVisibility: true })}
-                  >
-                    Add Task
-                  </Button>
                 </Col>
               </Row>
             </Card.Body>
@@ -512,12 +506,25 @@ export default class ProjectDetail extends Component {
 
   createBoard = () => {
     return (
-      <KanbanBoardView
-        boardData={this.state.boardData ? this.state.boardData : []}
-        refresh={(refresh) => (this.onKanbanRefresh = refresh)}
-        onCardDragEnd={this.onCardDragEnd}
-        boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
-      />
+      <Container className="dark-overview-container">
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Button
+            className="ml-2 new-task"
+            variant="dark"
+            onClick={() => this.setState({ taskFormVisibility: true })}
+          >
+              <Badge variant="primary">+</Badge> New
+          </Button>
+        </Row>
+        <Row className="project-detail-row mx-auto">
+          <KanbanBoardView
+            boardData={this.state.boardData ? this.state.boardData : []}
+            refresh={(refresh) => (this.onKanbanRefresh = refresh)}
+            onCardDragEnd={this.onCardDragEnd}
+            boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
+          />
+        </Row>
+      </Container>
     );
   };
   createTaskList = () => {
@@ -545,26 +552,27 @@ export default class ProjectDetail extends Component {
   };
 
   taskBoardExtractor = (tasks) => {
+    console.log(tasks);
     return {
       columns: [
         {
           id: 0,
-          title: "To-Do",
+          title: "TO-DO",
           cards: tasks.filter((item) => item.status === 0),
         },
         {
           id: 1,
-          title: "Active",
+          title: "ACTIVE",
           cards: tasks.filter((item) => item.status === 1),
         },
         {
           id: 2,
-          title: "Resolved",
+          title: "RESOLVED",
           cards: tasks.filter((item) => item.status === 2),
         },
         {
           id: 3,
-          title: "Closed",
+          title: "CLOSED",
           cards: tasks.filter((item) => item.status === 3),
         },
       ],

@@ -242,7 +242,7 @@ html,
 }
 
 .tasky-project-sidenav {
-  height: 100vh !important;
+  height: 110vh !important;
   background-color: var(--bs-dark) !important;
 }
 
@@ -293,6 +293,7 @@ html,
   height: 100%;
   padding: 0 !important;
   margin: 0 !important;
+  max-width: 50%;
 }
 .project-detail-left {
   padding: 0 !important;
@@ -394,4 +395,10 @@ html,
 
 .watcher-border{
   border-color: var(--tasky-dark) !important;
+}
+
+.new-task{
+  background-color: #464a50 !important;
+  border-radius:0 !important;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.07) !important;
 }

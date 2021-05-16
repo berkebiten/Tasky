@@ -174,7 +174,7 @@ export default class Projects extends Component {
                       " " +
                       item.projectManagerLastName}
                   </Card.Subtitle>
-                  <Card.Text>Project Description: {item.description}</Card.Text>
+                  <Card.Text>{item.description}</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
