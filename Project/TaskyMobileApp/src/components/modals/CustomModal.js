@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   modelTitle: {
     fontSize: Fonts.moderateScale(20),
     flex: 1,
+    color:'#6a6a71'
   },
   modalContent: {
     width: Metrics.FILL,

@@ -29,6 +29,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     height: 1,
   },
+
+  fab: {
+    position: 'absolute',
+    margin: Metrics.HEIGHT * 0.03,
+    right: 0,
+    bottom: 0,
+  },
 });
 
 export default styles;
