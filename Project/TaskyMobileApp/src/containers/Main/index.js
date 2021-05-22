@@ -98,7 +98,10 @@ export default class Main extends React.Component {
     );
     if (responseData.data && responseData.data.projects) {
       this.getMyTasks();
-      this.setState({projects: responseData.data.projects});
+      this.setState({
+        projects: responseData.data.projects,
+        filteredProjects: responseData.data.projects,
+      });
     }
   };
 
@@ -108,7 +111,10 @@ export default class Main extends React.Component {
       ServiceHelper.createOptionsJson(null, 'POST'),
     );
     if (responseData.data && responseData.data.tasks) {
-      this.setState({tasks: responseData.data.tasks});
+      this.setState({
+        tasks: responseData.data.tasks,
+        filteredTasks: responseData.data.tasks,
+      });
     }
   };
 
@@ -159,9 +165,9 @@ export default class Main extends React.Component {
         <FlatList
           data={
             this.state.activeTab === 'Projects'
-              ? this.state.projects
+              ? this.state.filteredProjects
               : this.state.activeTab === 'My Tasks'
-              ? this.state.tasks
+              ? this.state.filteredTasks
               : []
           }
           ref={(ref) => {
@@ -197,8 +203,38 @@ export default class Main extends React.Component {
   };
 
   _onChangeKeyword = (keyword) => {
-    if (keyword.length >= 3 || keyword.length == 0) {
-      // this.refresh(this.state.keyword);
+    if (this.state.activeTab === 'Projects') {
+      this.searchProjects(keyword);
+    } else {
+      this.searchTasks(keyword);
+    }
+  };
+
+  searchProjects = (keyword) => {
+    if (keyword.length > 0) {
+      let projects = this.state.projects;
+      let filteredProjects = projects.filter((project) => {
+        if (project.name) {
+          return project.name.toLowerCase().includes(keyword.toLowerCase());
+        }
+      });
+      this.setState({filteredProjects: filteredProjects});
+    } else {
+      this.setState({filteredProjects: this.state.projects});
+    }
+  };
+
+  searchTasks = (keyword) => {
+    if (keyword.length > 0) {
+      let tasks = this.state.tasks;
+      let filteredTasks = tasks.filter((task) => {
+        if (task.title) {
+          return task.title.toLowerCase().includes(keyword.toLowerCase());
+        }
+      });
+      this.setState({filteredTasks: filteredTasks});
+    } else {
+      this.setState({filteredTasks: this.state.tasks});
     }
   };
 
