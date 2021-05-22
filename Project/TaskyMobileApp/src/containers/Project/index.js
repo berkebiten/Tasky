@@ -35,7 +35,6 @@ export default class Project extends Component {
       keyword: '',
       modal: false,
     };
-    // console.warn(this.state.project);
   }
 
   componentDidMount() {
@@ -55,7 +54,10 @@ export default class Project extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), 'POST'),
     );
     if (responseData.data && responseData.data.tasks) {
-      this.setState({tasks: responseData.data.tasks});
+      this.setState({
+        tasks: responseData.data.tasks,
+        filteredTasks: responseData.data.tasks,
+      });
     }
     this.fetchParticipants();
   };
@@ -187,8 +189,16 @@ export default class Project extends Component {
   };
 
   _onChangeKeyword = (keyword) => {
-    if (keyword.length >= 3 || keyword.length == 0) {
-      // this.refresh(this.state.keyword);
+    if (keyword.length > 0) {
+      let tasks = this.state.filteredTasks;
+      let filteredTasks = tasks.filter((task) => {
+        if (task.title) {
+          return task.title.toLowerCase().includes(keyword.toLowerCase());
+        }
+      });
+      this.setState({filteredTasks: filteredTasks});
+    } else {
+      this.setState({filteredTasks: this.state.tasks});
     }
   };
 
@@ -216,8 +226,7 @@ export default class Project extends Component {
         />
         <TouchableOpacity
           onPress={() => {
-            this.setState({keyword: ''});
-            // this.refresh('');
+            this.handleDebounce('');
           }}>
           <AntDesign name="close" size={20} color="black" />
         </TouchableOpacity>
@@ -239,7 +248,7 @@ export default class Project extends Component {
   createTaskList = () => {
     return (
       <FlatList
-        data={this.state.tasks ? this.state.tasks : []}
+        data={this.state.filteredTasks ? this.state.filteredTasks : []}
         ref={(ref) => {
           this.flatListRef = ref;
         }}
