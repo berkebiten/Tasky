@@ -95,10 +95,14 @@ const columns = [
       let color;
       if (moment(text).format("DD/MM/YYYY") < moment().format("DD/MM/YYYY")) {
         color = "#ec6f75";
-      }else if (moment(text).format("DD/MM/YYYY") == moment().format("DD/MM/YYYY")){
+      } else if (
+        moment(text).format("DD/MM/YYYY") == moment().format("DD/MM/YYYY")
+      ) {
         color = "#0275d8";
       }
-      return <p style={{color:color}}>{moment(text).format("DD/MM/YYYY")}</p>;
+      return (
+        <p style={{ color: color }}>{moment(text).format("DD/MM/YYYY")}</p>
+      );
     },
   },
 ];
@@ -181,7 +185,9 @@ export default class ProjectDetail extends Component {
     super(props);
     console.log(props);
     this.state = {
-      activePage: props.location.state.activePage,
+      activePage: props.location.state
+        ? props.location.state.activePage
+        : "Overview",
       taskFormVisibility: false,
       projectId:
         props.match && props.match.params
