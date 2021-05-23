@@ -49,10 +49,14 @@ const menuItems = [
 
 const columns = [
   {
-    title: "Task Title",
+    title: "Title",
     dataIndex: "title",
     key: "title",
-    render: (text) => <a>{text}</a>,
+    render: (text, record) => {
+      console.log(record.id);
+      let id = record.id.toString();
+      return <a href={"/task/" + id}>{text}</a>;
+    },
   },
   {
     title: "Assignee",
@@ -60,19 +64,19 @@ const columns = [
     key: "assigneeFirstName",
   },
   {
-    title: "Status",
+    title: "State",
     key: "statusTitle",
     dataIndex: "statusTitle",
     render: (status) => {
       let color;
       if (status === "ToDo") {
-        color = "#7ea4b3";
+        color = "#464a50";
       } else if (status === "Resolved") {
-        color = "#fdca96";
+        color = "#9C64B3";
       } else if (status === "Closed") {
-        color = "#00b300";
+        color = "#5cb85c";
       } else {
-        color = "#aadd77";
+        color = "#0275d8";
       }
       return (
         <>
@@ -83,6 +87,20 @@ const columns = [
       );
     },
   },
+  {
+    title: "Due Date",
+    dataIndex: "dueDate",
+    key: "dueDate",
+    render: (text) => {
+      let color;
+      if (moment(text).format("DD/MM/YYYY") < moment().format("DD/MM/YYYY")) {
+        color = "#ec6f75";
+      }else if (moment(text).format("DD/MM/YYYY") == moment().format("DD/MM/YYYY")){
+        color = "#0275d8";
+      }
+      return <p style={{color:color}}>{moment(text).format("DD/MM/YYYY")}</p>;
+    },
+  },
 ];
 
 const data = [
@@ -91,18 +109,21 @@ const data = [
     title: "John Brown",
     status: "Active",
     assignee: "Oğuz Kaan Yazan",
+    dueDate: "05.04.2021",
   },
   {
     key: "2",
     title: "John Brown",
     status: "Active",
     assignee: "Oğuz Kaan Yazan",
+    dueDate: "05.04.2021",
   },
   {
     key: "3",
     title: "John Brown",
     status: "Active",
     assignee: "Oğuz Kaan Yazan",
+    dueDate: "05.04.2021",
   },
 ];
 
@@ -513,7 +534,7 @@ export default class ProjectDetail extends Component {
             variant="dark"
             onClick={() => this.setState({ taskFormVisibility: true })}
           >
-              <Badge variant="primary">+</Badge> New
+            <Badge variant="primary">+</Badge> New
           </Button>
         </Row>
         <Row className="project-detail-row mx-auto">
@@ -529,11 +550,24 @@ export default class ProjectDetail extends Component {
   };
   createTaskList = () => {
     return (
-      <TableView
-        columns={columns}
-        dataSource={data}
-        tableData={this.state.tableData}
-      />
+      <Container className="dark-overview-container">
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Button
+            className="ml-2 new-task"
+            variant="dark"
+            onClick={() => this.setState({ taskFormVisibility: true })}
+          >
+            <Badge variant="primary">+</Badge> New
+          </Button>
+        </Row>
+        <Row className="project-detail-row mx-auto">
+          <TableView
+            columns={columns}
+            dataSource={data}
+            tableData={this.state.tableData}
+          />
+        </Row>
+      </Container>
     );
   };
   createActivities = () => {};
@@ -590,6 +624,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
     ).then((response) => {
       if (response && response.data && response.isSuccessful) {
+        console.log(response.data.tasks);
         let boardData = this.taskBoardExtractor(response.data.tasks);
         this.setState({
           boardData: boardData,

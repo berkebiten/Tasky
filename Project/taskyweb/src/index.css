@@ -402,3 +402,36 @@ html,
   border-radius:0 !important;
   border-bottom: 5px solid rgba(0, 0, 0, 0.07) !important;
 }
+
+.task-list{
+  padding:7px;
+  width:100%;
+}
+
+.task-list .ant-table-thead .ant-table-cell{
+  background-color:var(--tasky-dark) !important;
+  color:var(--bs-light);
+  font-weight:bold;
+}
+
+.ant-table-tbody :nth-child(even) {
+  background-color:var(--main-light-blue) ;
+}
+
+.ant-table-tbody  :nth-child(odd) {
+  background-color:var(--bs-light) ;
+}
+
+.ant-table-cell{
+  background-color: inherit !important;
+}
+
+.ant-table-cell a{
+  color:var(--tasky-dark);
+  font-weight:bold;
+  background-color: inherit !important;
+}
+
+.ant-table-cell p{
+  background-color: inherit !important;
+}

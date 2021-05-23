@@ -11,7 +11,7 @@ export default class TableView extends Component {
 
   render() {
     return (
-      <Table columns={this.props.columns} dataSource={this.props.tableData} />
+      <Table className="task-list" columns={this.props.columns} dataSource={this.props.tableData}/>
     );
   }
 }
