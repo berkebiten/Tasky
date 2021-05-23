@@ -5,6 +5,7 @@ import SignIn from "./containers/SignIn";
 import Projects from "./containers/Projects";
 import ProjectDetail from "./containers/ProjectDetail";
 import Profile from "./containers/Profile";
+import Task from "./containers/Task";
 import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -54,6 +55,7 @@ function App(props) {
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
           <Route path="/project/:id" render={(props) => <ProjectDetail {...props} />} />
+          <Route path="/task/:id" render={(props) => <Task {...props} />} />
           <Route path="/profile" component={Profile} />
         </Switch>
       </Router>

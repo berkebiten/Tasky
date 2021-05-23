@@ -373,6 +373,7 @@ html,
 
 .project-participant-image{
   width:50px !important;
+  height:50px !important;
   border-radius: 100%;
   border: 2px solid;
 }
@@ -401,4 +402,83 @@ html,
   background-color: #464a50 !important;
   border-radius:0 !important;
   border-bottom: 5px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+.task-list{
+  padding:7px;
+  width:100%;
+}
+
+.task-list .ant-table-thead .ant-table-cell{
+  background-color:var(--tasky-dark) !important;
+  color:var(--bs-light);
+  font-weight:bold;
+}
+
+.ant-table-tbody :nth-child(even) {
+  background-color:var(--main-light-blue) ;
+}
+
+.ant-table-tbody  :nth-child(odd) {
+  background-color:var(--bs-light) ;
+}
+
+.ant-table-cell{
+  background-color: inherit !important;
+}
+
+.ant-table-cell a{
+  color:var(--tasky-dark);
+  font-weight:bold;
+  background-color: inherit !important;
+}
+
+.ant-table-cell p{
+  background-color: inherit !important;
+}
+
+.state-bar-undefined{
+  background-color: var(--bs-light);
+  color:var(--main-light-blue);
+  font-weight:bold;
+}
+.state-bar-todo{
+  background-color: var(--to-do);
+  color:var(--main-light-blue);
+  font-weight:bold;
+}
+.state-bar-active{
+  background-color: var(--active);
+  color:var(--main-light-blue);
+  font-weight:bold;
+}
+.state-bar-resolved{
+  background-color: var(--resolved);
+  color:var(--main-light-blue);
+  font-weight:bold;
+}
+.state-bar-closed{
+  background-color: var(--closed);
+  color:var(--main-light-blue);
+  font-weight:bold;
+}
+
+.task-title h2, h3{
+  color:var(--tasky-dark) !important;
+  font-weight:bold;
+}
+
+.task-title a:hover h3{
+  color:var(--main-blue) !important;
+}
+
+.back-button{
+  background-color: transparent !important;
+  border-radius:0 !important;
+  border: 2px solid var(--bs-dark) !important;
+  color: var(--bs-dark) !important;
+}
+.back-button:hover{
+  background-color: var(--bs-dark) !important;
+  color: var(--bs-light) !important;
 }
