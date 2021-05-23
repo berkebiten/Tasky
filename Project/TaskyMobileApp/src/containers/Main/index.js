@@ -22,7 +22,7 @@ import PersonalDescriptionItem from '../../components/items/PersonalDescriptionI
 import UserDetailItem from '../../components/items/UserDetailItem';
 import FooterTabView from '../../components/views/FooterTabView';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
-import {loadUser} from '../../util/storage/AsyncStorage';
+import {loadUser, logout} from '../../util/storage/AsyncStorage';
 import {
   GET_MY_TASKS_SERVICE,
   GET_PROJECTS_SERVICE,
@@ -285,7 +285,8 @@ export default class Main extends React.Component {
       },
       {
         iconName: 'logout',
-        onPress: () => {
+        onPress: async () => {
+          await logout();
           NavigationHelper.dispatch(
             StackActions.reset({
               index: 0,

@@ -18,6 +18,15 @@ export const loadLoginObject = async () => {
   }
 };
 
+export const logout = async () => {
+  try {
+    await AsyncStorage.removeItem('LOGIN_OBJECT');
+    await AsyncStorage.removeItem('USER');
+  } catch (e) {
+    console.log(error);
+  }
+};
+
 export const saveUser = async (user) => {
   try {
     await AsyncStorage.setItem('USER', user);
