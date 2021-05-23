@@ -26,9 +26,9 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("GetWorkLogs")]
-        public async Task<ActionResult<dynamic>> GetTasks([FromBody] GetWorkLogsBody requestBody)
+        public async Task<ActionResult<dynamic>> GetWorkLogs([FromBody] GetWorkLogsBody requestBody)
         {
-            var data = _context.WorkLog.ToList().Where(item => item.TaskId == Guid.Parse(requestBody.taskId)).ToList();
+            var data = _context.VW_WorkLog.ToList().Where(item => item.TaskId == Guid.Parse(requestBody.taskId)).ToList();
             return Ok(new { isSuccessful = true, data = data });
 
         }
@@ -116,10 +116,10 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("GetMyWorkLogs")]
-        public async Task<ActionResult<dynamic>> GetMyTasks([FromHeader(Name = "Authorization")] string token)
+        public async Task<ActionResult<dynamic>> GetMyWorkLogs([FromHeader(Name = "Authorization")] string token)
         {
             var userId = TokenService.getUserId(token);
-            var data = _context.WorkLog.ToList().Where(item => item.UserId == userId).ToList();
+            var data = _context.VW_WorkLog.ToList().Where(item => item.UserId == userId).ToList();
 
             return Ok(new { isSuccessful = true, data = data });
 
