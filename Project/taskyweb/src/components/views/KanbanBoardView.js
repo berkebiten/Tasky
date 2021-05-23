@@ -12,12 +12,13 @@ export default class KanbanBoardView extends Component {
 
   renderCard = (item) => {
     return (
-      <Card className="kanban-card">
-        <Card.Header>{item.title}</Card.Header>
-        <Card.Body>
+      <a href={"/task/" + item.id}>
+      <Card className="react-kanban-card stretched-link">
+        <Card.Header className="rkc-header">{item.title}</Card.Header>
+        <Card.Body className="rkc-body">
           <Card.Text>{item.description}</Card.Text>
         </Card.Body>
-        <Card.Footer className="text-muted">
+        <Card.Footer className="rkc-footer text-muted">
           <Icon name="user" />
           {item.assigneeFirstName} {item.assigneeLastName}
           <br />
@@ -25,6 +26,7 @@ export default class KanbanBoardView extends Component {
           {moment(item.dueDate).format("DD/MM/YYYY")}
         </Card.Footer>
       </Card>
+      </a>
     );
   };
 

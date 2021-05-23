@@ -3,11 +3,12 @@
 }
 .react-kanban-card {
   margin-top: 5px;
-  border-radius: 1px;
-  background-color: transparent;
-  padding: 10px;
+  border-radius: 7px !important;
+  background-color: transparent !important;
   margin-bottom: 7px;
+  width:200px;
   color: #343a40;
+  text-align: center;
 }
 .react-kanban-card-skeleton,
 .react-kanban-card,
@@ -34,7 +35,9 @@
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-bottom:none;
   margin: 5px;
-  height:100vh !important;
+  min-height:540px !important;
+  max-height:600px !important;
+  overflow-y: scroll;
 }
 
 /*to-do*/
@@ -47,6 +50,11 @@
   border: 2px solid #464a50;
 }
 
+.react-kanban-column:nth-child(1) .react-kanban-card .rkc-header{
+  font-weight:bold;
+  background-color: rgba(70, 74, 80,0.25) !important;
+}
+
 /*active*/
 .react-kanban-column:nth-child(2) .react-kanban-column-header {
   background-color: #0275d8;
@@ -55,6 +63,11 @@
 }
 .react-kanban-column:nth-child(2) .react-kanban-card {
   border: 2px solid #0275d8;
+}
+
+.react-kanban-column:nth-child(2) .react-kanban-card .rkc-header{
+  font-weight:bold;
+  background-color: rgba(2, 117, 216,0.25) !important;
 }
 /*resolved*/
 .react-kanban-column:nth-child(3) .react-kanban-column-header {
@@ -65,6 +78,11 @@
 .react-kanban-column:nth-child(3) .react-kanban-card {
   border: 2px solid #9c64b3;
 }
+
+.react-kanban-column:nth-child(3) .react-kanban-card .rkc-header{
+  font-weight:bold;
+  background-color: rgba(156, 100, 179,0.25) !important;
+}
 /*closed*/
 .react-kanban-column:nth-child(4) .react-kanban-column-header {
   background-color: #5cb85c;
@@ -73,6 +91,11 @@
 }
 .react-kanban-column:nth-child(4) .react-kanban-card {
   border: 2px solid #5cb85c;
+}
+
+.react-kanban-column:nth-child(4) .react-kanban-card .rkc-header{
+  font-weight:bold;
+  background-color: rgba(92, 184, 92,0.25) !important;
 }
 
 .react-kanban-column input:focus {
@@ -167,10 +190,9 @@
 
 .kanban-card{
   margin: 10px;
-  width:40vh;
 }
 
-.kanban-card:hover{
+.react-kanban-card:hover{
   transform: scale(1.03);
   box-shadow: 0 13px 40px -5px hsla(240, 30.1%, 28%, 0.12), 0 8px 32px -8px hsla(0, 0%, 0%, 0.14), 0 -6px 32px -6px hsla(0, 0%, 0%, 0.02);
 }
