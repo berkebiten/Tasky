@@ -179,8 +179,9 @@ const board = {
 export default class ProjectDetail extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
-      activePage: "Overview",
+      activePage: props.location.state.activePage,
       taskFormVisibility: false,
       projectId:
         props.match && props.match.params

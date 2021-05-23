@@ -56,14 +56,14 @@ namespace TaskyService.Controllers
         [HttpGet]
         public async Task<ActionResult<Models.Task>> GetProject(Guid id)
         {
-            var task = await _context.Task.FindAsync(id);
+            var task = await _context.VW_Task.FindAsync(id);
 
             if (task == null)
             {
                 return NotFound();
             }
 
-            return task;
+            return Ok(new { isSuccessful = true, data = task });
         }
 
         [HttpPut]

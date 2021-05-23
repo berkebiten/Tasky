@@ -16,7 +16,7 @@ namespace TaskyService.Services
         private readonly string authId = "taskydev@gmail.com";
         private readonly string authPw = "12122012aA";
         private readonly bool UseTestEmail = true;
-        private readonly string TestEmail = "volkan.davsan@isik.edu.tr";
+        private readonly string TestEmail = "berkesgs4@gmail.com";
 
         private readonly MailTemplateContext _context;
 
