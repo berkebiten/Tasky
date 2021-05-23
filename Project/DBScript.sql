@@ -186,5 +186,15 @@ ALTER TABLE [dbo].[WorkLog]  WITH CHECK ADD FOREIGN KEY([UserId])
 REFERENCES [dbo].[User] ([Id])
 GO
 
+--VW_WORKLOG CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_WorkLog]
+AS SELECT w.Id, p.Id as ProjectId, w.TaskId, p.Name as ProjectName, t.Title as TaskTitle, u.FirstName, u.LastName, w.Duration, w.CreatedDate, w.[Description], w.UserId, u.ProfileImage
+FROM [dbo].[User] u,[dbo].[WorkLog] w, [dbo].[Task] t, [dbo].[Project] p
+WHERE u.Id=w.UserId AND t.Id=w.TaskId AND p.Id=t.ProjectId;
+GO
 
 

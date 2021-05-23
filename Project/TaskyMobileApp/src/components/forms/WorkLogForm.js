@@ -29,13 +29,6 @@ export default class WorkLogForm extends Component {
               onBlur={handleBlur('duration')}
               value={values.duration}
             />
-            {/* <Label style={styles.label}>Title</Label>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={handleChange('title')}
-              onBlur={handleBlur('title')}
-              value={values.title}
-            /> */}
             <Label style={styles.label}>Description</Label>
             <TextInput
               style={{...styles.textInput, height: Metrics.HEIGHT * 0.15}}
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#f2f2f2',
+    borderColor: 'gray',
     marginTop: 10,
     padding: 10,
     alignSelf: 'center',

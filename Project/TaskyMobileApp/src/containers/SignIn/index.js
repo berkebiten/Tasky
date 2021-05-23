@@ -21,7 +21,11 @@ import NavigationHelper from '../../util/helpers/NavigationHelper';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
 import {ServiceHelper} from '../../util/helpers';
 import {LOGIN_SERVICE} from '../../util/constants/Services';
-import {saveLoginObject, saveUser} from '../../util/storage/AsyncStorage';
+import {
+  loadLoginObject,
+  saveLoginObject,
+  saveUser,
+} from '../../util/storage/AsyncStorage';
 import {NavigationActions, StackActions} from 'react-navigation';
 
 export default class SignIn extends Component {
@@ -31,6 +35,19 @@ export default class SignIn extends Component {
       rememberMe: false,
     };
   }
+
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = async () => {
+    let loginObject = await loadLoginObject();
+    if(loginObject){
+      loginObject = JSON.parse(loginObject)
+      this.setState({email: loginObject.email, password: loginObject.password})
+      this.signIn()
+    }
+  };
 
   signIn = async () => {
     let loginObject = {
@@ -118,6 +135,7 @@ export default class SignIn extends Component {
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 keyboardType="email-address"
                 onChangeText={(text) => this.setState({email: text})}
+                value={this.state.email}
               />
 
               <TextInput
@@ -130,6 +148,7 @@ export default class SignIn extends Component {
                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 keyboardType="default"
                 onChangeText={(text) => this.setState({password: text})}
+                value={this.state.password}
               />
             </View>
             <View style={styles.chboxConatiner}>
