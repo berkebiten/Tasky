@@ -482,3 +482,8 @@ html,
   background-color: var(--bs-dark) !important;
   color: var(--bs-light) !important;
 }
+
+.project-card{
+  min-height:90%;
+  max-height:90%;
+}

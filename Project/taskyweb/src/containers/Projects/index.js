@@ -158,14 +158,15 @@ export default class Projects extends Component {
 
   renderProjectCards = () => {
     return (
-      <Row className="mt-5">
+      <Row className="mt-5 projects-row">
         {this.state.projects.map((item, key) => {
           return (
-            <Col md={3}>
+            <Col md={3} >
               <Card
                 bg="dark"
                 text="light"
                 onClick={() => this.onClickCard(item)}
+                className="project-card mb-2"
               >
                 <Card.Body>
                   <Card.Title>{item.name}</Card.Title>
