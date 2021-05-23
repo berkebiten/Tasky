@@ -223,6 +223,7 @@ export default class ProjectDetail extends Component {
         toast("Task is Created Successfully.", {
           type: "success",
         });
+        this.resetTaskForm();
         this.setState({ taskFormVisibility: false });
         this.fetchTaskList();
       } else {
@@ -242,6 +243,7 @@ export default class ProjectDetail extends Component {
           <div>
             <TaskForm
               handleSubmit={(submit) => (this.submitTaskForm = submit)}
+              handleReset={(reset) => (this.resetTaskForm = reset)}
               onSubmit={this.submitTaskForm}
               initialValues={null}
               participants={
@@ -513,7 +515,7 @@ export default class ProjectDetail extends Component {
             variant="dark"
             onClick={() => this.setState({ taskFormVisibility: true })}
           >
-              <Badge variant="primary">+</Badge> New
+            <Badge variant="primary">+</Badge> New
           </Button>
         </Row>
         <Row className="project-detail-row mx-auto">

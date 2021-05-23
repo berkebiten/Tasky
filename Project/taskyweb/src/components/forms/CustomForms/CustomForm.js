@@ -11,6 +11,9 @@ export function CustomForm(props) {
     if (props.handleSubmit) {
       props.handleSubmit(formRef.handleSubmit);
     }
+    if (props.handleReset) {
+      props.handleReset(() => formRef.resetForm());
+    }
   }, []);
 
   const getValidation = (type) => {
@@ -60,7 +63,8 @@ export function CustomForm(props) {
         touched,
         isValid,
         errors,
-        setFieldValue
+        setFieldValue,
+        resetForm,
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>

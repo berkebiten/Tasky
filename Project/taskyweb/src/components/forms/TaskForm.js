@@ -59,6 +59,7 @@ function TaskForm(props) {
         handleSubmit={props.handleSubmit}
         buttonTitle="Save"
         dateValue={props.dateValue ? props.dateValue : null}
+        handleReset={props.handleReset ? props.handleReset : null}
       />
     </div>
   );
