@@ -9,6 +9,7 @@ using TaskyService.DbContexts;
 using Newtonsoft.Json.Linq;
 using TaskyService.Services;
 using TaskyService.Models;
+using System.Collections;
 
 namespace TaskyService.Controllers
 {
@@ -18,10 +19,12 @@ namespace TaskyService.Controllers
     public class WorkLogsController : ControllerBase
     {
         private readonly WorkLogContext _context;
+        private readonly ProjectParticipantContext _participantContext;
 
-        public WorkLogsController(WorkLogContext context)
+        public WorkLogsController(WorkLogContext context, ProjectParticipantContext participantContext)
         {
             _context = context;
+            _participantContext = participantContext;
         }
 
         [HttpPost]
@@ -29,6 +32,22 @@ namespace TaskyService.Controllers
         public async Task<ActionResult<dynamic>> GetWorkLogs([FromBody] GetWorkLogsBody requestBody)
         {
             var data = _context.VW_WorkLog.ToList().Where(item => item.TaskId == Guid.Parse(requestBody.taskId)).ToList();
+            return Ok(new { isSuccessful = true, data = data });
+
+        }
+
+        [HttpGet]
+        [Route("GetActivityStream")]
+        public async Task<ActionResult<dynamic>> GetActivityStream([FromHeader(Name = "Authorization")] String token)
+        {
+            var userId = TokenService.getUserId(token);
+            var projects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == userId).ToList();
+            var myProjectIds = new ArrayList();
+            foreach (ProjectParticipant projectParticipant in projects)
+            {
+                myProjectIds.Add(projectParticipant.ProjectId);
+            }
+            var data = _context.VW_WorkLog.ToList().Where(item => myProjectIds.Contains(item.ProjectId)).ToList();
             return Ok(new { isSuccessful = true, data = data });
 
         }
