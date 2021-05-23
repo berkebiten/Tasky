@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import {HeaderView} from '../../components/views';
 import FooterTabView from '../../components/views/FooterTabView';
 import styles from './styles';
@@ -10,17 +17,28 @@ import CustomModal from '../../components/modals/CustomModal';
 import WorkLogForm from '../../components/forms/WorkLogForm';
 import {FAB} from 'react-native-paper';
 import {ServiceHelper} from '../../util/helpers';
-import {INSERT_WORKLOG_SERVICE} from '../../util/constants/Services';
+import {
+  GET_WORKLOGS_UNDER_TASK_SERVICE,
+  INSERT_WORKLOG_SERVICE,
+} from '../../util/constants/Services';
+import debounce from 'lodash.debounce';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import WorkLogItem from '../../components/items/WorkLogItem';
 
 export default class Task extends Component {
   constructor(props) {
     super(props);
+    this.onChangeTextDelayed = debounce(this._onChangeKeyword, 1000);
     this.state = {
       task: props.navigation.state.params.task,
       activeTab: 'Overview',
       workLogFormVisibility: false,
     };
   }
+
+  componentDidMount = () => {
+    this.fetchWorkLogs();
+  };
 
   createTaskDetail = () => {
     return (
@@ -102,13 +120,109 @@ export default class Task extends Component {
         isVisible={this.state.workLogFormVisibility}
         content={<WorkLogForm onSubmit={(values) => this.logWork(values)} />}
         title="Log Work"
-        toggleModal={() =>
+        toggleModal={() => {
           this.setState({
             workLogFormVisibility: !this.state.workLogFormVisibility,
-          })
-        }
+          });
+        }}
       />
     );
+  };
+
+  _renderItem = (item) => {
+    return <WorkLogItem item={item.item} onPress={() => console.log('x')} />;
+  };
+
+  createWorkLogList = () => {
+    return (
+      <FlatList
+        data={this.state.filteredWorkLogs ? this.state.filteredWorkLogs : []}
+        ref={(ref) => {
+          this.flatListRef = ref;
+        }}
+        refreshing={false}
+        extraData={this.state}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={(item) => this._renderItem(item)}
+        onRefresh={() => this.fetchWorkLogs(this.state.keyword)}
+        refreshing={false}
+        windowSize={10}
+        // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
+        // onEndReached={() => {
+        //   this._loadMoreData();
+        // }}
+      />
+    );
+  };
+
+  _onChangeKeyword = (keyword) => {
+    if (keyword.length > 0) {
+      let workLogs = this.state.workLogs;
+      let filteredWorkLogs = workLogs.filter((workLog) => {
+        if (workLog.description) {
+          return (
+            workLog.description.toLowerCase().includes(keyword.toLowerCase()) ||
+            workLog.firstName.toLowerCase().includes(keyword.toLowerCase()) ||
+            workLog.lastName.toLowerCase().includes(keyword.toLowerCase()) ||
+            workLog.projectName.toLowerCase().includes(keyword.toLowerCase()) ||
+            workLog.taskTitle.toLowerCase().includes(keyword.toLowerCase())
+          );
+        }
+      });
+      this.setState({filteredWorkLogs: filteredWorkLogs});
+    } else {
+      this.setState({filteredWorkLogs: this.state.workLogs});
+    }
+  };
+
+  handleDebounce = (keyword) => {
+    this.setState({
+      keyword: keyword,
+    });
+    this.onChangeTextDelayed(keyword.trim());
+  };
+
+  createSearchBar = () => {
+    return (
+      <View style={styles.modelTopBar}>
+        <TextInput
+          style={styles.modelTitle}
+          placeholder="Search..."
+          placeholderTextColor={Colors.blacktxt}
+          underlineColorAndroid="transparent"
+          value={this.state.keyword}
+          onChangeText={this.handleDebounce}
+          autoCapitalize="none"
+          returnKeyType="search"
+          numberOfLines={1}
+          cle
+        />
+        <TouchableOpacity
+          onPress={() => {
+            this.handleDebounce('');
+          }}>
+          <AntDesign name="close" size={20} color="black" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  fetchWorkLogs = async () => {
+    let reqBody = {
+      taskId: this.state.task.id,
+    };
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_WORKLOGS_UNDER_TASK_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(reqBody), 'POST'),
+    );
+    if (responseData.data && responseData.data) {
+      let data = responseData.data;
+      data.reverse();
+      this.setState({
+        workLogs: data,
+        filteredWorkLogs: data,
+      });
+    }
   };
 
   createContent = () => {
@@ -117,6 +231,8 @@ export default class Task extends Component {
     } else {
       return (
         <View style={{flex: 1}}>
+          {this.createSearchBar()}
+          {this.createWorkLogList()}
           <FAB
             style={styles.fab}
             small
@@ -130,7 +246,6 @@ export default class Task extends Component {
 
   logWork = async (values) => {
     let insertObj = {...values, taskId: this.state.task.id};
-    console.warn(insertObj);
     const responseData = await ServiceHelper.serviceHandler(
       INSERT_WORKLOG_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(insertObj), 'POST'),
@@ -145,6 +260,7 @@ export default class Task extends Component {
         type: 'success',
         duration: 7000,
       });
+      this.fetchWorkLogs();
     } else {
       Toast.show({
         text:

@@ -6,3 +6,4 @@ export const GET_TASKS_SERVICE = '/Tasks/GetTasks';
 export const GET_PROJECT_PARTICIPANTS_SERVICE =
   '/Projects/GetProjectParticipants';
 export const INSERT_WORKLOG_SERVICE = '/WorkLogs/Insert';
+export const GET_WORKLOGS_UNDER_TASK_SERVICE = '/WorkLogs/GetWorkLogs'

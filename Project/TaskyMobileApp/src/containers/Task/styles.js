@@ -1,5 +1,5 @@
 import {Platform, StyleSheet, I18nManager} from 'react-native';
-import {Fonts, Metrics} from '../../res/styles';
+import {Fonts, Metrics, Colors} from '../../res/styles';
 
 const styles = StyleSheet.create({
   infoFieldTitleTxt: {
@@ -35,6 +35,26 @@ const styles = StyleSheet.create({
     margin: Metrics.HEIGHT * 0.03,
     right: 0,
     bottom: 0,
+    backgroundColor:'#2d324f'
+  },
+
+  modelTopBar: {
+    width: Metrics.WIDTH * 0.97,
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.silver,
+    paddingHorizontal: 10,
+    backgroundColor: Colors.lightgrey,
+    borderRadius: 15,
+    marginHorizontal: Metrics.WIDTH * 0.015,
+    marginTop: 10,
+  },
+
+  modelTitle: {
+    fontSize: Fonts.moderateScale(12),
+    flex: 1,
   },
 });
 
