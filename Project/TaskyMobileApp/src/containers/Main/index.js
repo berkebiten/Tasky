@@ -24,6 +24,7 @@ import FooterTabView from '../../components/views/FooterTabView';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
 import {loadUser, logout} from '../../util/storage/AsyncStorage';
 import {
+  GET_ACTIVITY_STREAM_SERVICE,
   GET_MY_TASKS_SERVICE,
   GET_PROJECTS_SERVICE,
 } from '../../util/constants/Services';
@@ -32,6 +33,7 @@ import {Colors} from '../../res/styles';
 import debounce from 'lodash.debounce';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import TaskItem from '../../components/items/TaskItem';
+import WorkLogItem from '../../components/items/WorkLogItem';
 
 const drawerStyles = {
   drawer: {
@@ -111,9 +113,25 @@ export default class Main extends React.Component {
       ServiceHelper.createOptionsJson(null, 'POST'),
     );
     if (responseData.data && responseData.data.tasks) {
+      this.getActivityStream();
       this.setState({
         tasks: responseData.data.tasks,
         filteredTasks: responseData.data.tasks,
+      });
+    }
+  };
+
+  getActivityStream = async () => {
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_ACTIVITY_STREAM_SERVICE,
+      ServiceHelper.createOptionsJson(null, 'GET'),
+    );
+    if (responseData && responseData.data) {
+      let data = responseData.data;
+      data.reverse();
+      this.setState({
+        workLogs: data,
+        filteredWorkLogs: data,
       });
     }
   };
@@ -125,6 +143,8 @@ export default class Main extends React.Component {
         break;
       case 'My Tasks':
         this.getMyTasks();
+      case 'Activities':
+        this.getActivityStream();
     }
   };
 
@@ -150,6 +170,8 @@ export default class Main extends React.Component {
             }
           />
         );
+      case 'Activities':
+        return <WorkLogItem item={item.item} />;
     }
   };
 
@@ -168,6 +190,8 @@ export default class Main extends React.Component {
               ? this.state.filteredProjects
               : this.state.activeTab === 'My Tasks'
               ? this.state.filteredTasks
+              : this.state.activeTab === 'Activities'
+              ? this.state.filteredWorkLogs
               : []
           }
           ref={(ref) => {
@@ -205,6 +229,8 @@ export default class Main extends React.Component {
   _onChangeKeyword = (keyword) => {
     if (this.state.activeTab === 'Projects') {
       this.searchProjects(keyword);
+    } else if (this.state.activeTab === 'Activities') {
+      this.searchActivities(keyword);
     } else {
       this.searchTasks(keyword);
     }
@@ -235,6 +261,26 @@ export default class Main extends React.Component {
       this.setState({filteredTasks: filteredTasks});
     } else {
       this.setState({filteredTasks: this.state.tasks});
+    }
+  };
+
+  searchActivities = (keyword) => {
+    if (keyword.length > 0) {
+      let activities = this.state.workLogs;
+      let filteredActivities = activities.filter((activity) => {
+        if (activity.description && activity.firstName && activity.lastName) {
+          return (
+            activity.description
+              .toLowerCase()
+              .includes(keyword.toLowerCase()) ||
+            activity.firstName.toLowerCase().includes(keyword.toLowerCase()) ||
+            activity.lastName.toLowerCase().includes(keyword.toLowerCase())
+          );
+        }
+      });
+      this.setState({filteredWorkLogs: filteredActivities});
+    } else {
+      this.setState({filteredWorkLogs: this.state.workLogs});
     }
   };
 

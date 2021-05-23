@@ -88,12 +88,12 @@ const styles = StyleSheet.create({
 
   rowDateTxt: {
     color: '#adadad',
-    fontSize: Fonts.moderateScale(14),
+    fontSize: Fonts.moderateScale(13.5),
     fontFamily: Fonts.type.sfuiDisplayRegular,
   },
 
   user: {
-    fontSize: Fonts.moderateScale(16),
+    fontSize: Fonts.moderateScale(15),
     fontFamily: Fonts.type.sfuiDisplayRegular,
   },
 
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginLeft: Metrics.WIDTH * 0.03,
     marginRight: Metrics.WIDTH * 0.03,
     marginBottom: Metrics.HEIGHT * 0.022,
-    fontSize: Fonts.moderateScale(16.5),
+    fontSize: Fonts.moderateScale(15),
     fontFamily: Fonts.type.sfuiDisplayRegular,
     textAlign: 'left',
   },
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 
   by: {
     color: '#adadad',
-    fontSize: Fonts.moderateScale(16),
+    fontSize: Fonts.moderateScale(15),
     fontFamily: Fonts.type.sfuiDisplayRegular,
   },
 });
