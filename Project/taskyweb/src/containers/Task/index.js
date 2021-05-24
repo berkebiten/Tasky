@@ -1,38 +1,27 @@
 import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
-import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import {
-  Card,
-  Col,
-  Row,
-  Container,
-  Badge,
-  Image,
-  Button,
-} from "react-bootstrap";
-import { Tag } from "antd";
+import { Card, Col, Row, Container, Badge, Button } from "react-bootstrap";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
-  GET_PROJECT_DETAIL,
   GET_PROJECT_PARTICIPANTS_SERVICE,
-  GET_TASKS_SERVICE,
+  GET_SUBTASKS_SERVICE,
   GET_TASK_DETAIL,
   GET_TASK_WORK_LOGS,
   INSERT_TASK_SERVICE,
   INSERT_WORK_LOG_SERVICE,
-  UPDATE_TASK_SERVICE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
-import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { activityTableColumns } from "../../util/constants/Constants";
+import {
+  activityTableColumns,
+  taskTableColumns,
+} from "../../util/constants/Constants";
 import WorkLogForm from "../../components/forms/WorkLogForm";
+import TaskForm from "../../components/forms/TaskForm";
 
 const menuItems = [
   {
@@ -63,6 +52,7 @@ export default class Task extends Component {
           : null,
       projectId: "",
       workLogFormVisibility: false,
+      taskFormVisibility: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -207,8 +197,18 @@ export default class Task extends Component {
     );
   };
 
-  createSubTasks = () => {
-    return <Container className="dark-overview-container">SubTasks</Container>;
+  fetchSubtasks = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_SUBTASKS_SERVICE + "/" + this.state.taskId,
+      ServiceHelper.createOptionsJson(null, "GET")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        // let data = response.data;
+        // data.reverse();
+        this.setState({ subTasks: response.data });
+        this.fetchProjectParticipants()
+      }
+    });
   };
 
   fetchActivities = async () => {
@@ -223,8 +223,42 @@ export default class Task extends Component {
         let data = response.data;
         data.reverse();
         this.setState({ workLogs: data });
+        this.fetchSubtasks();
       }
     });
+  };
+
+  fetchProjectParticipants = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_PROJECT_PARTICIPANTS_SERVICE + "/" + this.state.projectId,
+      ServiceHelper.createOptionsJson(null, "GET")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        this.setState({ projectParticipants: response.data });
+      }
+    });
+  };
+
+  createSubtaskList = () => {
+    return (
+      <Container className="dark-overview-container">
+        <Row className="mt-2 project-detail-row mx-auto">
+          <Button
+            className="ml-2 new-task"
+            variant="dark"
+            onClick={() => this.setState({ taskFormVisibility: true })}
+          >
+            <Badge variant="primary">+</Badge> Create Sub-task
+          </Button>
+        </Row>
+        <Row className="project-detail-row mx-auto">
+          <TableView
+            columns={taskTableColumns}
+            tableData={this.state.subTasks}
+          />
+        </Row>
+      </Container>
+    );
   };
 
   createActivities = () => {
@@ -236,7 +270,7 @@ export default class Task extends Component {
             variant="dark"
             onClick={() => this.setState({ workLogFormVisibility: true })}
           >
-            <Badge variant="primary">+</Badge> New
+            <Badge variant="primary">+</Badge> Log Work
           </Button>
         </Row>
         <Row className="project-detail-row mx-auto">
@@ -294,10 +328,64 @@ export default class Task extends Component {
     );
   };
 
+  submitTaskForm = async (data) => {
+    let date = moment(data.dueDate).format("YYYY-MM-DD");
+    let insertObject = {
+      projectId: this.state.projectId,
+      priority: 0,
+      ...data,
+      dueDate: date,
+      rootId: this.state.taskId
+    };
+    await ServiceHelper.serviceHandler(
+      INSERT_TASK_SERVICE,
+      ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Sub-task is Created Successfully.", {
+          type: "success",
+        });
+        this.resetTaskForm();
+        this.setState({ taskFormVisibility: false });
+        this.fetchSubtasks();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createTaskForm = () => {
+    return (
+      <CustomModal
+        isVisible={this.state.taskFormVisibility}
+        onClose={() => this.setState({ taskFormVisibility: false })}
+        content={
+          <div>
+            <TaskForm
+              handleSubmit={(submit) => (this.submitTaskForm = submit)}
+              handleReset={(reset) => (this.resetTaskForm = reset)}
+              onSubmit={this.submitTaskForm}
+              initialValues={null}
+              participants={
+                this.state.projectParticipants &&
+                this.state.projectParticipants.length > 0
+                  ? this.state.projectParticipants
+                  : []
+              }
+            />
+          </div>
+        }
+        title={"LOG WORK"}
+      />
+    );
+  };
+
   createContent = () => {
     switch (this.state.activePage) {
       case "Sub Tasks":
-        return this.createSubTasks();
+        return this.createSubtaskList();
       case "Activities":
         return this.createActivities();
       default:
@@ -332,6 +420,7 @@ export default class Task extends Component {
           </Col>
         </Row>
         {this.createWorkLogForm()}
+        {this.createTaskForm()}
       </div>
     );
   }

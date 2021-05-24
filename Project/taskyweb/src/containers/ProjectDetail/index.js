@@ -13,7 +13,6 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
-import { Tag } from "antd";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
   GET_PROJECT_DETAIL,
@@ -27,7 +26,7 @@ import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { activityTableColumns } from "../../util/constants/Constants";
+import { activityTableColumns, taskTableColumns } from "../../util/constants/Constants";
 
 const menuItems = [
   {
@@ -45,90 +44,6 @@ const menuItems = [
   {
     title: "Activity List",
     icon: "list",
-  },
-];
-
-const columns = [
-  {
-    title: "Title",
-    dataIndex: "title",
-    key: "title",
-    render: (text, record) => {
-      console.log(record.id);
-      let id = record.id.toString();
-      return <a href={"/task/" + id}>{text}</a>;
-    },
-  },
-  {
-    title: "Assignee",
-    dataIndex: "assigneeFirstName",
-    key: "assigneeFirstName",
-  },
-  {
-    title: "State",
-    key: "statusTitle",
-    dataIndex: "statusTitle",
-    render: (status) => {
-      let color;
-      if (status === "ToDo") {
-        color = "#464a50";
-      } else if (status === "Resolved") {
-        color = "#9C64B3";
-      } else if (status === "Closed") {
-        color = "#5cb85c";
-      } else {
-        color = "#0275d8";
-      }
-      return (
-        <>
-          <Tag color={color} key={status}>
-            {status.toUpperCase()}
-          </Tag>
-        </>
-      );
-    },
-  },
-  {
-    title: "Due Date",
-    dataIndex: "dueDate",
-    key: "dueDate",
-    render: (text) => {
-      let color;
-      if (moment(text).format("DD/MM/YYYY") < moment().format("DD/MM/YYYY")) {
-        color = "#ec6f75";
-      } else if (
-        moment(text).format("DD/MM/YYYY") == moment().format("DD/MM/YYYY")
-      ) {
-        color = "#0275d8";
-      }
-      return (
-        <p style={{ color: color }}>{moment(text).format("DD/MM/YYYY")}</p>
-      );
-    },
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    title: "John Brown",
-    status: "Active",
-    assignee: "Oğuz Kaan Yazan",
-    dueDate: "05.04.2021",
-  },
-  {
-    key: "2",
-    title: "John Brown",
-    status: "Active",
-    assignee: "Oğuz Kaan Yazan",
-    dueDate: "05.04.2021",
-  },
-  {
-    key: "3",
-    title: "John Brown",
-    status: "Active",
-    assignee: "Oğuz Kaan Yazan",
-    dueDate: "05.04.2021",
   },
 ];
 
@@ -505,7 +420,7 @@ export default class ProjectDetail extends Component {
   createBoard = () => {
     return (
       <Container className="dark-overview-container">
-        <Row className="mt-4 project-detail-row mx-auto">
+        <Row className="mt-2 project-detail-row mx-auto">
           <Button
             className="ml-2 new-task"
             variant="dark"
@@ -525,10 +440,11 @@ export default class ProjectDetail extends Component {
       </Container>
     );
   };
+
   createTaskList = () => {
     return (
       <Container className="dark-overview-container">
-        <Row className="mt-4 project-detail-row mx-auto">
+        <Row className="mt-2 project-detail-row mx-auto">
           <Button
             className="ml-2 new-task"
             variant="dark"
@@ -539,20 +455,19 @@ export default class ProjectDetail extends Component {
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView
-            columns={columns}
-            dataSource={data}
+            columns={taskTableColumns}
             tableData={this.state.tableData}
           />
         </Row>
       </Container>
     );
   };
+  
   createActivities = () => {
     return (
       <Container className="dark-overview-container">
         <TableView
           columns={activityTableColumns}
-          dataSource={data}
           tableData={this.state.projectWorkLogs}
         />
       </Container>
