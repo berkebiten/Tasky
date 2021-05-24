@@ -15,5 +15,6 @@ namespace TaskyService.Models
         public Int16 Status { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public Guid? RootId { get; set; }
     }
 }

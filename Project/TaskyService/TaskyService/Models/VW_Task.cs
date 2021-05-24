@@ -22,6 +22,7 @@ namespace TaskyService.Models
         public string ReporterLastName { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public Guid? RootId { get; set; }
         [NotMapped]
         public string StatusTitle { get; set; }
     }

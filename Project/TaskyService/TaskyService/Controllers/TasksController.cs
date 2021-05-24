@@ -148,6 +148,20 @@ namespace TaskyService.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetSubTasks/{taskId}")]
+        public async Task<ActionResult<dynamic>> GetSubTasks(Guid taskId)
+        {
+            var data = _context.VW_Task.ToList().Where(item => item.RootId == taskId).ToList();
+            foreach (Models.VW_Task item in data)
+            {
+                item.StatusTitle = Enum.GetName(typeof(TaskStatuses), item.Status);
+
+            }
+            return Ok(new { isSuccessful = true, data = data });
+
+        }
+
         private bool TaskExists(Guid id)
         {
             return _context.Task.Any(e => e.Id == id);
