@@ -198,3 +198,8 @@ WHERE u.Id=w.UserId AND t.Id=w.TaskId AND p.Id=t.ProjectId;
 GO
 
 
+--ALTER TASK TABLE
+ALTER TABLE  [dbo].[Task]
+    ADD RootId UNIQUEIDENTIFIER NULL,
+    FOREIGN KEY(rootId) REFERENCES [dbo].[Task] (Id);
+
