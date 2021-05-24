@@ -3,7 +3,6 @@ import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
-import { BsFillPlusCircleFill } from "react-icons/bs";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   Card,
@@ -19,6 +18,7 @@ import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
   GET_PROJECT_DETAIL,
   GET_PROJECT_PARTICIPANTS_SERVICE,
+  GET_PROJECT_WORK_LOGS,
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
   UPDATE_TASK_SERVICE,
@@ -27,6 +27,7 @@ import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { activityTableColumns } from "../../util/constants/Constants";
 
 const menuItems = [
   {
@@ -131,55 +132,6 @@ const data = [
   },
 ];
 
-const board = {
-  columns: [
-    {
-      id: 1,
-      title: "To-Do",
-      cards: [
-        {
-          id: 1,
-          title: "Add card",
-          description: "Add capability to add a card in a column",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Active",
-      cards: [
-        {
-          id: 2,
-          title: "Add card",
-          description: "Add capability to add a card in a column",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Resolved",
-      cards: [
-        {
-          id: 3,
-          title: "Drag-n-drop support",
-          description: "Move a card between the columns",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "Done",
-      cards: [
-        {
-          id: 4,
-          title: "Drag-n-drop support",
-          description: "Move a card between the columns",
-        },
-      ],
-    },
-  ],
-};
-
 export default class ProjectDetail extends Component {
   constructor(props) {
     super(props);
@@ -231,6 +183,22 @@ export default class ProjectDetail extends Component {
     ).then((response) => {
       if (response && response.isSuccessful) {
         this.setState({ projectParticipants: response.data });
+      }
+    });
+  };
+
+  fetchActivities = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_PROJECT_WORK_LOGS,
+      ServiceHelper.createOptionsJson(
+        JSON.stringify({ projectId: this.state.projectId }),
+        "POST"
+      )
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        let data = response.data;
+        data.reverse();
+        this.setState({ projectWorkLogs: data });
       }
     });
   };
@@ -579,7 +547,17 @@ export default class ProjectDetail extends Component {
       </Container>
     );
   };
-  createActivities = () => {};
+  createActivities = () => {
+    return (
+      <Container className="dark-overview-container">
+        <TableView
+          columns={activityTableColumns}
+          dataSource={data}
+          tableData={this.state.projectWorkLogs}
+        />
+      </Container>
+    );
+  };
 
   createContent = () => {
     switch (this.state.activePage) {
@@ -633,12 +611,12 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
     ).then((response) => {
       if (response && response.data && response.isSuccessful) {
-        console.log(response.data.tasks);
         let boardData = this.taskBoardExtractor(response.data.tasks);
         this.setState({
           boardData: boardData,
           tableData: response.data.tasks ? response.data.tasks : [],
         });
+        this.fetchActivities();
       }
     });
   };
