@@ -10,3 +10,6 @@ export const GET_PROJECT_PARTICIPANTS_SERVICE =
 export const INSERT_TASK_SERVICE = "/Tasks/Insert";
 export const UPDATE_TASK_SERVICE = "/Tasks/Update";
 export const GET_PROJECT_DETAIL = "/Projects/GetById/";
+export const GET_TASK_WORK_LOGS = "/WorkLogs/GetWorkLogs"
+export const GET_PROJECT_WORK_LOGS = "/WorkLogs/GetProjectWorkLogs"
+export const INSERT_WORK_LOG_SERVICE = '/WorkLogs/Insert'
