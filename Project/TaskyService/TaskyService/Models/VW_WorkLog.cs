@@ -19,5 +19,7 @@ namespace TaskyService.Models
         public string Description { get; set; }
         public string Duration { get; set; }
         public DateTime CreatedDate { get; set; }
+        [NotMapped]
+        public string MemberFullName { get; set; }
     }
 }

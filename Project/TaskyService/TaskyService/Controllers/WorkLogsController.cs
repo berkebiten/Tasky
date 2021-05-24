@@ -32,6 +32,25 @@ namespace TaskyService.Controllers
         public async Task<ActionResult<dynamic>> GetWorkLogs([FromBody] GetWorkLogsBody requestBody)
         {
             var data = _context.VW_WorkLog.ToList().Where(item => item.TaskId == Guid.Parse(requestBody.taskId)).ToList();
+            foreach (VW_WorkLog item in data)
+            {
+                item.MemberFullName = item.FirstName + ' ' + item.LastName;
+
+            }
+            return Ok(new { isSuccessful = true, data = data });
+
+        }
+
+        [HttpPost]
+        [Route("GetProjectWorkLogs")]
+        public async Task<ActionResult<dynamic>> GetProjectWorkLogs([FromBody] GetWorkLogsBody requestBody)
+        {
+            var data = _context.VW_WorkLog.ToList().Where(item => item.ProjectId == Guid.Parse(requestBody.projectId)).ToList();
+            foreach (VW_WorkLog item in data)
+            {
+                item.MemberFullName = item.FirstName + ' ' + item.LastName;
+
+            }
             return Ok(new { isSuccessful = true, data = data });
 
         }
@@ -153,6 +172,7 @@ namespace TaskyService.Controllers
     public class GetWorkLogsBody
     {
         public string taskId { get; set; }
+        public string projectId { get; set; }
     }
 
 }
