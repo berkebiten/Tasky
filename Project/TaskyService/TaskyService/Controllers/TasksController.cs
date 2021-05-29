@@ -46,6 +46,8 @@ namespace TaskyService.Controllers
             foreach (Models.VW_Task item in data)
             {
                 item.StatusTitle = Enum.GetName(typeof(TaskStatuses), item.Status);
+                item.AssigneeFullName = item.AssigneeFirstName + " " + item.AssigneeLastName;
+                item.ReporterFullName = item.ReporterFirstName + " " + item.ReporterLastName;
 
             }
             return Ok(new { isSuccessful = true, data = new { tasks = data} });
@@ -57,6 +59,9 @@ namespace TaskyService.Controllers
         public async Task<ActionResult<Models.Task>> GetProject(Guid id)
         {
             var task = await _context.VW_Task.FindAsync(id);
+            task.StatusTitle = Enum.GetName(typeof(TaskStatuses), task.Status);
+            task.AssigneeFullName = task.AssigneeFirstName + " " + task.AssigneeLastName;
+            task.ReporterFullName = task.ReporterFirstName + " " + task.ReporterLastName;
 
             if (task == null)
             {
@@ -142,6 +147,8 @@ namespace TaskyService.Controllers
             foreach (Models.VW_Task item in data)
             {
                 item.StatusTitle = Enum.GetName(typeof(TaskStatuses), item.Status);
+                item.AssigneeFullName = item.AssigneeFirstName + " " + item.AssigneeLastName;
+                item.ReporterFullName = item.ReporterFirstName + " " + item.ReporterLastName;
 
             }
             return Ok(new { isSuccessful = true, data = new { tasks = data } });
@@ -156,7 +163,8 @@ namespace TaskyService.Controllers
             foreach (Models.VW_Task item in data)
             {
                 item.StatusTitle = Enum.GetName(typeof(TaskStatuses), item.Status);
-
+                item.AssigneeFullName = item.AssigneeFirstName + " " + item.AssigneeLastName;
+                item.ReporterFullName = item.ReporterFirstName + " " + item.ReporterLastName;
             }
             return Ok(new { isSuccessful = true, data = data });
 

@@ -16,6 +16,8 @@ namespace TaskyService.Models
         public Byte Role { get; set; }
         [NotMapped]
         public string RoleTitle { get; set; }
+        [NotMapped]
+        public string FullName { get; set; }
 
     }
 }

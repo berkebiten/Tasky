@@ -184,7 +184,7 @@ namespace TaskyService.Controllers
             foreach (VW_ProjectParticipant item in participants)
             {
                 item.RoleTitle = Enum.GetName(typeof(RoleTitles), item.Role);
-
+                item.FullName = item.FirstName + " " + item.LastName;
             }
 
             return Ok(new { isSuccessful = true, data = participants });

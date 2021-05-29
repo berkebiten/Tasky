@@ -25,5 +25,9 @@ namespace TaskyService.Models
         public Guid? RootId { get; set; }
         [NotMapped]
         public string StatusTitle { get; set; }
+        [NotMapped]
+        public string AssigneeFullName { get; set; }
+        [NotMapped]
+        public string ReporterFullName { get; set; }
     }
 }
