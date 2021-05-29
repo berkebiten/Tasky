@@ -48,7 +48,7 @@ namespace TaskyService.Controllers
         {
             int startIndex = -1;
             int count = -1;
-            if(requestBody != null)
+            if (requestBody != null)
             {
                 startIndex = requestBody.startIndex;
                 count = requestBody.count;
@@ -71,13 +71,13 @@ namespace TaskyService.Controllers
 
             }
 
-            return Ok(new { isSuccessful = true, data = new {projects = data, projectCount = dataSize } });
+            return Ok(new { isSuccessful = true, data = new { projects = data, projectCount = dataSize } });
 
         }
 
         [Route("GetById/{id}")]
         [HttpGet]
-        public async Task<ActionResult<Project>> GetProject( Guid id)
+        public async Task<ActionResult<Project>> GetProject(Guid id)
         {
             var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
 
@@ -86,7 +86,7 @@ namespace TaskyService.Controllers
                 return NotFound();
             }
 
-            return Ok(new { isSuccessful = true, data = project});
+            return Ok(new { isSuccessful = true, data = project });
         }
 
         [HttpPut]
@@ -137,7 +137,8 @@ namespace TaskyService.Controllers
             var userList = _userContext.User.ToList();
 
 
-            foreach(Participant participantObj in project.participants){
+            foreach (Participant participantObj in project.participants)
+            {
                 var participant = new ProjectParticipant();
                 participant.ProjectId = project.Id;
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
@@ -193,6 +194,21 @@ namespace TaskyService.Controllers
         {
             return _context.Project.Any(e => e.Id == id);
         }
+
+        [HttpGet]
+        [Route("GetRole/{projectId}/{userId}")]
+        public IActionResult GetRole(Guid projectId, Guid userId)
+        {
+            var participant = _participantContext.VW_ProjectParticipant.ToList().Where(
+                participant => participant.UserId == userId && participant.ProjectId == projectId
+                ).FirstOrDefault();
+            if(participant == null)
+            {
+                return Ok(new { data = participant });
+            }
+            return Ok( new { data = Enum.GetName(typeof(RoleTitles), participant.Role) });
+        }
+
     }
 
     public class ProjectInsertObject : Project
