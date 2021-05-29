@@ -3,6 +3,7 @@ import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
+import ReportView from "../../components/views/ReportView";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   Card,
@@ -15,6 +16,7 @@ import {
 } from "react-bootstrap";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
+  GET_PARTICIPANT_ROLE,
   GET_PROJECT_DETAIL,
   GET_PROJECT_PARTICIPANTS_SERVICE,
   GET_PROJECT_WORK_LOGS,
@@ -26,7 +28,10 @@ import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { activityTableColumns, taskTableColumns } from "../../util/constants/Constants";
+import {
+  activityTableColumns,
+  taskTableColumns,
+} from "../../util/constants/Constants";
 
 const menuItems = [
   {
@@ -52,6 +57,7 @@ export default class ProjectDetail extends Component {
     super(props);
     console.log(props);
     this.state = {
+      user: SessionHelper.loadUser(),
       activePage: props.location.state
         ? props.location.state.activePage
         : "Overview",
@@ -75,7 +81,27 @@ export default class ProjectDetail extends Component {
   };
 
   initialize = async () => {
-    this.getProjectDetail();
+    this.getRole();
+  };
+
+  getRole = async () => {
+    await ServiceHelper.serviceHandler(
+      GET_PARTICIPANT_ROLE + this.state.projectId + "/" + this.state.user.id,
+      ServiceHelper.createOptionsJson(null, "GET")
+    ).then((response) => {
+      if (response && response.data) {
+        if (response.data === "ProjectManager") {
+          menuItems.push({
+            title: "Project Report",
+            icon: "line-chart",
+          });
+        }
+        this.setState({ userRole: response.data });
+        this.getProjectDetail();
+      } else {
+        this.props.history.push("/");
+      }
+    });
   };
 
   getProjectDetail = async () => {
@@ -462,7 +488,7 @@ export default class ProjectDetail extends Component {
       </Container>
     );
   };
-  
+
   createActivities = () => {
     return (
       <Container className="dark-overview-container">
@@ -474,6 +500,10 @@ export default class ProjectDetail extends Component {
     );
   };
 
+  createProjectReport = () => {
+    return <ReportView projectId={this.state.projectId} />;
+  };
+
   createContent = () => {
     switch (this.state.activePage) {
       case "Board":
@@ -482,6 +512,8 @@ export default class ProjectDetail extends Component {
         return this.createTaskList();
       case "Activity List":
         return this.createActivities();
+      case "Project Report":
+        return this.createProjectReport();
       default:
         return this.createOverview();
     }

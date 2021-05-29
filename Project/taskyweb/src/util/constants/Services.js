@@ -14,3 +14,5 @@ export const GET_TASK_WORK_LOGS = "/WorkLogs/GetWorkLogs"
 export const GET_PROJECT_WORK_LOGS = "/WorkLogs/GetProjectWorkLogs"
 export const INSERT_WORK_LOG_SERVICE = '/WorkLogs/Insert'
 export const GET_SUBTASKS_SERVICE = '/Tasks/GetSubTasks'
+export const GET_PARTICIPANT_ROLE = '/Projects/GetRole/'
+export const GET_PROJECT_REPORT = '/Reports/GetProjectReport/'
