@@ -575,7 +575,6 @@ export default class ProjectDetail extends Component {
         <Row className="project-detail-row mx-auto">
           <KanbanBoardView
             boardData={this.state.boardData ? this.state.boardData : []}
-            refresh={(refresh) => (this.onKanbanRefresh = refresh)}
             onCardDragEnd={this.onCardDragEnd}
             boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
             disableCardDrag={this.state.userRole === "Watcher"}
