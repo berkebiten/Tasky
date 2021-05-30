@@ -39,6 +39,8 @@ namespace TaskyService
                        opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             services.AddDbContext<WorkLogContext>(opt =>
                        opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            services.AddDbContext<TaskOperationContext>(opt =>
+                       opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

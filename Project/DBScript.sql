@@ -203,3 +203,39 @@ ALTER TABLE  [dbo].[Task]
     ADD RootId UNIQUEIDENTIFIER NULL,
     FOREIGN KEY(rootId) REFERENCES [dbo].[Task] (Id);
 
+--TASK OPERATION TABLE CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TaskOperation](
+	[Id] [uniqueidentifier] NOT NULL,
+	[TaskId] [uniqueidentifier] NOT NULL,
+	[UserId] [uniqueidentifier] NOT NULL,
+	[OldStatus] [smallint] NOT NULL,
+	[NewStatus] [smallint] NOT NULL,
+	[Date] [datetime] NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TaskOperation] ADD PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TaskOperation]  WITH CHECK ADD FOREIGN KEY([TaskId])
+REFERENCES [dbo].[Task] ([Id])
+GO
+ALTER TABLE [dbo].[TaskOperation]  WITH CHECK ADD FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+GO
+
+--VW_TASKOPERATION CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_TaskOperation]
+AS SELECT o.Id, o.TaskId, o.UserId, o.OldStatus, o.NewStatus, o.Date, u.FirstName as UserFirstName, u.LastName as UserLastName, u.ProfileImage as UserProfileImage
+FROM [dbo].[User] u, [dbo].[TaskOperation] o
+WHERE u.Id = o.UserId;
+GO

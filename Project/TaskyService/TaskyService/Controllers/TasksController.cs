@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using TaskyService.DbContexts;
 using Newtonsoft.Json.Linq;
 using TaskyService.Services;
+using TaskyService.Models;
 
 enum TaskStatuses
 {
@@ -25,10 +26,12 @@ namespace TaskyService.Controllers
     public class TasksController : ControllerBase
     {
         private readonly TaskContext _context;
+        private readonly TaskOperationContext _operationContext;
 
-        public TasksController(TaskContext context)
+        public TasksController(TaskContext context, TaskOperationContext operationContext)
         {
             _context = context;
+            _operationContext = operationContext;
         }
 
         [HttpGet]
@@ -73,7 +76,7 @@ namespace TaskyService.Controllers
 
         [HttpPut]
         [Route("Update/{id}")]
-        public async Task<IActionResult> PutProject(Guid id, Models.Task task)
+        public async Task<IActionResult> PutTask(Guid id, Models.Task task)
         {
             if (id != task.Id)
             {
@@ -99,6 +102,64 @@ namespace TaskyService.Controllers
             }
 
             return Ok(new { isSuccessful = true, message = "Task is Updated Successfuly" });
+        }
+
+        [HttpPut]
+        [Route("UpdateTaskStatus/{id}")]
+        public async Task<IActionResult> UpdateTaskStatus(Guid id, Models.Task task, [FromHeader(Name = "Authorization")] string token)
+        {
+            if (id != task.Id)
+            {
+                return NotFound(new { isSuccessful = false, message = "Task is Not Found!" });
+            }
+
+            var oldTask = _context.VW_Task.ToList().Where(item => item.Id == task.Id).FirstOrDefault();
+
+            TaskOperation operation = new TaskOperation();
+            operation.Id = new Guid();
+            operation.TaskId = task.Id;
+            operation.UserId = TokenService.getUserId(token);
+            operation.Date = DateTime.Now;
+            operation.NewStatus = task.Status;
+            operation.OldStatus = oldTask.Status;
+            _context.Entry(task).State = EntityState.Modified;
+            _operationContext.Add(operation);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                await _operationContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(new { isSuccessful = true, message = "Task is Updated Successfuly" });
+        }
+
+
+        [HttpGet]
+        [Route("GetTaskTimeline/{id}")]
+        public IActionResult GetTaskTimeline(Guid id)
+        {
+            var operations = _operationContext.VW_TaskOperation.ToList().Where(operation => operation.TaskId == id).ToList();
+            foreach(VW_TaskOperation operation in operations)
+            {
+                operation.OldStatusTitle = Enum.GetName(typeof(TaskStatuses), operation.OldStatus);
+                operation.NewStatusTitle = Enum.GetName(typeof(TaskStatuses), operation.NewStatus);
+                operation.UserFullName = operation.UserFirstName + " " + operation.UserLastName;
+            }
+
+            return Ok(new { data = operations});
+
         }
 
         [HttpPost]
