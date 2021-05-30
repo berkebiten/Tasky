@@ -15,7 +15,7 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
-import { ServiceHelper, SessionHelper } from "../../util/helpers";
+import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
   GET_PARTICIPANT_ROLE,
   GET_PROJECT_DETAIL,
@@ -24,6 +24,7 @@ import {
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
   UPDATE_TASK_STATUS_SERVICE,
+  UPLOAD_PROJECT_FILE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -71,6 +72,7 @@ export default class ProjectDetail extends Component {
               props.match.params.id.length
             )
           : null,
+      fileUpload: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -262,6 +264,75 @@ export default class ProjectDetail extends Component {
     return roleName;
   };
 
+  uploadFile = async () => {
+    let files = FileHelper.getFiles();
+    await ServiceHelper.serviceHandler(
+      UPLOAD_PROJECT_FILE + this.state.projectId,
+      ServiceHelper.createOptionsJson(JSON.stringify(files), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("File Uploaded.", {
+          type: "success",
+        });
+        FileHelper.clearFiles();
+        this.setState({ fileUpload: false });
+        this.getProjectDetail();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  onFileChange = (event, callback) => {
+    if (
+      event &&
+      event.target &&
+      event.target.files &&
+      event.target.files.length > 0
+    ) {
+      let files = Array.from(event.target.files);
+      files.map((file, index) => {
+        FileHelper.getBase64(file);
+      });
+    }
+  };
+
+  createFileUploadModal = () => {
+    return (
+      <CustomModal
+        title="Upload File"
+        isVisible={this.state.fileUpload}
+        onClose={() => this.setState({ fileUpload: false })}
+        content={
+          <div>
+            <input
+              type="file"
+              className="file-input"
+              onChange={(event) =>
+                this.onFileChange(event, (res) =>
+                  this.setState({ base64: res })
+                )
+              }
+              multiple
+            />
+            <Button
+              variant="dark"
+              size="lg"
+              onClick={() => {
+                this.uploadFile();
+              }}
+              block
+            >
+              Upload
+            </Button>
+          </div>
+        }
+      />
+    );
+  };
+
   createOverview = () => {
     var overview_participants =
       this.state.projectParticipants &&
@@ -425,7 +496,10 @@ export default class ProjectDetail extends Component {
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
-            <Card.Header>Participants</Card.Header>
+            <Card.Header>
+              Participants
+              <Button className="pull-right">Invite Participant</Button>
+            </Card.Header>
             <Card.Body>
               {overview_participants.map((item, key) => {
                 var roleName =
@@ -456,7 +530,15 @@ export default class ProjectDetail extends Component {
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
-            <Card.Header>Files</Card.Header>
+            <Card.Header>
+              Files
+              <Button
+                className="pull-right"
+                onClick={() => this.setState({ fileUpload: true })}
+              >
+                Upload File
+              </Button>
+            </Card.Header>
             <Card.Body>
               {this.state.project &&
                 this.state.project.files &&
@@ -466,6 +548,7 @@ export default class ProjectDetail extends Component {
             </Card.Body>
           </Card>
         </Row>
+        {this.createFileUploadModal()}
       </Container>
     );
   };
@@ -615,10 +698,6 @@ export default class ProjectDetail extends Component {
   onMenuItemSelect = (item) => {
     this.setState({ activePage: menuItems[parseInt(item)].title });
   };
-
-  // createTaskDetail = () => {
-
-  // }
 
   render() {
     return (
