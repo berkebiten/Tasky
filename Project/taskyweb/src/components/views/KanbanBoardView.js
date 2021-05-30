@@ -38,7 +38,7 @@ export default class KanbanBoardView extends Component {
     ) {
       return (
         <Board
-          initialBoard={this.props.boardData}
+          children={this.props.boardData}
           allowAddColumn={false}
           disableColumnDrag={true}
           onCardDragEnd={this.props.onCardDragEnd}
