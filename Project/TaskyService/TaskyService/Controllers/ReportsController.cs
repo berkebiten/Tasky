@@ -43,6 +43,7 @@ namespace TaskyService.Controllers
             report.ParticipantRep = GetParticipantReport(project.Id);
             report.TaskStatusReport = GetTaskStatusReport(project.Id);
             report.TotalWorkHour = GetTotalWorkHour(project.Id);
+            report.WorkHoursReport = GetWorkHours(project.Id);
             return Ok(new { isSuccessfull = true, data = report });
         }
 
@@ -153,6 +154,42 @@ namespace TaskyService.Controllers
             return workHour;
 
         }
+
+        private WorkHoursReport[] GetWorkHours (Guid id)
+        {
+            double workHour = 0;
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2).ToList();
+            WorkHoursReport[] workHoursReports = new WorkHoursReport[participants.Count];
+            int index = 0;
+            foreach (VW_ProjectParticipant participant in participants)
+            {
+                workHour = 0;
+                WorkHoursReport newWHReport = new WorkHoursReport();
+                newWHReport.FullName = participant.FirstName + " " + participant.LastName;
+
+                var participantWorkLogs = _workLogContext.VW_WorkLog.ToList().Where(item => item.ProjectId == id && item.UserId == participant.UserId);
+
+                foreach (VW_WorkLog workLog in participantWorkLogs)
+                {
+                    if (workLog.Duration.Contains("h"))
+                    {
+                        workHour += Double.Parse(workLog.Duration.Replace("h", ""));
+                    }
+                    else if (workLog.Duration.Contains("m"))
+                    {
+                        workHour += (Double.Parse(workLog.Duration.Replace("m", "")) / 60);
+                    }
+                    else
+                    {
+                        workHour += (Double.Parse(workLog.Duration.Replace("d", "")) * 24);
+                    }
+                }
+                newWHReport.WorkHour = workHour;
+                workHoursReports[index] = newWHReport;
+                index++;
+            }
+            return workHoursReports;
+        }
     }
 
     public class ParticipantReport
@@ -166,5 +203,11 @@ namespace TaskyService.Controllers
     {
         public string Status { get; set; }
         public int Count { get; set; }
+    }
+
+    public class WorkHoursReport
+    {
+        public string FullName { get; set; }
+        public double WorkHour { get; set; }
     }
 }

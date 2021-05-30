@@ -15,12 +15,12 @@ import {
 } from "recharts";
 import { ServiceHelper } from "../../util/helpers";
 import { GET_PROJECT_REPORT } from "../../util/constants/Services";
-import { Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import CustomCard from "../material-components/CustomCard";
 import HourIcon from "@material-ui/icons/QueryBuilder";
-import TaskIcon from '@material-ui/icons/FormatListBulleted';
+import TaskIcon from "@material-ui/icons/FormatListBulleted";
 
-export default class KanbanBoardView extends Component {
+export default class ReportView extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -70,6 +70,7 @@ export default class KanbanBoardView extends Component {
       this.state.report.participantRep &&
       this.state.report.participantRep.length > 0
     ) {
+      console.log(this.state.report);
       return (
         <ResponsiveContainer width="100%" height={250}>
           <RadialBarChart
@@ -99,6 +100,28 @@ export default class KanbanBoardView extends Component {
     return null;
   };
 
+  createParticipantWorkHours = () => {
+    if (
+      this.state.report.workHoursReport &&
+      this.state.report.workHoursReport.length > 0
+    ) {
+      return (
+        <BarChart
+          width={450}
+          height={250}
+          data={this.state.report.workHoursReport}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="fullName" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="workHour" fill="#8884d8" />
+        </BarChart>
+      );
+    }
+    return null;
+  };
+
   create = (info, title, icon) => {
     return <CustomCard info={info} title={title} icon={icon} />;
   };
@@ -106,8 +129,8 @@ export default class KanbanBoardView extends Component {
   render() {
     if (this.state.report) {
       return (
-        <div>
-          <Row className="mt-2 ml-5">
+        <Container className="dark-overview-container">
+          <Row className="mt-2 project-detail-row mx-auto">
             <Col md={5}>
               {this.create(
                 this.state.report.taskCount,
@@ -123,7 +146,7 @@ export default class KanbanBoardView extends Component {
               )}
             </Col>
           </Row>
-          <Row className="mt-2 ml-5">
+          <Row className="mt-2 project-detail-row mx-auto">
             <Col md={5}>
               <Card text="dark" className="mb-2">
                 <Card.Header>Project Participants</Card.Header>
@@ -132,12 +155,12 @@ export default class KanbanBoardView extends Component {
             </Col>
             <Col md={6}>
               <Card text="dark" className="mb-2">
-                <Card.Header>Project Participants</Card.Header>
-                <Card.Body>{this.createParticipantRoleChart()}</Card.Body>
+                <Card.Header>Participant Work Hours</Card.Header>
+                <Card.Body>{this.createParticipantWorkHours()}</Card.Body>
               </Card>
             </Col>
           </Row>
-          <Row className="mt-2 ml-5">
+          <Row className="mt-2 project-detail-row mx-auto">
             <Col md={11}>
               <Card text="dark" className="mb-2">
                 <Card.Header>Task Statuses</Card.Header>
@@ -145,7 +168,7 @@ export default class KanbanBoardView extends Component {
               </Card>
             </Col>
           </Row>
-        </div>
+        </Container>
       );
     } else {
       return null;

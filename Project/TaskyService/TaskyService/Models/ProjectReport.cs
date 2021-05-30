@@ -17,5 +17,6 @@ namespace TaskyService.Models
         public ParticipantReport[] ParticipantRep { get; set; }
         public TaskStatusReport[] TaskStatusReport { get; set; }
         public double TotalWorkHour { get; set; }
+        public WorkHoursReport[] WorkHoursReport { get; set; }
     }
 }
