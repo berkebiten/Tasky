@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskyService.Models
 {
@@ -11,5 +13,7 @@ namespace TaskyService.Models
         public string Description { get; set; }
         public Guid ProjectManagerId { get; set; }
         public bool Status { get; set; }
+        [NotMapped]
+        public List<string> Files { get; set; }
     }
 }

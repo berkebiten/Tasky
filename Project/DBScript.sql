@@ -239,3 +239,19 @@ AS SELECT o.Id, o.TaskId, o.UserId, o.OldStatus, o.NewStatus, o.Date, u.FirstNam
 FROM [dbo].[User] u, [dbo].[TaskOperation] o
 WHERE u.Id = o.UserId;
 GO
+
+--FILE CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[File](
+	[Id] [uniqueidentifier] NOT NULL,
+	[DataId] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[TableName] [nvarchar](max) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[Base64] [varchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO

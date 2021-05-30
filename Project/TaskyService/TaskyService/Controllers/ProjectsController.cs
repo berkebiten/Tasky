@@ -27,12 +27,14 @@ namespace TaskyService.Controllers
         private readonly ProjectContext _context;
         private readonly ProjectParticipantContext _participantContext;
         private readonly UserContext _userContext;
+        private readonly FileContext _fileContext;
 
-        public ProjectsController(ProjectContext context, ProjectParticipantContext participantContext, UserContext userContext)
+        public ProjectsController(ProjectContext context, FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext)
         {
             _context = context;
             _participantContext = participantContext;
             _userContext = userContext;
+            _fileContext = fileContext;
         }
 
         [HttpGet]
@@ -80,7 +82,14 @@ namespace TaskyService.Controllers
         public async Task<ActionResult<Project>> GetProject(Guid id)
         {
             var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
+            var projectFiles = new ArrayList();
+            var files = _fileContext.File.ToList().Where(item => item.TableName == "Project" && item.DataId == id).ToList();
+            foreach(File item in files)
+            {
+                projectFiles.Add(item.Base64);
+            }
 
+            project.Files = projectFiles.Cast<string>().ToList();
             if (project == null)
             {
                 return NotFound();
@@ -147,10 +156,24 @@ namespace TaskyService.Controllers
                 _participantContext.Add(participant);
             }
 
+            foreach(string file64 in project.Files)
+            {
+                var _file = new File();
+                _file.DataId = project.Id;
+                _file.Name = "Project File";
+                _file.CreatedDate = DateTime.Now;
+                _file.CreatedBy = userId;
+                _file.Base64 = file64;
+                _file.TableName = "Project";
+                _fileContext.Add(_file);
+            }
+
+
             try
             {
                 await _context.SaveChangesAsync();
                 await _participantContext.SaveChangesAsync();
+                await _fileContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
