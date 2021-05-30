@@ -186,6 +186,36 @@ namespace TaskyService.Controllers
             return Ok(new { isSuccessful = true, message = "Project is Created Successfuly." });
         }
 
+        [HttpPost]
+        [Route("UploadFile/{id}")]
+        public IActionResult UploadFile(Guid id, [FromBody] List<File64> files, [FromHeader(Name = "Authorization")] String token)
+        {
+            var userId = TokenService.getUserId(token);
+            foreach (File64 file64 in files)
+            {
+                var _file = new File();
+                _file.DataId = id;
+                _file.Name = file64.Name;
+                _file.CreatedDate = DateTime.Now;
+                _file.CreatedBy = userId;
+                _file.Base64 = file64.Data;
+                _file.TableName = "Project";
+                _fileContext.Add(_file);
+            }
+
+            try
+            {
+                _fileContext.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessfull = true });
+
+        }
+
         [HttpDelete]
         [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProject(Guid id)
