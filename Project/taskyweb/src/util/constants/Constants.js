@@ -38,8 +38,8 @@ export const taskTableColumns = [
   },
   {
     title: "Assignee",
-    dataIndex: "assigneeFirstName",
-    key: "assigneeFirstName",
+    dataIndex: "assigneeFullName",
+    key: "assigneeFullName",
   },
   {
     title: "State",

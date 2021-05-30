@@ -31,7 +31,7 @@ function TaskForm(props) {
         onSubmit={props.onSubmit}
         initialValues={props.initialValues ? props.initialValues : {}}
         handleSubmit={props.handleSubmit}
-        buttonTitle="Save"
+        buttonTitle={props.hideButton ? null : "Save"}
         dateValue={props.dateValue ? props.dateValue : null}
         handleReset={props.handleReset ? props.handleReset : null}
       />

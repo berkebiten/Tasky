@@ -27,10 +27,10 @@ function TaskForm(props) {
       control: {
         type: "picker",
         name: "assigneeId",
-        displayKey: "firstName",
+        displayKey: "fullName",
         key: "userId",
         options: [
-          { userId: -20, firstName: "Please Select an Assignee!" },
+          { userId: -20, fullName: "Please Select an Assignee!" },
           ...props.participants,
         ],
       },
@@ -40,10 +40,10 @@ function TaskForm(props) {
       control: {
         type: "picker",
         name: "reporterId",
-        displayKey: "firstName",
+        displayKey: "fullName",
         key: "userId",
         options: [
-          { userId: -20, firstName: "Please Select an Reporter!" },
+          { userId: -20, fullName: "Please Select an Reporter!" },
           ...props.participants,
         ],
       },

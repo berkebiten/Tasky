@@ -9,6 +9,7 @@ export const GET_PROJECT_PARTICIPANTS_SERVICE =
   "/Projects/GetProjectParticipants";
 export const INSERT_TASK_SERVICE = "/Tasks/Insert";
 export const UPDATE_TASK_SERVICE = "/Tasks/Update";
+export const UPDATE_TASK_STATUS_SERVICE = '/Tasks/UpdateTaskStatus'
 export const GET_PROJECT_DETAIL = "/Projects/GetById/";
 export const GET_TASK_WORK_LOGS = "/WorkLogs/GetWorkLogs"
 export const GET_PROJECT_WORK_LOGS = "/WorkLogs/GetProjectWorkLogs"
@@ -16,3 +17,4 @@ export const INSERT_WORK_LOG_SERVICE = '/WorkLogs/Insert'
 export const GET_SUBTASKS_SERVICE = '/Tasks/GetSubTasks'
 export const GET_PARTICIPANT_ROLE = '/Projects/GetRole/'
 export const GET_PROJECT_REPORT = '/Reports/GetProjectReport/'
+export const GET_TASK_TIMELINE = '/Tasks/GetTaskTimeline/'

@@ -78,27 +78,20 @@ export default class CustomFormElement extends Component {
     );
   };
 
-  handleFileSubmit = (data) => {
-    let x = this.filePickerRef.current;
-    console.log(data);
+  handleFileSubmit = (data, item, xd, yz) => {
+    let a = data.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(a);
+    reader.onload = () => {
+      this.props.handleChange(reader.result);
+    };
   };
 
   createFilePicker = (element) => {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
-        <Form.File
-          ref={(ref) => (this.filePickerRef = ref)}
-          className="form-file-upload-tasky"
-          multiple={element.control.multiple}
-          name={element.control.name}
-          onChange={this.handleFileSubmit}
-          isValid={
-            this.props.touched[element.control.name] &&
-            !this.props.errors[element.control.name]
-          }
-          isInvalid={!!this.props.errors[element.control.name]}
-        />
+        <input type="file" onChange={this.handleFileSubmit} />
         <Form.Control.Feedback type="invalid">
           {this.props.errors[element.control.name]}
         </Form.Control.Feedback>
@@ -107,16 +100,19 @@ export default class CustomFormElement extends Component {
   };
 
   createButton = (element) => {
-    return (
-      <Button
-        className="centered"
-        variant={element.control.variant}
-        type="submit"
-        onSubmit={this.props.handleSubmit}
-      >
-        {element.label}
-      </Button>
-    );
+    if (!element.control.isHidden) {
+      return (
+        <Button
+          className="centered"
+          variant={element.control.variant}
+          type="submit"
+          onSubmit={this.props.handleSubmit}
+        >
+          {element.label}
+        </Button>
+      );
+    }
+    return null;
   };
 
   createPicker = (element, values) => {
@@ -162,7 +158,7 @@ export default class CustomFormElement extends Component {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
-        <br/>
+        <br />
         <DatePicker
           onChange={(value) =>
             this.props.setFieldValue(element.control.name, value)
@@ -177,6 +173,7 @@ export default class CustomFormElement extends Component {
               ? values[element.control.name]
               : null
           }
+          className='date-picker'
         />
       </Form.Group>
     );

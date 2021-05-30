@@ -13,19 +13,19 @@ export default class KanbanBoardView extends Component {
   renderCard = (item) => {
     return (
       <a href={"/task/" + item.id}>
-      <Card className="react-kanban-card stretched-link">
-        <Card.Header className="rkc-header">{item.title}</Card.Header>
-        <Card.Body className="rkc-body">
-          <Card.Text>{item.description}</Card.Text>
-        </Card.Body>
-        <Card.Footer className="rkc-footer text-muted">
-          <Icon name="user" />
-          {item.assigneeFirstName} {item.assigneeLastName}
-          <br />
-          <Icon name="calendar check outline" />
-          {moment(item.dueDate).format("DD/MM/YYYY")}
-        </Card.Footer>
-      </Card>
+        <Card className="react-kanban-card stretched-link">
+          <Card.Header className="rkc-header">{item.title}</Card.Header>
+          <Card.Body className="rkc-body">
+            <Card.Text>{item.description}</Card.Text>
+          </Card.Body>
+          <Card.Footer className="rkc-footer text-muted">
+            <Icon name="user" />
+            {item.assigneeFullName}
+            <br />
+            <Icon name="calendar check outline" />
+            {moment(item.dueDate).format("DD/MM/YYYY")}
+          </Card.Footer>
+        </Card>
       </a>
     );
   };
@@ -43,6 +43,7 @@ export default class KanbanBoardView extends Component {
           disableColumnDrag={true}
           onCardDragEnd={this.props.onCardDragEnd}
           renderCard={(item) => this.renderCard(item)}
+          disableCardDrag={this.props.disableCardDrag}
         />
       );
     } else {
