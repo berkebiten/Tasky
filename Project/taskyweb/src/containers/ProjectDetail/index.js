@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
+import {moveCard} from "@lourenci/react-kanban";
 import TableView from "../../components/views/TableView";
 import ReportView from "../../components/views/ReportView";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
@@ -168,6 +169,11 @@ export default class ProjectDetail extends Component {
         this.resetTaskForm();
         this.setState({ taskFormVisibility: false });
         this.fetchTaskList();
+        this.props.history.push({
+          pathname: "/project/" + this.state.projectId,
+          state: { activePage: "Board" },
+        });
+        window.location.reload();
       } else {
         toast(response.message, {
           type: "error",
@@ -217,7 +223,6 @@ export default class ProjectDetail extends Component {
       createdDate: card.createdDate,
       status: destination.toColumnId,
     };
-
     await ServiceHelper.serviceHandler(
       UPDATE_TASK_STATUS_SERVICE + "/" + card.id,
       ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
@@ -226,13 +231,16 @@ export default class ProjectDetail extends Component {
         toast("Task is Updated Successfully.", {
           type: "success",
         });
+        
         this.fetchTaskList();
+        
       } else {
         toast(response.message, {
           type: "error",
         });
       }
     });
+    
   };
 
   getParticipantRoleName = (participant) => {

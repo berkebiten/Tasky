@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Board from "@lourenci/react-kanban";
+import Board, {moveCard} from "@lourenci/react-kanban";
 import "../../res/styles/kanban-board.css";
 import { Card } from "react-bootstrap";
 import { Icon } from "semantic-ui-react";
@@ -38,7 +38,7 @@ export default class KanbanBoardView extends Component {
     ) {
       return (
         <Board
-          children={this.props.boardData}
+          initialBoard={this.props.boardData}
           allowAddColumn={false}
           disableColumnDrag={true}
           onCardDragEnd={this.props.onCardDragEnd}
