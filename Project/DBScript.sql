@@ -133,7 +133,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_Task]
-AS SELECT c.Id, c.ProjectId, c.Title, c.Description, d.Name as Project_Title,  c.Status, c.DueDate, c.AssigneeId, c.ReporterId, c.Priority, c.CreatedDate, a.FirstName as AssigneeFirstName, a.LastName as AssigneeLastName, b.FirstName as ReporterFirstName, b.LastName as ReporterLastName
+AS SELECT c.Id, c.ProjectId, c.Title, c.Description, d.Name as Project_Title,  c.Status, c.DueDate, c.AssigneeId, c.ReporterId, c.Priority, c.CreatedDate,c.RootId, a.FirstName as AssigneeFirstName, a.LastName as AssigneeLastName, b.FirstName as ReporterFirstName, b.LastName as ReporterLastName
 FROM [dbo].[User] a,[dbo].[User] b, [dbo].[Task] c, [dbo].[Project] d
 WHERE a.Id=c.AssigneeId AND b.Id=c.ReporterId AND d.Id=c.ProjectId;
 GO
