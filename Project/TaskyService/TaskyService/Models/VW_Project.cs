@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TaskyService.Controllers;
 
 namespace TaskyService.Models
 {
@@ -15,6 +16,6 @@ namespace TaskyService.Models
         public string ProjectManagerFirstName { get; set; }
         public string ProjectManagerLastName { get; set; }
         [NotMapped]
-        public List<string> Files { get; set; }
+        public List<File64> Files { get; set; }
     }
 }

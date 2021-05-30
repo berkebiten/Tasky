@@ -15,11 +15,10 @@ export default class FileHelper {
     xhr.open("GET", url, true);
     xhr.responseType = "blob";
     xhr.onload = function (e) {
-      console.log(this.response);
       var reader = new FileReader();
       reader.onload = function (event) {
         var res = event.target.result;
-        FileHelper.files.push(res);
+        FileHelper.files.push({ name: data.name, data: res });
       };
       var file = this.response;
       reader.readAsDataURL(file);

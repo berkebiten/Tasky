@@ -22,7 +22,6 @@ import {
   GET_PROJECT_WORK_LOGS,
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
-  UPDATE_TASK_SERVICE,
   UPDATE_TASK_STATUS_SERVICE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
@@ -33,6 +32,7 @@ import {
   activityTableColumns,
   taskTableColumns,
 } from "../../util/constants/Constants";
+import { Icon, Divider } from "semantic-ui-react";
 
 const menuItems = [
   {
@@ -446,7 +446,32 @@ export default class ProjectDetail extends Component {
             </Card.Body>
           </Card>
         </Row>
+        <Row className="mt-4 project-detail-row mx-auto">
+          <Card className="project-detail-card">
+            <Card.Header>Files</Card.Header>
+            <Card.Body>
+              {this.state.project &&
+                this.state.project.files &&
+                this.state.project.files.map((item, key) => {
+                  return this.renderFile(item);
+                })}
+            </Card.Body>
+          </Card>
+        </Row>
       </Container>
+    );
+  };
+
+  renderFile = (file) => {
+    return (
+      <div className="file-container">
+        <Icon name="file" size="huge" />
+        <text className="file-text">{file.name}</text>
+        <a href={file.data} download className="file-download">
+          <Icon name="download" size="big" />
+        </a>
+        <Divider />
+      </div>
     );
   };
 

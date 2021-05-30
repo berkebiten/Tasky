@@ -86,10 +86,13 @@ namespace TaskyService.Controllers
             var files = _fileContext.File.ToList().Where(item => item.TableName == "Project" && item.DataId == id).ToList();
             foreach(File item in files)
             {
-                projectFiles.Add(item.Base64);
+                var projectFile = new File64();
+                projectFile.Data = item.Base64;
+                projectFile.Name = item.Name;
+                projectFiles.Add(projectFile);
             }
 
-            project.Files = projectFiles.Cast<string>().ToList();
+            project.Files = projectFiles.Cast<File64>().ToList();
             if (project == null)
             {
                 return NotFound();
@@ -156,14 +159,14 @@ namespace TaskyService.Controllers
                 _participantContext.Add(participant);
             }
 
-            foreach(string file64 in project.Files)
+            foreach(File64 file64 in project.Files)
             {
                 var _file = new File();
                 _file.DataId = project.Id;
-                _file.Name = "Project File";
+                _file.Name = file64.Name;
                 _file.CreatedDate = DateTime.Now;
                 _file.CreatedBy = userId;
-                _file.Base64 = file64;
+                _file.Base64 = file64.Data;
                 _file.TableName = "Project";
                 _fileContext.Add(_file);
             }
@@ -243,5 +246,11 @@ namespace TaskyService.Controllers
     {
         public string email { get; set; }
         public Byte role { get; set; }
+    }
+
+    public class File64
+    {
+        public string Name { get; set; }
+        public string Data { get; set; }
     }
 }
