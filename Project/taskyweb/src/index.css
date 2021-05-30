@@ -441,26 +441,31 @@ html,
   background-color: var(--bs-light);
   color: var(--main-light-blue);
   font-weight: bold;
+  font-size: medium !important;
 }
 .state-bar-todo {
   background-color: var(--to-do);
   color: var(--main-light-blue);
   font-weight: bold;
+  font-size: medium !important;
 }
 .state-bar-active {
   background-color: var(--active);
   color: var(--main-light-blue);
   font-weight: bold;
+  font-size: medium !important;
 }
 .state-bar-resolved {
   background-color: var(--resolved);
   color: var(--main-light-blue);
   font-weight: bold;
+  font-size: medium !important;
 }
 .state-bar-closed {
   background-color: var(--closed);
   color: var(--main-light-blue);
   font-weight: bold;
+  font-size: medium !important;
 }
 
 .task-title h2,
@@ -526,6 +531,7 @@ h3 {
 .task-detail-title {
   color: #5f5f5f;
   font-size: 16px;
+  margin-bottom: 0px !important;
 }
 
 .task-detail-info {
@@ -534,19 +540,76 @@ h3 {
   margin-left: 10px;
 }
 
-.file-input{
+.file-input {
   margin-top: 5px;
   margin-bottom: 15px;
 }
 
 .file-container{
-margin-bottom: 20px;
+  margin-bottom: 20px;
+  }
+  
+  .file-download{
+    margin-left: 20px;
+  }
+  
+  .file-text{
+    margin-left: 20px;
+  }
+
+.timeline-status-ToDo {
+  color: var(--to-do);
+  font-weight: bold;
+  margin-top: 0 !important;
 }
 
-.file-download{
-  margin-left: 20px;
+.timeline-status-Active {
+  color: var(--active);
+  font-weight: bold;
+  margin-top: 0 !important;
 }
 
-.file-text{
-  margin-left: 20px;
+.timeline-status-Resolved {
+  color: var(--resolved);
+  font-weight: bold;
+  margin-top: 0 !important;
+}
+
+.timeline-status-Closed {
+  color: var(--closed);
+  font-weight: bold;
+  margin-top: 0 !important;
+}
+
+.dot-ToDo .rs-timeline-item-dot::before {
+  background-color: var(--to-do) !important;
+}
+
+.dot-Active .rs-timeline-item-dot::before {
+  background-color: var(--active) !important;
+}
+
+.dot-Resolved .rs-timeline-item-dot::before {
+  background-color: var(--resolved) !important;
+}
+
+.dot-Closed .rs-timeline-item-dot::before {
+  background-color: var(--closed) !important;
+}
+
+p + p {
+  margin-top: 2px !important;
+}
+
+.task-d-pp-image {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 100%;
+  border: 2px solid;
+}
+
+.task-timeline-pp-image{
+  width: 19px !important;
+  height: 19px !important;
+  border-radius: 100%;
 }

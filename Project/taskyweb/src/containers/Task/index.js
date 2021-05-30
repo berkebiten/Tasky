@@ -180,23 +180,28 @@ export default class Task extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-3 mb-3 ml-5">
-          <Button onClick={() => this.goBack()} className="back-button">
+          <Button
+            onClick={() => this.goBack()}
+            className="new-task"
+            variant="dark"
+          >
             <RiArrowGoBackFill /> Go to Project Task List
           </Button>
         </Row>
-        <Card className="ml-5" style={{ width: "91%" }}>
+        <Card className="ml-5 task-detail-card" style={{ width: "91%" }}>
           <Card.Header>
             <Row className="mx-auto">
+              <Col md={1} className={"state-bar-" + stateName}>
+                <p className="centered">{stateName.toUpperCase()}</p>
+              </Col>
               <Col md={3} className="task-title">
                 <h2> {title} </h2>
               </Col>
               <Col md={2}></Col>
-              <Col md={1} className={"state-bar-" + stateName}>
-                <p className="centered">{stateName.toUpperCase()}</p>
-              </Col>
+
               <Col md={2}></Col>
               <Col md={3} className="task-title">
-                <h2> Task Timeline </h2>
+                <h2> Timeline </h2>
               </Col>
             </Row>
           </Card.Header>
@@ -261,28 +266,72 @@ export default class Task extends Component {
     );
   };
 
+  renderProfileImage = (title, info) => {
+    if (
+      this.state.projectParticipants &&
+      this.state.projectParticipants.length > 0
+    ) {
+      let participant;
+      participant = this.state.projectParticipants.filter(
+        (participant) => participant.fullName === info.toString()
+      );
+      console.log(participant);
+      if (title === "Assignee" || title === "Reporter") {
+        return (
+          <Image
+            className="task-d-pp-image"
+            src={
+              participant[0].profileImage
+                ? participant[0].profileImage
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+            }
+          ></Image>
+        );
+      }
+    }
+  };
+
   renderDetailRow = (info, title, divClassName = "mt-4") => {
     return (
       <div className={divClassName}>
         <p className="task-detail-title">{title}</p>
-        <p className="task-detail-info">{info}</p>
+        <Row className="ml-2">
+          {this.renderProfileImage(title, info)}
+          <p className="task-detail-info">{info}</p>
+        </Row>
       </div>
     );
   };
 
   createTimeLine = () => {
     if (this.state.taskTimeline) {
+      console.log(this.state.taskTimeline);
       return (
         <Card.Body className="ml-2">
           <Timeline className="custom-timeline">
             {this.state.taskTimeline.map((item, index) => {
+              let statusTitle = " " + item.newStatusTitle.toString();
               return (
-                <Timeline.Item className="timeline-text">
+                <Timeline.Item
+                  className={"timeline-text dot-" + item.newStatusTitle}
+                >
                   <p>{moment(item.date).format("DD/MM/YYYY HH:mm")}</p>
-                  <p>
-                    {item.userFullName} changed the status to{" "}
-                    {item.newStatusTitle}
-                  </p>
+                  <Row>
+                    
+                      <Image
+                      className="task-timeline-pp-image"
+                        src={
+                          item.userProfileImage
+                            ? item.userProfileImage
+                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                        }
+                      ></Image>
+                      <p>{item.userFullName} changed the status to:{" "}
+                    </p>
+                    <p className={"timeline-status-" + item.newStatusTitle}>
+                      {statusTitle}
+                    </p>
+                  </Row>
                 </Timeline.Item>
               );
             })}
