@@ -23,6 +23,7 @@ import {
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
   UPDATE_TASK_SERVICE,
+  UPDATE_TASK_STATUS_SERVICE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -79,6 +80,10 @@ export default class ProjectDetail extends Component {
   componentDidMount = () => {
     this.initialize();
   };
+
+  componentWillUnmount(){
+    menuItems.pop()
+  }
 
   initialize = async () => {
     this.getRole();
@@ -212,7 +217,7 @@ export default class ProjectDetail extends Component {
     };
 
     await ServiceHelper.serviceHandler(
-      UPDATE_TASK_SERVICE + "/" + card.id,
+      UPDATE_TASK_STATUS_SERVICE + "/" + card.id,
       ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
     ).then((response) => {
       if (response && response.isSuccessful) {
@@ -447,13 +452,15 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          <Button
-            className="ml-2 new-task"
-            variant="dark"
-            onClick={() => this.setState({ taskFormVisibility: true })}
-          >
-            <Badge variant="primary">+</Badge> New
-          </Button>
+          {this.state.userRole !== "Watcher" && (
+            <Button
+              className="ml-2 new-task"
+              variant="dark"
+              onClick={() => this.setState({ taskFormVisibility: true })}
+            >
+              <Badge variant="primary">+</Badge> New
+            </Button>
+          )}
         </Row>
         <Row className="project-detail-row mx-auto">
           <KanbanBoardView
@@ -461,6 +468,7 @@ export default class ProjectDetail extends Component {
             refresh={(refresh) => (this.onKanbanRefresh = refresh)}
             onCardDragEnd={this.onCardDragEnd}
             boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
+            disableCardDrag={this.state.userRole === "Watcher"}
           />
         </Row>
       </Container>
@@ -471,13 +479,15 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          <Button
-            className="ml-2 new-task"
-            variant="dark"
-            onClick={() => this.setState({ taskFormVisibility: true })}
-          >
-            <Badge variant="primary">+</Badge> New
-          </Button>
+          {this.state.userRole !== "Watcher" && (
+            <Button
+              className="ml-2 new-task"
+              variant="dark"
+              onClick={() => this.setState({ taskFormVisibility: true })}
+            >
+              <Badge variant="primary">+</Badge> New
+            </Button>
+          )}
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView
