@@ -81,8 +81,8 @@ export default class ProjectDetail extends Component {
     this.initialize();
   };
 
-  componentWillUnmount(){
-    menuItems.pop()
+  componentWillUnmount() {
+    menuItems.pop();
   }
 
   initialize = async () => {
@@ -191,7 +191,9 @@ export default class ProjectDetail extends Component {
               participants={
                 this.state.projectParticipants &&
                 this.state.projectParticipants.length > 0
-                  ? this.state.projectParticipants
+                  ? this.state.projectParticipants.filter(
+                      (participant) => participant.role !== 2
+                    )
                   : []
               }
             />

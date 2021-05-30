@@ -21,6 +21,8 @@ export const activityTableColumns = [
     title: "Date",
     dataIndex: "createdDate",
     key: "createdDate",
+    defaultSortOrder: "descend",
+    sorter: (a, b) => a.createdDate > b.createdDate,
     render: (date) => <p>{moment(date).format("DD/MM/YYYY")}</p>,
   },
 ];
@@ -44,6 +46,27 @@ export const taskTableColumns = [
   {
     title: "State",
     key: "statusTitle",
+    filters: [
+      {
+        text: "To-Do",
+        value: "todo",
+      },
+      {
+        text: "Active",
+        value: "active",
+      },
+      {
+        text: "Resolved",
+        value: "resolved",
+      },
+      {
+        text: "Closed",
+        value: "closed",
+      },
+    ],
+    onFilter: (value, record) => {
+      return record.statusTitle.toLowerCase() === value
+    },
     dataIndex: "statusTitle",
     render: (status) => {
       let color;
@@ -69,6 +92,8 @@ export const taskTableColumns = [
     title: "Due Date",
     dataIndex: "dueDate",
     key: "dueDate",
+    defaultSortOrder: "descend",
+    sorter: (a, b) => a.dueDate > b.dueDate,
     render: (text) => {
       let color;
       if (moment(text).format("DD/MM/YYYY") < moment().format("DD/MM/YYYY")) {

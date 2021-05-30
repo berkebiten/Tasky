@@ -15,6 +15,7 @@ import { BsSearch, BsPlus } from "react-icons/bs";
 import ProjectForm from "../../components/forms/ProjectForm";
 import CustomModal from "../../components/modals/CustomModal";
 import {
+  FileHelper,
   RootViewHelper,
   ServiceHelper,
   SessionHelper,
@@ -34,6 +35,7 @@ export default class Projects extends Component {
     super(props);
     this.state = {
       projectFormVisibility: false,
+      base64: "x",
     };
     if (!SessionHelper.checkIsSessionLive()) {
       props.history.push("/");
@@ -102,12 +104,28 @@ export default class Projects extends Component {
   };
 
   submitProjectForm = (data) => {
+    let files = FileHelper.getFiles();
     let projectObject = {
       name: data.name,
       description: data.description,
+      files: files ? files : [],
     };
     this.setState({ formObject: projectObject });
     this.submitParticipants();
+  };
+
+  onFileChange = (event, callback) => {
+    if (
+      event &&
+      event.target &&
+      event.target.files &&
+      event.target.files.length > 0
+    ) {
+      let files = Array.from(event.target.files);
+      files.map((file, index) => {
+        FileHelper.getBase64(file);
+      });
+    }
   };
 
   createProjectForm = () => {
@@ -127,6 +145,16 @@ export default class Projects extends Component {
               handleSubmit={(submit) => {
                 this.submitParticipants = submit;
               }}
+            />
+            <input
+              type="file"
+              className="file-input"
+              onChange={(event) =>
+                this.onFileChange(event, (res) =>
+                  this.setState({ base64: res })
+                )
+              }
+              multiple
             />
             <Button
               variant="dark"
@@ -161,7 +189,7 @@ export default class Projects extends Component {
       <Row className="mt-5 projects-row">
         {this.state.projects.map((item, key) => {
           return (
-            <Col md={3} >
+            <Col md={3}>
               <Card
                 bg="dark"
                 text="light"

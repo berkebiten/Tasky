@@ -437,7 +437,9 @@ export default class Task extends Component {
               participants={
                 this.state.projectParticipants &&
                 this.state.projectParticipants.length > 0
-                  ? this.state.projectParticipants
+                  ? this.state.projectParticipants.filter(
+                      (participant) => participant.role !== 2
+                    )
                   : []
               }
             />

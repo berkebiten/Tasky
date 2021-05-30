@@ -14,22 +14,17 @@ function ProjectForm(props) {
         name: "description",
       },
     },
-    {
-      label: "Project Files",
-      control: { type: "file", name: "file", multiple: false },
-    },
   ];
 
   return (
     <div>
-
-    <CustomForm
-      formElements={formElements}
-      onSubmit={props.onSubmit}
-      initialValues={props.initialValues ? props.initialValues : {}}
-      handleSubmit={props.handleSubmit}
+      <CustomForm
+        formElements={formElements}
+        onSubmit={props.onSubmit}
+        initialValues={props.initialValues ? props.initialValues : {}}
+        handleSubmit={props.handleSubmit}
       />
-      </div>
+    </div>
   );
 }
 export default withRouter(ProjectForm);
