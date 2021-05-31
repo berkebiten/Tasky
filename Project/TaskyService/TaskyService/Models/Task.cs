@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TaskyService.Controllers;
+
 namespace TaskyService.Models
 {
     public class Task
@@ -16,5 +20,7 @@ namespace TaskyService.Models
         public DateTime DueDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? RootId { get; set; }
+        [NotMapped]
+        public List<File64> Files { get; set; }
     }
 }

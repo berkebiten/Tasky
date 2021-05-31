@@ -4,9 +4,10 @@ import SideBar from "../../components/SideBar";
 import TableView from "../../components/views/TableView";
 import { Card, Col, Row, Container, Badge, Button } from "react-bootstrap";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { ServiceHelper, SessionHelper } from "../../util/helpers";
-import { Divider, Grid, Image, Segment } from "semantic-ui-react";
+import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
+import { Divider, Image } from "semantic-ui-react";
 import { Helmet } from "react-helmet";
+import { Icon } from "semantic-ui-react";
 import {
   GET_PARTICIPANT_ROLE,
   GET_PROJECT_PARTICIPANTS_SERVICE,
@@ -16,6 +17,7 @@ import {
   INSERT_TASK_SERVICE,
   INSERT_WORK_LOG_SERVICE,
   GET_TASK_TIMELINE,
+  UPLOAD_TASK_FILE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import { toast } from "react-toastify";
@@ -26,7 +28,7 @@ import {
 } from "../../util/constants/Constants";
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import TaskForm from "../../components/forms/TaskForm";
-import { Timeline, Icon } from "rsuite";
+import { Timeline } from "rsuite";
 
 const menuItems = [
   {
@@ -60,6 +62,7 @@ export default class Task extends Component {
       workLogFormVisibility: false,
       taskFormVisibility: false,
       selectedWorkLog: null,
+      fileUpload: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -195,11 +198,9 @@ export default class Task extends Component {
               <Col md={1} className={"state-bar-" + stateName}>
                 <p className="centered">{stateName.toUpperCase()}</p>
               </Col>
-              <Col md={3} className="task-title">
+              <Col md={5} className="task-title">
                 <h2> {title} </h2>
               </Col>
-              <Col md={2}></Col>
-
               <Col md={2}></Col>
               <Col md={3} className="task-title">
                 <h2> Timeline </h2>
@@ -216,7 +217,58 @@ export default class Task extends Component {
             </Col>
           </Row>
         </Card>
+        {this.createFilesCard()}
+        {this.createFileUploadModal()}
       </Container>
+    );
+  };
+
+  renderFile = (file) => {
+    return (
+      <a href={file.data} download>
+        <Card className="react-kanban-card stretched-link">
+          <Card.Title className="file-text">{file.name}</Card.Title>
+          <Card.Body className="file-card row">
+            <Icon name="file" size="huge" />
+          </Card.Body>
+          <Card.Footer className="rkc-footer text-muted">
+            <Icon name="user" />
+            {file.userFullName}
+            <br />
+            <Icon name="calendar check outline" />
+            {moment(file.date).format("DD/MM/YYYY")}
+          </Card.Footer>
+        </Card>
+      </a>
+    );
+  };
+
+  createFilesCard = () => {
+    return (
+      <Row className="mt-3 project-detail-row mx-auto">
+        <Card className="ml-3 task-detail-card" style={{ width: "96%" }}>
+          <Card.Header>
+            Files
+            {this.state.userRole !== "Watcher" && (
+              <Button
+                className="pull-right"
+                onClick={() => this.setState({ fileUpload: true })}
+              >
+                Upload File
+              </Button>
+            )}
+          </Card.Header>
+          <Card.Body>
+            <Row>
+              {this.state.task &&
+                this.state.task.files &&
+                this.state.task.files.map((item, key) => {
+                  return <Col md={3}>{this.renderFile(item)}</Col>;
+                })}
+            </Row>
+          </Card.Body>
+        </Card>
+      </Row>
     );
   };
 
@@ -240,19 +292,6 @@ export default class Task extends Component {
       ? this.state.task.reporterFullName
       : "UNDEFINED";
     return (
-      // <Card className="ml-5 mr-5" style={{ width: "100%" }}>
-      //   <Card.Header>
-      //     <Row className="mx-auto">
-      //       <Col md={5} className="task-title">
-      //         <h2> {title} </h2>
-      //       </Col>
-      //       {/* <Divider vertical>AND</Divider> */}
-      //       <Col md={4}></Col>
-      //       <Col md={3} className={"state-bar-" + stateName}>
-      //         <p className="centered">{stateName.toUpperCase()}</p>
-      //       </Col>
-      //     </Row>
-      //   </Card.Header>
       <Card.Body>
         {projectName
           ? this.renderDetailRow(projectName, "Project", "mt-0")
@@ -263,7 +302,71 @@ export default class Task extends Component {
         {reporter ? this.renderDetailRow(reporter, "Reporter") : null}
         {assignee ? this.renderDetailRow(assignee, "Assignee") : null}
       </Card.Body>
-      // </Card>
+    );
+  };
+
+  uploadFile = async () => {
+    let files = FileHelper.getFiles();
+    await ServiceHelper.serviceHandler(
+      UPLOAD_TASK_FILE + this.state.taskId,
+      ServiceHelper.createOptionsJson(JSON.stringify(files), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("File Uploaded.", {
+          type: "success",
+        });
+        FileHelper.clearFiles();
+        this.getTaskDetail();
+        this.setState({ fileUpload: false });
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  onFileChange = (event, callback) => {
+    if (
+      event &&
+      event.target &&
+      event.target.files &&
+      event.target.files.length > 0
+    ) {
+      let files = Array.from(event.target.files);
+      files.map((file, index) => {
+        FileHelper.getBase64(file);
+      });
+    }
+  };
+
+  createFileUploadModal = () => {
+    return (
+      <CustomModal
+        title="Upload File"
+        isVisible={this.state.fileUpload}
+        onClose={() => this.setState({ fileUpload: false })}
+        content={
+          <div>
+            <input
+              type="file"
+              className="file-input"
+              onChange={(event) => this.onFileChange(event)}
+              multiple
+            />
+            <Button
+              variant="dark"
+              size="lg"
+              onClick={() => {
+                this.uploadFile();
+              }}
+              block
+            >
+              Upload
+            </Button>
+          </div>
+        }
+      />
     );
   };
 
@@ -445,6 +548,7 @@ export default class Task extends Component {
   };
 
   submitTaskForm = async (data) => {
+    let files = FileHelper.getFiles();
     let date = moment(data.dueDate).format("YYYY-MM-DD");
     let insertObject = {
       projectId: this.state.projectId,
@@ -452,6 +556,7 @@ export default class Task extends Component {
       ...data,
       dueDate: date,
       rootId: this.state.taskId,
+      files: files ? files : [],
     };
     await ServiceHelper.serviceHandler(
       INSERT_TASK_SERVICE,
@@ -462,6 +567,7 @@ export default class Task extends Component {
           type: "success",
         });
         this.resetTaskForm();
+        FileHelper.clearFiles()
         this.setState({ taskFormVisibility: false });
         this.fetchSubtasks();
       } else {

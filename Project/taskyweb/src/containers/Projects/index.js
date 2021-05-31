@@ -20,7 +20,7 @@ import {
   ServiceHelper,
   SessionHelper,
 } from "../../util/helpers";
-import {Helmet} from 'react-helmet'
+import { Helmet } from "react-helmet";
 import {
   INSERT_PROJECT_SERVICE,
   GET_PROJECTS_SERVICE,
@@ -29,7 +29,7 @@ import { toast } from "react-toastify";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 
 const startIndex = 0;
-const count = 8;
+const count = 9;
 
 export default class Projects extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ export default class Projects extends Component {
   };
 
   getProjects = async (page) => {
-    let reqBody = { startIndex: startIndex + (page - 1) * count, count: count };
+    let reqBody = { startIndex: 0 , count: 1000 };
     await ServiceHelper.serviceHandler(
       GET_PROJECTS_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
@@ -95,6 +95,7 @@ export default class Projects extends Component {
           type: "success",
         });
         this.setState({ projectFormVisibility: false });
+        this.getProjects();
       } else {
         toast(response.message, {
           type: "error",
@@ -115,20 +116,6 @@ export default class Projects extends Component {
     this.submitParticipants();
   };
 
-  onFileChange = (event, callback) => {
-    if (
-      event &&
-      event.target &&
-      event.target.files &&
-      event.target.files.length > 0
-    ) {
-      let files = Array.from(event.target.files);
-      files.map((file, index) => {
-        FileHelper.getBase64(file);
-      });
-    }
-  };
-
   createProjectForm = () => {
     return (
       <CustomModal
@@ -146,16 +133,6 @@ export default class Projects extends Component {
               handleSubmit={(submit) => {
                 this.submitParticipants = submit;
               }}
-            />
-            <input
-              type="file"
-              className="file-input"
-              onChange={(event) =>
-                this.onFileChange(event, (res) =>
-                  this.setState({ base64: res })
-                )
-              }
-              multiple
             />
             <Button
               variant="dark"

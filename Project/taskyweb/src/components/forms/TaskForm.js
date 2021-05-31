@@ -48,6 +48,13 @@ function TaskForm(props) {
         ],
       },
     },
+    {
+      label: "Task Files",
+      control: {
+        type: "file",
+        name: "file",
+      },
+    },
   ];
 
   return (

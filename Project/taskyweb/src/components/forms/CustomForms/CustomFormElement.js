@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
+import { FileHelper } from "../../../util/helpers";
 
 export default class CustomFormElement extends Component {
   createElement = () => {
@@ -87,14 +88,31 @@ export default class CustomFormElement extends Component {
     };
   };
 
+  onFileChange = (event) => {
+    if (
+      event &&
+      event.target &&
+      event.target.files &&
+      event.target.files.length > 0
+    ) {
+      let files = Array.from(event.target.files);
+      files.map((file, index) => {
+        FileHelper.getBase64(file);
+      });
+    }
+  };
+
   createFilePicker = (element) => {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
-        <input type="file" onChange={this.handleFileSubmit} />
-        <Form.Control.Feedback type="invalid">
-          {this.props.errors[element.control.name]}
-        </Form.Control.Feedback>
+        <br/>
+        <input
+          type="file"
+          className="file-input"
+          onChange={(event) => this.onFileChange(event)}
+          multiple
+        />
       </Form.Group>
     );
   };
@@ -173,7 +191,7 @@ export default class CustomFormElement extends Component {
               ? values[element.control.name]
               : null
           }
-          className='date-picker'
+          className="date-picker"
         />
       </Form.Group>
     );

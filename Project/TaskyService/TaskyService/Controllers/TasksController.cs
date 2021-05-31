@@ -9,6 +9,7 @@ using TaskyService.DbContexts;
 using Newtonsoft.Json.Linq;
 using TaskyService.Services;
 using TaskyService.Models;
+using System.Collections;
 
 enum TaskStatuses
 {
@@ -27,11 +28,13 @@ namespace TaskyService.Controllers
     {
         private readonly TaskContext _context;
         private readonly TaskOperationContext _operationContext;
+        private readonly FileContext _fileContext;
 
-        public TasksController(TaskContext context, TaskOperationContext operationContext)
+        public TasksController(TaskContext context, TaskOperationContext operationContext, FileContext fileContext)
         {
             _context = context;
             _operationContext = operationContext;
+            _fileContext = fileContext;
         }
 
         [HttpGet]
@@ -65,6 +68,20 @@ namespace TaskyService.Controllers
             task.StatusTitle = Enum.GetName(typeof(TaskStatuses), task.Status);
             task.AssigneeFullName = task.AssigneeFirstName + " " + task.AssigneeLastName;
             task.ReporterFullName = task.ReporterFirstName + " " + task.ReporterLastName;
+            var taskFiles = new ArrayList();
+
+            var files = _fileContext.VW_File.ToList().Where(item => item.TableName == "Task" && item.DataId == id).ToList();
+            foreach (VW_File item in files)
+            {
+                var taskFile = new File64();
+                taskFile.Data = item.Base64;
+                taskFile.Name = item.Name;
+                taskFile.UserFullName = item.UserFirstName + " " + item.UserLastName;
+                taskFile.date = item.CreatedDate;
+                taskFiles.Add(taskFile);
+            }
+
+            task.Files = taskFiles.Cast<File64>().ToList();
 
             if (task == null)
             {
@@ -72,6 +89,36 @@ namespace TaskyService.Controllers
             }
 
             return Ok(new { isSuccessful = true, data = task });
+        }
+
+        [HttpPost]
+        [Route("UploadFile/{id}")]
+        public IActionResult UploadFile(Guid id, [FromBody] List<File64> files, [FromHeader(Name = "Authorization")] String token)
+        {
+            var userId = TokenService.getUserId(token);
+            foreach (File64 file64 in files)
+            {
+                var _file = new File();
+                _file.DataId = id;
+                _file.Name = file64.Name;
+                _file.CreatedDate = DateTime.Now;
+                _file.CreatedBy = userId;
+                _file.Base64 = file64.Data;
+                _file.TableName = "Task";
+                _fileContext.Add(_file);
+            }
+
+            try
+            {
+                _fileContext.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessfull = true });
+
         }
 
         [HttpPut]
@@ -168,12 +215,24 @@ namespace TaskyService.Controllers
         {
             task.CreatedDate = DateTime.Now.Date;
             task.Status = 0;
-
             _context.Add(task);
+
+            foreach (File64 file64 in task.Files)
+            {
+                var _file = new File();
+                _file.DataId = task.Id;
+                _file.Name = file64.Name;
+                _file.CreatedDate = DateTime.Now;
+                _file.CreatedBy = TokenService.getUserId(token);
+                _file.Base64 = file64.Data;
+                _file.TableName = "Task";
+                _fileContext.Add(_file);
+            }
 
             try
             {
                 await _context.SaveChangesAsync();
+                await _fileContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

@@ -36,8 +36,7 @@ import {
   activityTableColumns,
   taskTableColumns,
 } from "../../util/constants/Constants";
-import { Icon, Divider } from "semantic-ui-react";
-import { FileCopyOutlined } from "@material-ui/icons";
+import { Icon } from "semantic-ui-react";
 
 const menuItems = [
   {
@@ -157,12 +156,14 @@ export default class ProjectDetail extends Component {
   };
 
   submitTaskForm = async (data) => {
+    let files = FileHelper.getFiles()
     let date = moment(data.dueDate).format("YYYY-MM-DD");
     let insertObject = {
       projectId: this.state.project.id,
       priority: 0,
       ...data,
       dueDate: date,
+      files: files ? files : [],
     };
     await ServiceHelper.serviceHandler(
       INSERT_TASK_SERVICE,
@@ -173,6 +174,7 @@ export default class ProjectDetail extends Component {
           type: "success",
         });
         this.resetTaskForm();
+        FileHelper.clearFiles();
         this.setState({ taskFormVisibility: false });
         this.fetchTaskList();
         this.props.history.push({
@@ -500,7 +502,9 @@ export default class ProjectDetail extends Component {
           <Card className="project-detail-card">
             <Card.Header>
               Participants
-              <Button className="pull-right">Invite Participant</Button>
+              {this.state.userRole === "ProjectManager" && (
+                <Button className="pull-right">Invite Participant</Button>
+              )}
             </Card.Header>
             <Card.Body>
               {overview_participants.map((item, key) => {
@@ -540,12 +544,14 @@ export default class ProjectDetail extends Component {
           <Card className="project-detail-card">
             <Card.Header>
               Files
-              <Button
-                className="pull-right"
-                onClick={() => this.setState({ fileUpload: true })}
-              >
-                Upload File
-              </Button>
+              {this.state.userRole !== "Watcher" && (
+                <Button
+                  className="pull-right"
+                  onClick={() => this.setState({ fileUpload: true })}
+                >
+                  Upload File
+                </Button>
+              )}
             </Card.Header>
             <Card.Body>
               <Row>
@@ -567,9 +573,7 @@ export default class ProjectDetail extends Component {
     return (
       <a href={file.data} download>
         <Card className="react-kanban-card stretched-link">
-          <Card.Title className="file-text">
-            {file.name}dasdasadsasdasdadsads
-          </Card.Title>
+          <Card.Title className="file-text">{file.name}</Card.Title>
           <Card.Body className="file-card row">
             <Icon name="file" size="huge" />
           </Card.Body>

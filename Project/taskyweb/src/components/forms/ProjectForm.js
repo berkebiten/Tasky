@@ -14,6 +14,13 @@ function ProjectForm(props) {
         name: "description",
       },
     },
+    {
+      label: "Project Files",
+      control: {
+        type: "file",
+        name: "file",
+      },
+    },
   ];
 
   return (
