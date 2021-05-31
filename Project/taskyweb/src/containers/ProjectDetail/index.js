@@ -13,6 +13,8 @@ import {
   Badge,
   Image,
   Button,
+  OverlayTrigger,
+  Tooltip as Ttip,
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
@@ -64,9 +66,7 @@ export default class ProjectDetail extends Component {
       activePage: props.location.state
         ? props.location.state.activePage
         : "Overview",
-      project: props.location.state
-        ? props.location.state.project
-        : null,
+      project: props.location.state ? props.location.state.project : null,
       taskFormVisibility: false,
       projectId:
         props.match && props.match.params
@@ -168,7 +168,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Task is Created Successfully.", {
+        toast("Task Created.", {
           type: "success",
         });
         this.resetTaskForm();
@@ -233,7 +233,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Task is Updated Successfully.", {
+        toast("Task Updated.", {
           type: "success",
         });
 
@@ -507,16 +507,26 @@ export default class ProjectDetail extends Component {
                   this.getParticipantRoleName(item).toString() + "";
                 return (
                   <div className="project-participant-card ml-3">
-                    <Image
-                      className={
-                        "project-participant-image " + roleName + "-border"
+                    <OverlayTrigger
+                      key={item.id}
+                      placement={"top-start"}
+                      overlay={
+                        <Ttip id={item.id}>
+                          {item.roleTitle}
+                        </Ttip>
                       }
-                      src={
-                        item.profileImage
-                          ? item.profileImage
-                          : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                      }
-                    ></Image>
+                    >
+                      <Image
+                        className={
+                          "project-participant-image " + roleName + "-border"
+                        }
+                        src={
+                          item.profileImage
+                            ? item.profileImage
+                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                        }
+                      ></Image>
+                    </OverlayTrigger>
                     <div className="project-participant-name text-center">
                       {item.firstName}
                     </div>

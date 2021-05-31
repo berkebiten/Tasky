@@ -411,7 +411,7 @@ export default class Task extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Work Log is Created Successfully.", {
+        toast("Work Log Created.", {
           type: "success",
         });
         this.setState({ workLogFormVisibility: false });
@@ -458,7 +458,7 @@ export default class Task extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "POST")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        toast("Sub-task is Created Successfully.", {
+        toast("Sub-task Created.", {
           type: "success",
         });
         this.resetTaskForm();
