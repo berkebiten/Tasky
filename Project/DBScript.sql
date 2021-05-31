@@ -255,3 +255,14 @@ CREATE TABLE [dbo].[File](
 	[Base64] [varchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+
+--VW_FILE CREATION
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_File]
+AS SELECT f.Id, f.Name, f.Base64, f.TableName, f.DataId, f.CreatedBy, f.CreatedDate, u.FirstName as UserFirstName, u.LastName as UserLastName
+FROM [dbo].[User] u,[dbo].[File] f
+WHERE f.CreatedBy=u.Id;
+GO
