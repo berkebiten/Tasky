@@ -83,12 +83,14 @@ namespace TaskyService.Controllers
         {
             var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
             var projectFiles = new ArrayList();
-            var files = _fileContext.File.ToList().Where(item => item.TableName == "Project" && item.DataId == id).ToList();
-            foreach(File item in files)
+            var files = _fileContext.VW_File.ToList().Where(item => item.TableName == "Project" && item.DataId == id).ToList();
+            foreach(VW_File item in files)
             {
                 var projectFile = new File64();
                 projectFile.Data = item.Base64;
                 projectFile.Name = item.Name;
+                projectFile.UserFullName = item.UserFirstName + " " + item.UserLastName;
+                projectFile.date = item.CreatedDate;
                 projectFiles.Add(projectFile);
             }
 
@@ -290,5 +292,7 @@ namespace TaskyService.Controllers
     {
         public string Name { get; set; }
         public string Data { get; set; }
+        public string UserFullName { get; set; }
+        public DateTime date { get; set; }
     }
 }

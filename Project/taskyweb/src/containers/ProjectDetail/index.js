@@ -37,6 +37,7 @@ import {
   taskTableColumns,
 } from "../../util/constants/Constants";
 import { Icon, Divider } from "semantic-ui-react";
+import { FileCopyOutlined } from "@material-ui/icons";
 
 const menuItems = [
   {
@@ -510,11 +511,7 @@ export default class ProjectDetail extends Component {
                     <OverlayTrigger
                       key={item.id}
                       placement={"top-start"}
-                      overlay={
-                        <Ttip id={item.id}>
-                          {item.roleTitle}
-                        </Ttip>
-                      }
+                      overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
                     >
                       <Image
                         className={
@@ -551,11 +548,13 @@ export default class ProjectDetail extends Component {
               </Button>
             </Card.Header>
             <Card.Body>
-              {this.state.project &&
-                this.state.project.files &&
-                this.state.project.files.map((item, key) => {
-                  return this.renderFile(item);
-                })}
+              <Row>
+                {this.state.project &&
+                  this.state.project.files &&
+                  this.state.project.files.map((item, key) => {
+                    return <Col md={3}>{this.renderFile(item)}</Col>;
+                  })}
+              </Row>
             </Card.Body>
           </Card>
         </Row>
@@ -566,14 +565,23 @@ export default class ProjectDetail extends Component {
 
   renderFile = (file) => {
     return (
-      <div className="file-container">
-        <Icon name="file" size="huge" />
-        <text className="file-text">{file.name}</text>
-        <a href={file.data} download className="file-download">
-          <Icon name="download" size="big" />
-        </a>
-        <Divider />
-      </div>
+      <a href={file.data} download>
+        <Card className="react-kanban-card stretched-link">
+          <Card.Title className="file-text">
+            {file.name}dasdasadsasdasdadsads
+          </Card.Title>
+          <Card.Body className="file-card row">
+            <Icon name="file" size="huge" />
+          </Card.Body>
+          <Card.Footer className="rkc-footer text-muted">
+            <Icon name="user" />
+            {file.userFullName}
+            <br />
+            <Icon name="calendar check outline" />
+            {moment(file.date).format("DD/MM/YYYY")}
+          </Card.Footer>
+        </Card>
+      </a>
     );
   };
 

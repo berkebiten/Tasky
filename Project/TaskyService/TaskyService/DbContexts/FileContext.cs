@@ -10,6 +10,17 @@ namespace TaskyService.DbContexts
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<VW_File>(eb =>
+                {
+                    eb.HasNoKey();
+                    eb.ToView("VW_File");
+                });
+        }
+
         public DbSet<File> File { get; set; }
+        public virtual DbSet<VW_File> VW_File { get; set; }
     }
 }

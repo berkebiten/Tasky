@@ -544,17 +544,20 @@ h3 {
   margin-top: 5px;
   margin-bottom: 15px;
 }
-
-.file-container{
-  margin-bottom: 20px;
-  }
-  
-  .file-download{
-    margin-left: 20px;
-  }
   
   .file-text{
     margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    margin-right: 20px;
+  }
+
+  .file-card{
+    align-items: center;
+    justify-content: center;
   }
 
 .timeline-status-ToDo {
