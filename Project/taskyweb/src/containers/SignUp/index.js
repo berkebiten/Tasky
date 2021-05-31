@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import logo from "../../res/images/tasky-logo.png";
+import {Helmet} from 'react-helmet'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -43,6 +44,9 @@ export default class SignUp extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>{"Register"}</title>
+        </Helmet>
         <Navbar />
         <div className="auth-wrapper">
           <div className="auth-inner mt-5">

@@ -6,6 +6,7 @@ import { Card, Col, Row, Container, Badge, Button } from "react-bootstrap";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { ServiceHelper, SessionHelper } from "../../util/helpers";
 import { Divider, Grid, Image, Segment } from "semantic-ui-react";
+import { Helmet } from "react-helmet";
 import {
   GET_PARTICIPANT_ROLE,
   GET_PROJECT_PARTICIPANTS_SERVICE,
@@ -317,20 +318,20 @@ export default class Task extends Component {
                 >
                   <p>{moment(item.date).format("DD/MM/YYYY HH:mm")}</p>
                   <Row>
-                    
-                      <Image
+                    <Image
                       className="task-timeline-pp-image"
-                        src={
-                          item.userProfileImage
-                            ? item.userProfileImage
-                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                        }
-                      ></Image>
-                      <p>{item.userFullName} changed the status to:{" "}
-                    </p>
-                    <p className={"timeline-status-" + item.newStatusTitle}>
+                      src={
+                        item.userProfileImage
+                          ? item.userProfileImage
+                          : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                      }
+                    ></Image>
+                    <span className="title-span">
+                      {item.userFullName} changed the status to
+                    </span>
+                    <span className={"timeline-status-" + item.newStatusTitle}>
                       {statusTitle}
-                    </p>
+                    </span>
                   </Row>
                 </Timeline.Item>
               );
@@ -551,6 +552,14 @@ export default class Task extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>
+            {this.state.task && this.state.task.title
+              ? this.state.task.title
+              : "Görev Detayı"}
+          </title>
+        </Helmet>
+
         <NavbarLogged />
         <Row>
           <Col className="project-detail-left" md={2}>

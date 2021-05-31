@@ -20,6 +20,7 @@ import {
   ServiceHelper,
   SessionHelper,
 } from "../../util/helpers";
+import {Helmet} from 'react-helmet'
 import {
   INSERT_PROJECT_SERVICE,
   GET_PROJECTS_SERVICE,
@@ -180,7 +181,7 @@ export default class Projects extends Component {
   onClickCard = (project) => {
     this.props.history.push({
       pathname: "/project/" + project.id,
-      state: { project: project },
+      state: { project: project, projectName: project.name },
     });
   };
 
@@ -216,6 +217,9 @@ export default class Projects extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>{"Projects"}</title>
+        </Helmet>
         <NavbarLogged />
         <div className="auth-wrapper">
           <Container>

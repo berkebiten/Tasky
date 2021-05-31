@@ -151,8 +151,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return workHour;
-
+            return Double.Parse(String.Format("{0:0.00}", workHour));      
         }
 
         private WorkHoursReport[] GetWorkHours (Guid id)

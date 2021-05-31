@@ -11,6 +11,7 @@ import LoginForm from "../../components/forms/LoginForm";
 import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import logo from "../../res/images/tasky-logo.png";
+import {Helmet} from 'react-helmet'
 export default class SignIn extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +48,9 @@ export default class SignIn extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>{"Login"}</title>
+        </Helmet>
         <Navbar />
         <div className="auth-wrapper">
           <div className="auth-inner mt-5">

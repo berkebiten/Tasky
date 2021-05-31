@@ -1,17 +1,8 @@
 import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
-import {
-  Card,
-  Col,
-  Row,
-  Container,
-  Badge,
-  Form,
-  FormControl,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
+import { Card, Col, Row, Container, Badge } from "react-bootstrap";
 import { FiEdit2, FiSettings } from "react-icons/fi";
+import { Helmet } from "react-helmet";
 import {
   RootViewHelper,
   ServiceHelper,
@@ -20,11 +11,10 @@ import {
 import { GET_PROFILE_SERVICE } from "../../util/constants/Services";
 import moment from "moment";
 export default class Profile extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      user : ""
+      user: "",
     };
     if (!SessionHelper.checkIsSessionLive()) {
       props.history.push("/");
@@ -56,6 +46,9 @@ export default class Profile extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>{"Profile"}</title>
+        </Helmet>
         <NavbarLogged />
         <div className="auth-wrapper">
           <Container>
@@ -70,16 +63,25 @@ export default class Profile extends Component {
                   <Card.Img
                     className="tasky-profile-image"
                     variant="top"
-                    src={this.state.user.profileImage ? this.state.user.profileImage : 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png'}
+                    src={
+                      this.state.user.profileImage
+                        ? this.state.user.profileImage
+                        : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                    }
                     size="small"
                   />
                   <Card.Body className="mt-2">
                     <Card.Title>
-                      {this.state.user.firstName + " " + this.state.user.lastName}
+                      {this.state.user.firstName +
+                        " " +
+                        this.state.user.lastName}
                     </Card.Title>
                     <Card.Text>{this.state.user.email}</Card.Text>
                     <Card.Text>
-                      {"Member since: " +  moment(this.state.user.registrationDate).format('DD/MM/YYYY')}
+                      {"Member since: " +
+                        moment(this.state.user.registrationDate).format(
+                          "DD/MM/YYYY"
+                        )}
                     </Card.Text>
                   </Card.Body>
                 </Card>

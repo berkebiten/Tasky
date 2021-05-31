@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
 import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
-import {moveCard} from "@lourenci/react-kanban";
 import TableView from "../../components/views/TableView";
 import ReportView from "../../components/views/ReportView";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
@@ -15,6 +14,7 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
+import { Helmet } from "react-helmet";
 import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
   GET_PARTICIPANT_ROLE,
@@ -64,6 +64,9 @@ export default class ProjectDetail extends Component {
       activePage: props.location.state
         ? props.location.state.activePage
         : "Overview",
+      project: props.location.state
+        ? props.location.state.project
+        : null,
       taskFormVisibility: false,
       projectId:
         props.match && props.match.params
@@ -233,16 +236,14 @@ export default class ProjectDetail extends Component {
         toast("Task is Updated Successfully.", {
           type: "success",
         });
-        
+
         this.fetchTaskList();
-        
       } else {
         toast(response.message, {
           type: "error",
         });
       }
     });
-    
   };
 
   getParticipantRoleName = (participant) => {
@@ -702,6 +703,13 @@ export default class ProjectDetail extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>
+            {this.state.project && this.state.project.name
+              ? this.state.project.name
+              : "Proje Detayı"}
+          </title>
+        </Helmet>
         <NavbarLogged />
         <Row>
           <Col className="project-detail-left" md={2}>

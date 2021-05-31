@@ -612,4 +612,11 @@ p + p {
   width: 19px !important;
   height: 19px !important;
   border-radius: 100%;
+  margin-right: 5px;
+  background-color: red;
+}
+
+.title-span{
+  margin-right:4px; 
+  display:inline-block
 }
