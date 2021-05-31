@@ -156,7 +156,10 @@ namespace TaskyService.Controllers
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
                 participant.UserId = participantId;
                 participant.Role = participantObj.role;
-                _participantContext.Add(participant);
+                if (!ParticipantExists(participantId))
+                {
+                    _participantContext.Add(participant);
+                }
             }
 
             foreach(File64 file64 in project.Files)
@@ -249,6 +252,11 @@ namespace TaskyService.Controllers
         private bool ProjectExists(Guid id)
         {
             return _context.Project.Any(e => e.Id == id);
+        }
+
+        private bool ParticipantExists (Guid id)
+        {
+            return _participantContext.ProjectParticipant.Any(e => e.UserId == id);
         }
 
         [HttpGet]
