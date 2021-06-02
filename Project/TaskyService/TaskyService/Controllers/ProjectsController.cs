@@ -158,7 +158,7 @@ namespace TaskyService.Controllers
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
                 participant.UserId = participantId;
                 participant.Role = participantObj.role;
-                if (!ParticipantExists(participantId))
+                if (!ParticipantExists(participantId, project.Id))
                 {
                     _participantContext.Add(participant);
                 }
@@ -189,6 +189,41 @@ namespace TaskyService.Controllers
             }
 
             return Ok(new { isSuccessful = true, message = "Project is Created Successfuly." });
+        }
+
+        [HttpPost]
+        [Route("InviteParticipant/{id}")]
+        public async Task<IActionResult> InviteParticipant(Guid id, List<Participant> participants)
+        {
+            var userList = _userContext.User.ToList();
+            foreach (Participant participantObj in participants)
+            {
+                var participant = new ProjectParticipant();
+                participant.ProjectId = id;
+                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
+                participant.UserId = participantId;
+                participant.Role = participantObj.role;
+                if (!ParticipantExists(participantId, id))
+                {
+                    _participantContext.Add(participant);
+                }
+                else
+                {
+                    return Ok(new { isSuccessful = false, message = "User already exists." });
+                }
+            }
+
+            try
+            {
+                 await _participantContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessful = true, message = "User Invited to Project." });
+
         }
 
         [HttpPost]
@@ -256,9 +291,9 @@ namespace TaskyService.Controllers
             return _context.Project.Any(e => e.Id == id);
         }
 
-        private bool ParticipantExists (Guid id)
+        private bool ParticipantExists (Guid userId, Guid projectId)
         {
-            return _participantContext.ProjectParticipant.Any(e => e.UserId == id);
+            return _participantContext.ProjectParticipant.Any(e => e.UserId == userId && e.ProjectId == projectId);
         }
 
         [HttpGet]

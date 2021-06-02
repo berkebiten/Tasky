@@ -25,6 +25,7 @@ import {
   GET_PROJECT_WORK_LOGS,
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
+  INVITE_PARTICIPANT,
   UPDATE_TASK_STATUS_SERVICE,
   UPLOAD_PROJECT_FILE,
 } from "../../util/constants/Services";
@@ -37,6 +38,7 @@ import {
   taskTableColumns,
 } from "../../util/constants/Constants";
 import { Icon } from "semantic-ui-react";
+import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 
 const menuItems = [
   {
@@ -76,6 +78,7 @@ export default class ProjectDetail extends Component {
             )
           : null,
       fileUpload: false,
+      inviteParticipant: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -156,7 +159,7 @@ export default class ProjectDetail extends Component {
   };
 
   submitTaskForm = async (data) => {
-    let files = FileHelper.getFiles()
+    let files = FileHelper.getFiles();
     let date = moment(data.dueDate).format("YYYY-MM-DD");
     let insertObject = {
       projectId: this.state.project.id,
@@ -337,6 +340,63 @@ export default class ProjectDetail extends Component {
     );
   };
 
+  inviteParticipant = async (data) => {
+    let participants = [];
+    for (let i = 0; i < Object.keys(data).length / 2; i++) {
+      let participantObj = {
+        email: data["participantEmail" + i.toString()],
+        role: parseInt(data["role" + i.toString()]),
+      };
+      participants.push(participantObj);
+    }
+    await ServiceHelper.serviceHandler(
+      INVITE_PARTICIPANT + this.state.projectId,
+      ServiceHelper.createOptionsJson(JSON.stringify(participants), "POST")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Invitation sent.", {
+          type: "success",
+        });
+        this.setState({ inviteParticipant: false });
+        this.getProjectDetail();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createInviteParticipantModal = () => {
+    return (
+      <CustomModal
+        title="Invite Participant"
+        isVisible={this.state.inviteParticipant}
+        onClose={() => this.setState({ inviteParticipant: false })}
+        content={
+          <div>
+            <InviteParticipantView
+              onSubmit={this.inviteParticipant}
+              handleSubmit={(submit) => {
+                this.submitParticipants = submit;
+              }}
+            />
+            <Button
+              variant="dark"
+              size="lg"
+              onClick={() => {
+                this.submitParticipants();
+              }}
+              block
+            >
+              Create
+            </Button>
+          </div>
+        }
+      />
+    );
+  };
+
   createOverview = () => {
     var overview_participants =
       this.state.projectParticipants &&
@@ -503,10 +563,16 @@ export default class ProjectDetail extends Component {
             <Card.Header>
               Participants
               {this.state.userRole === "ProjectManager" && (
-                <Button className="pull-right">Invite Participant</Button>
+                <Button
+                  onClick={() => this.setState({ inviteParticipant: true })}
+                  className="pull-right"
+                >
+                  Invite Participant
+                </Button>
               )}
             </Card.Header>
             <Card.Body>
+              {this.createInviteParticipantModal()}
               {overview_participants.map((item, key) => {
                 var roleName =
                   this.getParticipantRoleName(item).toString() + "";
