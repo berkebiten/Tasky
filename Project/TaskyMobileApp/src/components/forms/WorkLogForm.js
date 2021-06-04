@@ -9,6 +9,19 @@ import {
 import {Formik} from 'formik';
 import {Fonts, Metrics, Colors} from '../../res/styles';
 import {Label} from 'native-base';
+import * as yup from 'yup';
+
+let elements = {
+  duration: yup
+    .string()
+    .required('Required Field!')
+    .matches(
+      '\\d[hHmMdD]',
+      'Invalid time duration entered. (eg. 1d 2h 30m)',
+    ),
+  description: yup.string().required('Required Field!'),
+};
+let schema = yup.object().shape(elements);
 
 export default class WorkLogForm extends Component {
   constructor(props) {
@@ -18,9 +31,18 @@ export default class WorkLogForm extends Component {
   createContent() {
     return (
       <Formik
-        initialValues={{email: ''}}
-        onSubmit={(values) => this.props.onSubmit(values)}>
-        {({handleChange, handleBlur, handleSubmit, values}) => (
+        initialValues={this.props.initialValues ? this.props.initialValues : {}}
+        onSubmit={(values) => this.props.onSubmit(values)}
+        validationSchema={schema}>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          submitCount,
+        }) => (
           <View style={{flex: 1}}>
             <Label style={styles.label}>Duration</Label>
             <TextInput
@@ -29,6 +51,9 @@ export default class WorkLogForm extends Component {
               onBlur={handleBlur('duration')}
               value={values.duration}
             />
+            {errors.duration && (touched.duration || submitCount > 0) && (
+              <Text style={styles.errorTxt}>{errors.duration}</Text>
+            )}
             <Label style={styles.label}>Description</Label>
             <TextInput
               style={{...styles.textInput, height: Metrics.HEIGHT * 0.15}}
@@ -37,6 +62,9 @@ export default class WorkLogForm extends Component {
               value={values.description}
               multiline={true}
             />
+            {errors.description && (touched.description || submitCount > 0) && (
+              <Text style={styles.errorTxt}>{errors.description}</Text>
+            )}
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonTxt}>Submit</Text>
             </TouchableOpacity>
@@ -68,6 +96,11 @@ const styles = StyleSheet.create({
     fontSize: Fonts.moderateScale(16),
     height: Metrics.HEIGHT * 0.05,
     color: Colors.darktext,
+  },
+
+  errorTxt: {
+    margin: 5,
+    color: 'red',
   },
 
   label: {

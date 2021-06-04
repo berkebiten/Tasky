@@ -34,6 +34,7 @@ import debounce from 'lodash.debounce';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import TaskItem from '../../components/items/TaskItem';
 import WorkLogItem from '../../components/items/WorkLogItem';
+import Profile from '../Profile';
 
 const drawerStyles = {
   drawer: {
@@ -184,31 +185,33 @@ export default class Main extends React.Component {
       <View style={{flex: 1}}>
         {this.state.activeTab === 'Home' && this.createHome()}
         {this.state.activeTab !== 'Home' && this.createSearchBar()}
-        <FlatList
-          data={
-            this.state.activeTab === 'Projects'
-              ? this.state.filteredProjects
-              : this.state.activeTab === 'My Tasks'
-              ? this.state.filteredTasks
-              : this.state.activeTab === 'Activities'
-              ? this.state.filteredWorkLogs
-              : []
-          }
-          ref={(ref) => {
-            this.flatListRef = ref;
-          }}
-          refreshing={false}
-          extraData={this.state}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={(item) => this._renderItem(item)}
-          onRefresh={() => this._onRefresh(this.state.keyword)}
-          refreshing={false}
-          windowSize={10}
-          // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
-          // onEndReached={() => {
-          //   this._loadMoreData();
-          // }}
-        />
+        {this.state.activeTab !== 'Home' && (
+          <FlatList
+            data={
+              this.state.activeTab === 'Projects'
+                ? this.state.filteredProjects
+                : this.state.activeTab === 'My Tasks'
+                ? this.state.filteredTasks
+                : this.state.activeTab === 'Activities'
+                ? this.state.filteredWorkLogs
+                : []
+            }
+            ref={(ref) => {
+              this.flatListRef = ref;
+            }}
+            refreshing={false}
+            extraData={this.state}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={(item) => this._renderItem(item)}
+            onRefresh={() => this._onRefresh(this.state.keyword)}
+            refreshing={false}
+            windowSize={10}
+            // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
+            // onEndReached={() => {
+            //   this._loadMoreData();
+            // }}
+          />
+        )}
       </View>
     );
   };
@@ -222,6 +225,7 @@ export default class Main extends React.Component {
         <UserDetailItem
           userData={{resolvedTasks: 76, openTasks: 14, totalProjects: 25}}
         />
+        <Profile />
       </View>
     );
   };

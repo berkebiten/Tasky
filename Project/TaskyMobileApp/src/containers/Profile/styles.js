@@ -70,51 +70,6 @@ const styles = StyleSheet.create({
     marginTop: Metrics.WIDTH * 0.045
   },
 
-  connectWithTwitterBg: {
-    backgroundColor: "#0691ce",
-    width: Metrics.WIDTH * 0.82,
-    ...Platform.select({
-      android: {
-        height: Metrics.HEIGHT * 0.07
-      },
-      ios: {
-        height: Metrics.HEIGHT * 0.06
-      }
-    }),
-    alignSelf: "center",
-    marginTop: Metrics.HEIGHT * 0.03,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
-  connectWithFacebookBg: {
-    backgroundColor: "#3b5999",
-    width: Metrics.WIDTH * 0.82,
-    ...Platform.select({
-      android: {
-        height: Metrics.HEIGHT * 0.07
-      },
-      ios: {
-        height: Metrics.HEIGHT * 0.06
-      }
-    }),
-    alignSelf: "center",
-    marginTop: Metrics.HEIGHT * 0.015,
-    marginBottom: Metrics.HEIGHT * 0.04,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
-  connectWithTwitterFbTxt: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: Fonts.moderateScale(15),
-    fontFamily: Fonts.type.SFUIDisplayMedium,
-    marginTop: -1
-  },
-
   dividerHorizontal: {
     backgroundColor: "#d6d6d6",
     height: 1,
@@ -123,7 +78,6 @@ const styles = StyleSheet.create({
   },
 
   accountInfoBg: {
-    backgroundColor: "#f1f1f1",
     height: Metrics.HEIGHT * 0.072,
     width: Metrics.WIDTH
   },

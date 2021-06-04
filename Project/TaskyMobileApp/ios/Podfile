@@ -12,6 +12,8 @@ target 'Tasky' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
   target 'TaskyTests' do
     inherit! :complete
     # Pods for testing

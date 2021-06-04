@@ -7,9 +7,20 @@ import {
   SignUpScreen,
   ProfileScreen,
   TaskScreen,
-  ProjectScreen
+  ProjectScreen,
 } from '../screens';
 import {SCREEN_ENUMS} from '../util/constants/Enums';
+import {loadLoginObject} from '../util/storage/AsyncStorage';
+
+const getInitialRoute = () => {
+  loadLoginObject().then((loginObj) => {
+    if (loginObj) {
+      return SCREEN_ENUMS.SIGN_IN;
+    } else {
+      return SCREEN_ENUMS.GET_STARTED;
+    }
+  });
+};
 
 const ScreenStack = createStackNavigator(
   {
@@ -45,7 +56,7 @@ const Route = createStackNavigator(
     },
   },
   {
-    initialRouteName: SCREEN_ENUMS.GET_STARTED,
+    initialRouteName: getInitialRoute(),
     headerMode: 'none',
   },
 );

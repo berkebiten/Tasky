@@ -16,14 +16,17 @@ import {Colors, Fonts, Metrics} from '../../res/styles';
 import CustomModal from '../../components/modals/CustomModal';
 import WorkLogForm from '../../components/forms/WorkLogForm';
 import {FAB} from 'react-native-paper';
-import {ServiceHelper} from '../../util/helpers';
+import {NavigationHelper, ServiceHelper} from '../../util/helpers';
 import {
   GET_WORKLOGS_UNDER_TASK_SERVICE,
   INSERT_WORKLOG_SERVICE,
+  GET_SUB_TASKS,
 } from '../../util/constants/Services';
 import debounce from 'lodash.debounce';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import WorkLogItem from '../../components/items/WorkLogItem';
+import TaskItem from '../../components/items/TaskItem';
+import {SCREEN_ENUMS} from '../../util/constants/Enums';
 
 export default class Task extends Component {
   constructor(props) {
@@ -130,7 +133,18 @@ export default class Task extends Component {
   };
 
   _renderItem = (item) => {
-    return <WorkLogItem item={item.item} onPress={() => console.log('x')} />;
+    if (this.state.activeTab === 'Sub-tasks') {
+      return (
+        <TaskItem
+          item={item.item}
+          onPress={() =>
+            NavigationHelper.navigate(SCREEN_ENUMS.TASK, {task: item.item})
+          }
+        />
+      );
+    } else {
+      return <WorkLogItem item={item.item} />;
+    }
   };
 
   createWorkLogList = () => {
@@ -155,7 +169,33 @@ export default class Task extends Component {
     );
   };
 
+  createSubtaskList = () => {
+    return (
+      <FlatList
+        data={this.state.filteredSubtasks ? this.state.filteredSubtasks : []}
+        ref={(ref) => {
+          this.flatListRef = ref;
+        }}
+        refreshing={false}
+        extraData={this.state}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={(item) => this._renderItem(item)}
+        onRefresh={() => this.fetchSubTasks(this.state.keyword)}
+        refreshing={false}
+        windowSize={10}
+        // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
+        // onEndReached={() => {
+        //   this._loadMoreData();
+        // }}
+      />
+    );
+  };
+
   _onChangeKeyword = (keyword) => {
+    if (this.state.activeTab === 'Sub-tasks') {
+      this.searchSubtasks(keyword);
+      return;
+    }
     if (keyword.length > 0) {
       let workLogs = this.state.workLogs;
       let filteredWorkLogs = workLogs.filter((workLog) => {
@@ -172,6 +212,20 @@ export default class Task extends Component {
       this.setState({filteredWorkLogs: filteredWorkLogs});
     } else {
       this.setState({filteredWorkLogs: this.state.workLogs});
+    }
+  };
+
+  searchSubtasks = (keyword) => {
+    if (keyword.length > 0) {
+      let tasks = this.state.filteredSubtasks;
+      let filteredSubtasks = tasks.filter((task) => {
+        if (task.title) {
+          return task.title.toLowerCase().includes(keyword.toLowerCase());
+        }
+      });
+      this.setState({filteredSubtasks: filteredSubtasks});
+    } else {
+      this.setState({filteredSubtasks: this.state.subtasks});
     }
   };
 
@@ -218,9 +272,27 @@ export default class Task extends Component {
     if (responseData.data && responseData.data) {
       let data = responseData.data;
       data.reverse();
+      this.setState(
+        {
+          workLogs: data,
+          filteredWorkLogs: data,
+        },
+        () => this.fetchSubTasks(),
+      );
+    }
+  };
+
+  fetchSubTasks = async () => {
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_SUB_TASKS + this.state.task.id,
+      ServiceHelper.createOptionsJson(null, 'GET'),
+    );
+    if (responseData.data && responseData.data) {
+      let data = responseData.data;
+      data.reverse();
       this.setState({
-        workLogs: data,
-        filteredWorkLogs: data,
+        subtasks: data,
+        filteredSubtasks: data,
       });
     }
   };
@@ -228,6 +300,13 @@ export default class Task extends Component {
   createContent = () => {
     if (this.state.activeTab === 'Overview') {
       return this.createTaskDetail();
+    } else if (this.state.activeTab === 'Sub-tasks') {
+      return (
+        <View style={{flex: 1}}>
+          {this.createSearchBar()}
+          {this.createSubtaskList()}
+        </View>
+      );
     } else {
       return (
         <View style={{flex: 1}}>
@@ -291,6 +370,13 @@ export default class Task extends Component {
                     this.setState({activeTab: 'Overview'});
                   },
                   iconName: 'home',
+                },
+                {
+                  title: 'Sub-tasks',
+                  onPress: () => {
+                    this.setState({activeTab: 'Sub-tasks'});
+                  },
+                  iconName: 'checkmark',
                 },
                 {
                   title: 'Work Logs',

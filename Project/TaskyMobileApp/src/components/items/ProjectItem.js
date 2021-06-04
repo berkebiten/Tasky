@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.snow,
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 10,
     borderRadius: 10,
   },
