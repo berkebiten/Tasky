@@ -11,10 +11,10 @@ import {
   Row,
   Container,
   Badge,
-  Image,
   Button,
   OverlayTrigger,
   Tooltip as Ttip,
+  Image,
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
@@ -37,8 +37,9 @@ import {
   activityTableColumns,
   taskTableColumns,
 } from "../../util/constants/Constants";
-import { Icon } from "semantic-ui-react";
+import { Icon, Label } from "semantic-ui-react";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
+import WorkLogForm from "../../components/forms/WorkLogForm";
 
 const menuItems = [
   {
@@ -79,6 +80,8 @@ export default class ProjectDetail extends Component {
           : null,
       fileUpload: false,
       inviteParticipant: false,
+      workLogModal: false,
+      selectedWorkLog: null
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -397,6 +400,46 @@ export default class ProjectDetail extends Component {
     );
   };
 
+  onDoubleClickActivityRow = (index) => {
+    this.setState({
+      selectedWorkLog: this.state.projectWorkLogs[index - 1],
+      workLogModal: true,
+    });
+  };
+
+  createWorkLogModal = () => {
+    let workLog = this.state.selectedWorkLog;
+    return (
+      <CustomModal
+        isVisible={this.state.workLogModal}
+        onClose={() =>
+          this.setState({ workLogModal: false, selectedWorkLog: null })
+        }
+        content={
+          <div>
+            <WorkLogForm
+              handleSubmit={(submit) => (this.submitTaskForm = submit)}
+              handleReset={(reset) => (this.resetTaskForm = reset)}
+              onSubmit={null}
+              initialValues={{
+                ...workLog,
+                createdDate: moment().valueOf(workLog.createdDate),
+              }}
+              hideButton={true}
+              participants={
+                this.state.projectParticipants &&
+                this.state.projectParticipants.length > 0
+                  ? this.state.projectParticipants
+                  : []
+              }
+            />
+          </div>
+        }
+        title={"WORK LOG"}
+      />
+    );
+  };
+
   createOverview = () => {
     var overview_participants =
       this.state.projectParticipants &&
@@ -592,7 +635,7 @@ export default class ProjectDetail extends Component {
                             ? item.profileImage
                             : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
                         }
-                      ></Image>
+                      />
                     </OverlayTrigger>
                     <div className="project-participant-name text-center">
                       {item.firstName}
@@ -607,8 +650,8 @@ export default class ProjectDetail extends Component {
           </Card>
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
-          <Card className="project-detail-card">
-            <Card.Header>
+          <Card className="file-card overflow-auto">
+            <Card.Header style={{ width: "100%" }}>
               Files
               {this.state.userRole !== "Watcher" && (
                 <Button
@@ -711,6 +754,7 @@ export default class ProjectDetail extends Component {
         <TableView
           columns={activityTableColumns}
           tableData={this.state.projectWorkLogs}
+          onDoubleClickRow={this.onDoubleClickActivityRow}
         />
       </Container>
     );
@@ -812,6 +856,7 @@ export default class ProjectDetail extends Component {
           </Col>
           <Col className="project-detail-right" md={10}>
             {this.createContent()}
+            {this.state.selectedWorkLog && this.createWorkLogModal()}
             {this.createProjectForm()}
           </Col>
         </Row>
