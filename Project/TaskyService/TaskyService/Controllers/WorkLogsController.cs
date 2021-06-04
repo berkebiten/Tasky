@@ -67,6 +67,11 @@ namespace TaskyService.Controllers
                 myProjectIds.Add(projectParticipant.ProjectId);
             }
             var data = _context.VW_WorkLog.ToList().Where(item => myProjectIds.Contains(item.ProjectId)).ToList();
+            foreach (VW_WorkLog item in data)
+            {
+                item.MemberFullName = item.FirstName + ' ' + item.LastName;
+
+            }
             return Ok(new { isSuccessful = true, data = data });
 
         }

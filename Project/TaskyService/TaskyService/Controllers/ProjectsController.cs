@@ -226,6 +226,31 @@ namespace TaskyService.Controllers
 
         }
 
+        [HttpDelete]
+        [Route("RemoveParticipant/{participantId}")]
+        public IActionResult InviteParticipant(Guid participantId)
+        {
+            var participant = _participantContext.ProjectParticipant.Find(participantId);
+            if(participant == null)
+            {
+                return NotFound();
+            }
+
+            _participantContext.Remove(participant);
+
+            try
+            {
+                _participantContext.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessful = true, message = "User Removed From Project." });
+        }
+
+
         [HttpPost]
         [Route("UploadFile/{id}")]
         public IActionResult UploadFile(Guid id, [FromBody] List<File64> files, [FromHeader(Name = "Authorization")] String token)
