@@ -541,6 +541,18 @@ h3 {
   margin-left: 10px;
 }
 
+.task-detail-info-passed{
+  color:#ec6f75;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.task-detail-info-today{
+  color:#0275d8;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
 .file-input {
   margin-top: 5px;
   margin-bottom: 15px;
