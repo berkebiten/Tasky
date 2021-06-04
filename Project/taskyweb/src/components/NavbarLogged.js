@@ -33,14 +33,14 @@ class NavbarLogged extends Component {
           />
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/projects" className="nav-link-tasky ml-5">
+          <Nav.Link href="/Projects" className="nav-link-tasky ml-5">
             Projects
           </Nav.Link>
-          <Nav.Link href="/tasks" className="nav-link-tasky ml-2">
-            Tasks
+          <Nav.Link href="/MyTasks" className="nav-link-tasky ml-2">
+            My Tasks
           </Nav.Link>
-          <Nav.Link href="/activities" className="nav-link-tasky ml-2">
-            Activities
+          <Nav.Link href="/ActivityStream" className="nav-link-tasky ml-2">
+            Activity Stream
           </Nav.Link>
         </Nav>
         <Form inline>

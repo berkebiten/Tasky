@@ -379,6 +379,7 @@ html,
 }
 
 .project-participant-name {
+  text-align: center;
   font-weight: bold;
 }
 
@@ -622,4 +623,22 @@ p + p {
 .title-span{
   margin-right:4px; 
   display:inline-block
+}
+
+.file-card {
+  width: 100%;
+  background-color: transparent !important;
+  color: var(--bs-dark);
+  max-height: 40vh;
+  margin-bottom: 10;
+}
+
+.file-card .card-header {
+  font-weight: bold;
+  font-size: x-large;
+}
+.file-card .card-text {
+  font-weight: bold;
+  font-style: italic;
+  font-size: medium;
 }
