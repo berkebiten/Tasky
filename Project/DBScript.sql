@@ -288,5 +288,5 @@ GO
 
 --ADD PREFERENCES
 ALTER TABLE [dbo].[User]
-ADD SendEmail BIT, SendNotification BIT
+ADD SendEmail BIT DEFAULT 1, SendNotification BIT DEFAULT 1
 
