@@ -58,7 +58,7 @@ function App(props) {
           <Route path="/sign-up" component={SignUp} />
           <Route path="/project/:id" render={(props) => <ProjectDetail {...props} />} />
           <Route path="/task/:id" render={(props) => <Task {...props} />} />
-          <Route path="/profile" component={Profile} />
+          <Route path="/profile" render={(props) => <Profile {...props} />} />
           <Route path="/MyTasks" component={Tasks} />
           <Route path="/ActivityStream" component={ActivityStream} />
         </Switch>
