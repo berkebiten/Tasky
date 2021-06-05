@@ -164,7 +164,7 @@ export default class Projects extends Component {
 
   renderProjectCards = () => {
     return (
-      <Row className="mt-5 projects-row">
+      <Row className="mt-5 projects-row justify-content-center">
         {this.state.projects.map((item, key) => {
           return (
             <Col md={3}>
@@ -172,7 +172,7 @@ export default class Projects extends Component {
                 bg="dark"
                 text="light"
                 onClick={() => this.onClickCard(item)}
-                className="project-card mb-2"
+                className="project-card mb-2 clickable"
               >
                 <Card.Body>
                   <Card.Title>{item.name}</Card.Title>
