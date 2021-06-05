@@ -44,7 +44,7 @@ export default class Profile extends Component {
     ).then((response) => {
       if (response && response.isSuccessful  && response.data) {
         console.log(response.data);
-        this.setState({ user: response.data.user });
+        this.setState({ user: response.data.user, stats: response.data.stats, recentProjects:response.data.recentProjects });
       }
     });
   };
@@ -121,13 +121,13 @@ export default class Profile extends Component {
                           <Card.Text className="mt-2">
                             Tasks{" "}
                             <Badge pill variant="primary">
-                              5
+                              {this.state.stats ? this.state.stats.activeTasks : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Projects{" "}
                             <Badge pill variant="primary">
-                              7
+                            {this.state.stats ? this.state.stats.activeProjects : 0}
                             </Badge>
                           </Card.Text>
                         </Card.Body>
@@ -142,19 +142,19 @@ export default class Profile extends Component {
                           <Card.Text className="mt-2">
                             Tasks{" "}
                             <Badge pill variant="success">
-                              15
+                            {this.state.stats ? this.state.stats.completedTasks : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Projects{" "}
                             <Badge pill variant="success">
-                              1
+                            {this.state.stats ? this.state.stats.completedProjects : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Work Logs{" "}
                             <Badge pill variant="success">
-                              19
+                            {this.state.stats ? this.state.stats.completedWorkLogs : 0}
                             </Badge>
                           </Card.Text>
                         </Card.Body>
@@ -173,7 +173,7 @@ export default class Profile extends Component {
                                 text="light"
                                 className="tasky-profile-stat-card"
                               >
-                                <Card.Body>Project1</Card.Body>
+                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project1.projectName : "undefined"}</Card.Body>
                               </Card>
                             </Col>
                             <Col>
@@ -182,7 +182,7 @@ export default class Profile extends Component {
                                 text="light"
                                 className="tasky-profile-stat-card"
                               >
-                                <Card.Body>Project2</Card.Body>
+                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project2.projectName : "undefined"}</Card.Body>
                               </Card>
                             </Col>
                             <Col>
@@ -191,7 +191,7 @@ export default class Profile extends Component {
                                 text="light"
                                 className="tasky-profile-stat-card"
                               >
-                                <Card.Body>Project3</Card.Body>
+                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project3.projectName : "undefined"}</Card.Body>
                               </Card>
                             </Col>
                           </Row>
