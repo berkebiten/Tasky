@@ -285,9 +285,7 @@ export default class Task extends Component {
     let created = this.state.task
       ? moment(this.state.task.createdDate).format("DD/MM/YYYY")
       : "UNDEFINED";
-    let due = this.state.task
-      ? this.state.task.dueDate
-      : "UNDEFINED";
+    let due = this.state.task ? this.state.task.dueDate : "UNDEFINED";
     let reporter = this.state.task
       ? this.state.task.reporterFullName
       : "UNDEFINED";
@@ -397,12 +395,12 @@ export default class Task extends Component {
 
   renderDetailRow = (info, title, divClassName = "mt-4") => {
     let dueClass = "";
-    
+
     if (title == "Due Date") {
       let dateNow = new Date().setHours(0, 0, 0, 0);
-      console.log(new Date(info).setHours(0,0,0,0));
+      console.log(new Date(info).setHours(0, 0, 0, 0));
       console.log(dateNow);
-      console.log(new Date(info).setHours(0,0,0,0)<dateNow)
+      console.log(new Date(info).setHours(0, 0, 0, 0) < dateNow);
       if (new Date(info).setHours(0, 0, 0, 0) < dateNow) {
         dueClass = "-passed";
       } else if (new Date(info).setHours(0, 0, 0, 0) === dateNow) {
@@ -482,7 +480,7 @@ export default class Task extends Component {
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView
-            columns={taskTableColumns}
+            columns={taskTableColumns(this.state.projectParticipants)}
             tableData={this.state.subTasks}
           />
         </Row>
@@ -506,7 +504,7 @@ export default class Task extends Component {
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView
-            columns={activityTableColumns}
+            columns={activityTableColumns(this.state.projectParticipants)}
             tableData={this.state.workLogs}
             onDoubleClickRow={this.onDoubleClickActivityRow}
           />

@@ -743,7 +743,7 @@ export default class ProjectDetail extends Component {
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView
-            columns={taskTableColumns}
+            columns={taskTableColumns(this.state.projectParticipants)}
             tableData={this.state.tableData}
           />
         </Row>
@@ -755,7 +755,7 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <TableView
-          columns={activityTableColumns}
+          columns={activityTableColumns(this.state.projectParticipants)}
           tableData={this.state.projectWorkLogs}
           onDoubleClickRow={this.onDoubleClickActivityRow}
         />
