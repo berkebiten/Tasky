@@ -266,3 +266,7 @@ AS SELECT f.Id, f.Name, f.Base64, f.TableName, f.DataId, f.CreatedBy, f.CreatedD
 FROM [dbo].[User] u,[dbo].[File] f
 WHERE f.CreatedBy=u.Id;
 GO
+
+--ADD PREFERENCES
+ALTER TABLE [dbo].[User]
+ADD SendEmail BIT, SendNotification BIT
