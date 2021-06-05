@@ -24,6 +24,7 @@ import TaskItem from '../../components/items/TaskItem';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
 import images from '../../res/styles/images';
 import CustomModal from '../../components/modals/CustomModal';
+import NoContentView from '../../components/views/NoContentView';
 
 export default class Project extends Component {
   constructor(props) {
@@ -246,25 +247,29 @@ export default class Project extends Component {
   };
 
   createTaskList = () => {
-    return (
-      <FlatList
-        data={this.state.filteredTasks ? this.state.filteredTasks : []}
-        ref={(ref) => {
-          this.flatListRef = ref;
-        }}
-        refreshing={false}
-        extraData={this.state}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={(item) => this._renderItem(item)}
-        onRefresh={() => this.fetchTaskList(this.state.keyword)}
-        refreshing={false}
-        windowSize={10}
-        // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
-        // onEndReached={() => {
-        //   this._loadMoreData();
-        // }}
-      />
-    );
+    if (this.state.filteredTasks && this.state.filteredTasks.length > 0) {
+      return (
+        <FlatList
+          data={this.state.filteredTasks ? this.state.filteredTasks : []}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
+          refreshing={false}
+          extraData={this.state}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(item) => this._renderItem(item)}
+          onRefresh={() => this.fetchTaskList(this.state.keyword)}
+          refreshing={false}
+          windowSize={10}
+        />
+      );
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <NoContentView text="No Data To Display" />
+        </View>
+      );
+    }
   };
 
   createContent = () => {
@@ -272,7 +277,7 @@ export default class Project extends Component {
       return this.createOverview();
     } else {
       return (
-        <View>
+        <View style={{flex: 1}}>
           {this.createSearchBar()}
           {this.createTaskList()}
         </View>

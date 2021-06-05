@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ControlPanelView, HeaderView} from '../../components/views';
+import {HeaderView} from '../../components/views';
 import {NavigationActions, SafeAreaView, StackActions} from 'react-navigation';
 import {
   NavigationHelper,
@@ -15,8 +15,6 @@ import {
 } from '../../util/helpers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Drawer from 'react-native-drawer';
-import tweens from './tweens';
 import styles from './styles';
 import PersonalDescriptionItem from '../../components/items/PersonalDescriptionItem';
 import UserDetailItem from '../../components/items/UserDetailItem';
@@ -35,36 +33,13 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import TaskItem from '../../components/items/TaskItem';
 import WorkLogItem from '../../components/items/WorkLogItem';
 import Profile from '../Profile';
+import NoContentView from '../../components/views/NoContentView';
 
-const drawerStyles = {
-  drawer: {
-    shadowColor: '#000000',
-    shadowOpacity: 0.8,
-    shadowRadius: 0,
-  },
-};
 export default class Main extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.onChangeTextDelayed = debounce(this._onChangeKeyword, 1000);
     this.state = {
-      drawerType: 'static',
-      openDrawerOffset: 50,
-      closedDrawerOffset: 0,
-      panOpenMask: 0.1,
-      relativeDrag: false,
-      panThreshold: 0.25,
-      tweenHandlerOn: false,
-      tweenDuration: 350,
-      tweenEasing: 'linear',
-      disabled: false,
-      tweenHandlerPreset: null,
-      acceptDoubleTap: false,
-      acceptTap: false,
-      acceptPan: true,
-      tapToClose: true,
-      negotiatePan: false,
-      side: 'left',
       activeTab: 'Home',
     };
   }
@@ -85,10 +60,6 @@ export default class Main extends React.Component {
       return {};
     }
     return tweens[this.state.tweenHandlerPreset](ratio);
-  }
-
-  openDrawer() {
-    this.drawer.open();
   }
 
   getProjects = async () => {
@@ -180,7 +151,7 @@ export default class Main extends React.Component {
     this.refresh();
   };
 
-  createContent = () => {
+  createList = () => {
     return (
       <View style={{flex: 1}}>
         {this.state.activeTab === 'Home' && this.createHome()}
@@ -214,6 +185,46 @@ export default class Main extends React.Component {
         )}
       </View>
     );
+  };
+
+  createNoContent = () => {
+    return (
+      <View style={{flex: 1}}>
+        {this.createSearchBar()}
+        <NoContentView text="No Data To Display" />
+      </View>
+    );
+  };
+
+  createContent = () => {
+    switch (this.state.activeTab) {
+      case 'Home':
+        return this.createHome();
+      case 'Projects':
+        if (
+          this.state.filteredProjects &&
+          this.state.filteredProjects.length > 0
+        ) {
+          return this.createList();
+        } else {
+          return this.createNoContent();
+        }
+      case 'My Tasks':
+        if (this.state.filteredTasks && this.state.filteredTasks.length > 0) {
+          return this.createList();
+        } else {
+          return this.createNoContent();
+        }
+      case 'Activities':
+        if (
+          this.state.filteredWorkLogs &&
+          this.state.filteredWorkLogs.length > 0
+        ) {
+          return this.createList();
+        } else {
+          return this.createNoContent();
+        }
+    }
   };
 
   createHome = () => {
@@ -353,91 +364,67 @@ export default class Main extends React.Component {
     ];
     return (
       <View style={{flex: 1}}>
-        <Drawer
-          ref={(c) => (this.drawer = c)}
-          type={this.state.drawerType}
-          animation={this.state.animation}
-          openDrawerOffset={this.state.openDrawerOffset}
-          closedDrawerOffset={this.state.closedDrawerOffset}
-          panOpenMask={this.state.panOpenMask}
-          panCloseMask={this.state.panCloseMask}
-          relativeDrag={this.state.relativeDrag}
-          panThreshold={this.state.panThreshold}
-          content={
-            <ControlPanelView
-              onClose={() => {
-                this.drawer.close();
-              }}
-              modules={modules}
-              userData={this.state.userData ? this.state.userData : null}
-            />
-          }
-          styles={drawerStyles}
-          disabled={this.state.disabled}
-          tweenHandler={this.tweenHandler.bind(this)}
-          tweenDuration={this.state.tweenDuration}
-          tweenEasing={this.state.tweenEasing}
-          acceptDoubleTap={this.state.acceptDoubleTap}
-          acceptTap={this.state.acceptTap}
-          acceptPan={this.state.acceptPan}
-          tapToClose={this.state.tapToClose}
-          negotiatePan={this.state.negotiatePan}
-          changeVal={this.state.changeVal}
-          side={this.state.side}>
-          <View style={styles.drawercontainer}>
-            <HeaderView
-              title="Tasky"
-              leftItem={
-                <MaterialCommunityIcons name="menu" size={28} color="#fff" />
-              }
-              leftItemOnPress={() => {
-                this.openDrawer();
-              }}
-              rightItem={
-                <Ionicons name="notifications" size={28} color="#fff" />
-              }
-              rightItemOnPress={() => {
-                console.warn('Notifications');
-              }}
-            />
-            <SafeAreaView style={{flex: 1}}>
-              {this.createContent()}
-              <View style={styles.footerTab}>
-                <FooterTabView
-                  tabs={[
-                    {
-                      title: 'Home',
-                      onPress: () => {
-                        this.setState({activeTab: 'Home'});
-                      },
-                      iconName: 'home',
+        <View style={styles.drawercontainer}>
+          <HeaderView
+            title="Tasky"
+            leftItem={
+              <MaterialCommunityIcons name="logout" size={28} color="#fff" />
+            }
+            leftItemOnPress={async () => {
+              await logout();
+              NavigationHelper.dispatch(
+                StackActions.reset({
+                  index: 0,
+                  actions: [
+                    NavigationActions.navigate({
+                      routeName: SCREEN_ENUMS.SIGN_IN,
+                    }),
+                  ],
+                }),
+              );
+            }}
+            rightItem={<Ionicons name="notifications" size={28} color="#fff" />}
+            rightItemOnPress={() => {
+              console.warn('Notifications');
+            }}
+          />
+          <SafeAreaView style={{flex: 1}}>
+            {this.createContent()}
+            <View style={styles.footerTab}>
+              <FooterTabView
+                tabs={[
+                  {
+                    title: 'Home',
+                    onPress: () => {
+                      this.setState({activeTab: 'Home'});
                     },
-                    {
-                      title: 'Projects',
-                      onPress: () => {
-                        this.setState({activeTab: 'Projects'});
-                      },
-                      iconName: 'briefcase',
+                    iconName: 'home',
+                  },
+                  {
+                    title: 'Projects',
+                    onPress: () => {
+                      this.setState({activeTab: 'Projects'});
                     },
-                    {
-                      title: 'My Tasks',
-                      onPress: () => {
-                        this.setState({activeTab: 'My Tasks'});
-                      },
-                      iconName: 'checkmark',
+                    iconName: 'briefcase',
+                  },
+                  {
+                    title: 'My Tasks',
+                    onPress: () => {
+                      this.setState({activeTab: 'My Tasks'});
                     },
-                    {
-                      title: 'Activities',
-                      onPress: () => this.setState({activeTab: 'Activities'}),
-                      iconName: 'list',
-                    },
-                  ]}
-                  activeTab={this.state.activeTab}
-                />
-              </View>
-            </SafeAreaView>
-          </View>
-        </Drawer>
+                    iconName: 'checkmark',
+                  },
+                  {
+                    title: 'Activities',
+                    onPress: () => this.setState({activeTab: 'Activities'}),
+                    iconName: 'list',
+                  },
+                ]}
+                activeTab={this.state.activeTab}
+              />
+            </View>
+          </SafeAreaView>
+        </View>
       </View>
     );
   }

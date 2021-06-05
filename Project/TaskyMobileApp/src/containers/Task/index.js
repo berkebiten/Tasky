@@ -27,6 +27,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import WorkLogItem from '../../components/items/WorkLogItem';
 import TaskItem from '../../components/items/TaskItem';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
+import NoContentView from '../../components/views/NoContentView';
 
 export default class Task extends Component {
   constructor(props) {
@@ -148,47 +149,55 @@ export default class Task extends Component {
   };
 
   createWorkLogList = () => {
-    return (
-      <FlatList
-        data={this.state.filteredWorkLogs ? this.state.filteredWorkLogs : []}
-        ref={(ref) => {
-          this.flatListRef = ref;
-        }}
-        refreshing={false}
-        extraData={this.state}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={(item) => this._renderItem(item)}
-        onRefresh={() => this.fetchWorkLogs(this.state.keyword)}
-        refreshing={false}
-        windowSize={10}
-        // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
-        // onEndReached={() => {
-        //   this._loadMoreData();
-        // }}
-      />
-    );
+    if (this.state.filteredWorkLogs && this.state.filteredWorkLogs.length > 0) {
+      return (
+        <FlatList
+          data={this.state.filteredWorkLogs ? this.state.filteredWorkLogs : []}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
+          refreshing={false}
+          extraData={this.state}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(item) => this._renderItem(item)}
+          onRefresh={() => this.fetchWorkLogs(this.state.keyword)}
+          refreshing={false}
+          windowSize={10}
+        />
+      );
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <NoContentView text="No Data To Display" />
+        </View>
+      );
+    }
   };
 
   createSubtaskList = () => {
-    return (
-      <FlatList
-        data={this.state.filteredSubtasks ? this.state.filteredSubtasks : []}
-        ref={(ref) => {
-          this.flatListRef = ref;
-        }}
-        refreshing={false}
-        extraData={this.state}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={(item) => this._renderItem(item)}
-        onRefresh={() => this.fetchSubTasks(this.state.keyword)}
-        refreshing={false}
-        windowSize={10}
-        // onEndReachedThreshold={LOAD_MORE_CONTANTS.REACHED_THRESHOLD}
-        // onEndReached={() => {
-        //   this._loadMoreData();
-        // }}
-      />
-    );
+    if (this.state.filteredSubtasks && this.state.filteredSubtasks.length > 0) {
+      return (
+        <FlatList
+          data={this.state.filteredSubtasks ? this.state.filteredSubtasks : []}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
+          refreshing={false}
+          extraData={this.state}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(item) => this._renderItem(item)}
+          onRefresh={() => this.fetchSubTasks(this.state.keyword)}
+          refreshing={false}
+          windowSize={10}
+        />
+      );
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <NoContentView text="No Data To Display" />
+        </View>
+      );
+    }
   };
 
   _onChangeKeyword = (keyword) => {
