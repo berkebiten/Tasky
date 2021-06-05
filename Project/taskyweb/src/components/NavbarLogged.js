@@ -13,6 +13,7 @@ import {
 import { Avatar, Dropdown } from "rsuite";
 import logo from "../res/images/tasky-logo-md.png";
 import { SessionHelper } from "../util/helpers";
+import { useRadioGroup } from "@material-ui/core";
 
 class NavbarLogged extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class NavbarLogged extends Component {
     };
   }
   render() {
+    console.log(this.state.user);
     return (
       <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="/projects">
@@ -74,7 +76,14 @@ class NavbarLogged extends Component {
             />
           }
         >
-          <Dropdown.Item onSelect={() => this.props.history.push("/profile")}>
+          <Dropdown.Item
+            onSelect={() =>
+              this.props.history.push({
+                pathname: "/profile/" + this.state.user.id,
+                state: { user: this.state.user },
+              })
+            }
+          >
             <FiUser className="mr-sm-2" />
             Profile
           </Dropdown.Item>
