@@ -14,9 +14,17 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "",
+      user: props.location.state ? props.location.state.user : null,
+      userId:
+        props.match && props.match.params
+          ? props.match.params.id.slice(
+              props.match.params.id.indexOf("=") + 1,
+              props.match.params.id.length
+            )
+          : null,
     };
-    if (!SessionHelper.checkIsSessionLive()) {
+    let a =SessionHelper.checkIsSessionLive();
+    if (!a) {
       props.history.push("/");
     }
   }
@@ -31,16 +39,14 @@ export default class Profile extends Component {
 
   getProfile = async () => {
     await ServiceHelper.serviceHandler(
-      GET_PROFILE_SERVICE,
+      GET_PROFILE_SERVICE + this.state.userId,
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
-      let update = {};
-      if (response && response.data && response.isSuccessful) {
-        update.user = response.data.user;
-        this.setState({ user: update.user });
+      if (response && response.isSuccessful  && response.data) {
+        console.log(response.data);
+        this.setState({ user: response.data.user });
       }
     });
-    RootViewHelper.stopLoading();
   };
 
   render() {
@@ -64,7 +70,7 @@ export default class Profile extends Component {
                     className="tasky-profile-image"
                     variant="top"
                     src={
-                      this.state.user.profileImage
+                      this.state.user && this.state.user.profileImage
                         ? this.state.user.profileImage
                         : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
                     }
@@ -72,16 +78,17 @@ export default class Profile extends Component {
                   />
                   <Card.Body className="mt-2">
                     <Card.Title>
-                      {this.state.user.firstName +
+                    
+                      {this.state.user ?  this.state.user.firstName +
                         " " +
-                        this.state.user.lastName}
+                        this.state.user.lastName : "undefined"}
                     </Card.Title>
-                    <Card.Text>{this.state.user.email}</Card.Text>
+                    <Card.Text>{this.state.user ? this.state.user.email : "undefined"}</Card.Text>
                     <Card.Text>
-                      {"Member since: " +
+                      {this.state.user ? "Member since: " +
                         moment(this.state.user.registrationDate).format(
-                          "DD/MM/YYYY"
-                        )}
+                          "DD/MM/YYYY" 
+                        ): "undefined"}
                     </Card.Text>
                   </Card.Body>
                 </Card>

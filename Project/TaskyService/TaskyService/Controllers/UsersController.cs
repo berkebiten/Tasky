@@ -154,10 +154,9 @@ namespace TaskyService.Controllers
         }
 
         [HttpGet]
-        [Route("GetProfile")]
-        public async Task<ActionResult<dynamic>> GetProfile([FromHeader(Name = "Authorization")] string token)
+        [Route("GetProfile/{id}")]
+        public async Task<ActionResult<dynamic>> GetProfile(Guid id)
         {
-            Guid id = TokenService.getUserId(token);
 
             var user = await _context.User.FindAsync(id);
             if (user == null)

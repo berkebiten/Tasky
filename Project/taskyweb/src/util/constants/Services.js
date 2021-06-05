@@ -1,6 +1,6 @@
 export const LOGIN_SERVICE = "/Users/Login";
 export const REGISTER_SERVICE = "/Users/Register";
-export const GET_PROFILE_SERVICE = "/Users/GetProfile";
+export const GET_PROFILE_SERVICE = "/Users/GetProfile/";
 export const INSERT_PROJECT_SERVICE = "/Projects/Insert";
 export const GET_PROJECTS_SERVICE = "/Projects/GetMyProjects";
 export const GET_TASKS_SERVICE = "/Tasks/GetTasks";
