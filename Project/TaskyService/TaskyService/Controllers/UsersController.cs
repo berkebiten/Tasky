@@ -296,6 +296,33 @@ namespace TaskyService.Controllers
 
         }
 
+        [HttpPost]
+        [Route("ManagePreferences")]
+        public ActionResult ManagePreferences([FromHeader(Name = "Authorization")] string token, Preferences userPreferences)
+        {
+            Guid userId = TokenService.getUserId(token);
+
+            var user = _context.User.Find(userId);
+            user.SendEmail = userPreferences.SendEmail;
+            user.SendNotification = userPreferences.SendNotification;
+            _context.User.Update(user);
+
+            try
+            {
+            _context.SaveChanges();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return Ok();
+
+        }
+
+
+
         private bool UserExists(Guid id)
         {
             return _context.User.Any(e => e.Id == id);
@@ -323,5 +350,11 @@ namespace TaskyService.Controllers
     {
         public Guid projectId { get; set; }
         public string projectName { get; set; }
+    }
+
+    public class Preferences
+    {
+        public bool SendEmail { get; set; }
+        public bool SendNotification { get; set; }
     }
 }

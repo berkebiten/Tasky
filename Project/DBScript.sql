@@ -286,5 +286,7 @@ FROM            dbo.[User] AS u LEFT OUTER JOIN
 ORDER BY t2.Date DESC, w.CreatedDate DESC
 GO
 
-
+--ADD PREFERENCES
+ALTER TABLE [dbo].[User]
+ADD SendEmail BIT, SendNotification BIT
 
