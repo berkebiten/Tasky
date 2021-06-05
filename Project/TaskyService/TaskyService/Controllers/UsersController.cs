@@ -103,7 +103,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new { isSuccessful = true, message = "Updated." });
         }
 
         [HttpPost]
@@ -271,6 +271,7 @@ namespace TaskyService.Controllers
             return Ok(new { isSuccessful = true, data = new { user = user, stats = stats, recentProjects = recent3Projects } });
         }
 
+
         [HttpGet]
         [Route("GetUserInfo")]
         public ActionResult GetUserInfo([FromHeader(Name = "Authorization")] string token)
@@ -357,4 +358,5 @@ namespace TaskyService.Controllers
         public bool SendEmail { get; set; }
         public bool SendNotification { get; set; }
     }
+
 }

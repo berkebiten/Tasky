@@ -3,12 +3,15 @@ import NavbarLogged from "../../components/NavbarLogged";
 import { Card, Col, Row, Container, Badge } from "react-bootstrap";
 import { FiEdit2, FiSettings } from "react-icons/fi";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import CustomModal from "../../components/modals/CustomModal";
+import EditProfileForm from "../../components/forms/EditProfileForm";
 import {
-  RootViewHelper,
+  FileHelper,
   ServiceHelper,
   SessionHelper,
 } from "../../util/helpers";
-import { GET_PROFILE_SERVICE } from "../../util/constants/Services";
+import { GET_PROFILE_SERVICE, UPDATE_USER_SERVICE } from "../../util/constants/Services";
 import moment from "moment";
 export default class Profile extends Component {
   constructor(props) {
@@ -22,6 +25,7 @@ export default class Profile extends Component {
               props.match.params.id.length
             )
           : null,
+      editProfileFormVisibility: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -126,6 +130,51 @@ export default class Profile extends Component {
     }
   };
 
+  submitEditProfileForm = async (data) => {
+    let newUser = this.state.user;
+    newUser.FirstName = data.firstName;
+    newUser.LastName = data.lastName;
+    await ServiceHelper.serviceHandler(
+      UPDATE_USER_SERVICE + this.state.userId,
+      ServiceHelper.createOptionsJson(JSON.stringify(newUser), "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Profile Info Updated.", {
+          type: "success",
+        });
+        this.resetEditProfileForm();
+        this.setState({ editProfileFormVisibility: false });
+        this.getProfile();
+        this.createEditProfileForm();
+        window.location.reload();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createEditProfileForm = () => {
+    return (
+      <CustomModal
+        isVisible={this.state.editProfileFormVisibility}
+        onClose={() => this.setState({ editProfileFormVisibility: false })}
+        content={
+          <div>
+            <EditProfileForm
+              handleSubmit={(submit) => (this.submitEditProfileForm = submit)}
+              handleReset={(reset) => (this.resetEditProfileForm = reset)}
+              onSubmit={this.submitEditProfileForm}
+              initialValues={ this.state.user ? {firstName:this.state.user.firstName, lastName:this.state.user.lastName}: null}
+            />
+          </div>
+        }
+        title={"EDIT PROFILE"}
+      />
+    );
+  };
+
   render() {
     return (
       <div>
@@ -136,23 +185,25 @@ export default class Profile extends Component {
         <div className="auth-wrapper">
           <Container>
             <Col className="mx-auto">
-              <Row className="mx-auto mt-4">
+              <Row className="mx-auto mt-4 ">
                 <Card
-                  className="tasky-profile-card"
+                  className="tasky-profile-card justify-content-center"
                   bg="dark"
                   text="light"
                   style={{ width: "25%" }}
                 >
-                  <Card.Img
-                    className="tasky-profile-image"
-                    variant="top"
-                    src={
-                      this.state.user && this.state.user.profileImage
-                        ? this.state.user.profileImage
-                        : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                    }
-                    size="small"
-                  />
+                  <div className="centered-image">
+                    <Card.Img
+                      className="tasky-profile-image"
+                      variant="top"
+                      src={
+                        this.state.user && this.state.user.profileImage
+                          ? this.state.user.profileImage
+                          : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                      }
+                      size="small"
+                    />
+                  </div>
                   <Card.Body className="mt-2">
                     <Card.Title>
                       {this.state.user
@@ -178,21 +229,21 @@ export default class Profile extends Component {
                   className="dark-profile-container"
                   style={{ width: "75%" }}
                 >
-                  <Row className="mt-2 ml-1 mr-1">
-                    <Col md={10}></Col>
-                    <Col md={2}>
-                      <a className="ml-5" href="/edit-profile">
-                        <Badge pill variant="secondary">
-                          <FiEdit2></FiEdit2>
-                        </Badge>
-                      </a>
-                      <a className="ml-1" href="/settings">
-                        <Badge pill variant="secondary">
-                          <FiSettings></FiSettings>
-                        </Badge>
-                      </a>
-                    </Col>
-                  </Row>
+                  {this.state.userId === SessionHelper.loadUser().id ? (
+                    <Row className="mt-2 ml-1 mr-1">
+                      <Col md={10}></Col>
+                      <Col md={2}>
+                          <Badge className="ml-5 clickable" pill variant="secondary" onClick={() => this.setState({ editProfileFormVisibility: true })}>
+                            <FiEdit2></FiEdit2>
+                          </Badge>
+                        <a className="ml-1" href="/settings">
+                          <Badge pill variant="secondary">
+                            <FiSettings></FiSettings>
+                          </Badge>
+                        </a>
+                      </Col>
+                    </Row>
+                  ) : null}
                   <Row className="mt-2 ml-1 mr-1">
                     <Col md={2.5} className="tasky-profile-stat-col">
                       <Card text="light" className="tasky-profile-stat-card">
@@ -268,6 +319,7 @@ export default class Profile extends Component {
                 </Container>
               </Row>
             </Col>
+            {this.createEditProfileForm()}
           </Container>
         </div>
       </div>
