@@ -23,7 +23,7 @@ export default class Profile extends Component {
             )
           : null,
     };
-    let a =SessionHelper.checkIsSessionLive();
+    let a = SessionHelper.checkIsSessionLive();
     if (!a) {
       props.history.push("/");
     }
@@ -42,11 +42,88 @@ export default class Profile extends Component {
       GET_PROFILE_SERVICE + this.state.userId,
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
-      if (response && response.isSuccessful  && response.data) {
+      if (response && response.isSuccessful && response.data) {
         console.log(response.data);
-        this.setState({ user: response.data.user, stats: response.data.stats, recentProjects:response.data.recentProjects });
+        this.setState({
+          user: response.data.user,
+          stats: response.data.stats,
+          recentProjects: response.data.recentProjects,
+        });
       }
     });
+  };
+
+  onClickCard = (project) => {
+    this.props.history.push({
+      pathname: "/project/" + project.projectId,
+      state: { project: project, projectName: project.projectName },
+    });
+  };
+
+  renderRecentProjectCards = () => {
+    if (this.state.recentProjects) {
+      let card1 = this.state.recentProjects.project1.projectName;
+      let card2 = this.state.recentProjects.project2.projectName;
+      let card3 = this.state.recentProjects.project3.projectName;
+      return (
+        <>
+          {card1 != null ? (
+            <Col md={4}>
+              <Card
+                bg="dark"
+                text="light"
+                className="tasky-profile-stat-card clickable"
+                onClick={() =>
+                  this.onClickCard(this.state.recentProjects.project1)
+                }
+              >
+                <Card.Body>
+                  {this.state.recentProjects.project1.projectName}
+                </Card.Body>
+              </Card>
+            </Col>
+          ) : null}
+          {card2 != null ? (
+            <Col md={4}>
+              <Card
+                bg="dark"
+                text="light"
+                className="tasky-profile-stat-card clickable"
+                onClick={() =>
+                  this.onClickCard(this.state.recentProjects.project2)
+                }
+              >
+                <Card.Body>
+                  {this.state.recentProjects.project2.projectName}
+                </Card.Body>
+              </Card>
+            </Col>
+          ) : null}
+          {card3 ? (
+            <Col md={4}>
+              <Card
+                bg="dark"
+                text="light"
+                className="tasky-profile-stat-card clickable"
+                onClick={() =>
+                  this.onClickCard(this.state.recentProjects.project3)
+                }
+              >
+                <Card.Body>
+                  {this.state.recentProjects.project3.projectName}
+                </Card.Body>
+              </Card>
+            </Col>
+          ) : null}
+        </>
+      );
+    } else {
+      return (
+        <Col>
+          <p>You are not a member of any project.</p>
+        </Col>
+      );
+    }
   };
 
   render() {
@@ -78,17 +155,22 @@ export default class Profile extends Component {
                   />
                   <Card.Body className="mt-2">
                     <Card.Title>
-                    
-                      {this.state.user ?  this.state.user.firstName +
-                        " " +
-                        this.state.user.lastName : "undefined"}
+                      {this.state.user
+                        ? this.state.user.firstName +
+                          " " +
+                          this.state.user.lastName
+                        : "undefined"}
                     </Card.Title>
-                    <Card.Text>{this.state.user ? this.state.user.email : "undefined"}</Card.Text>
                     <Card.Text>
-                      {this.state.user ? "Member since: " +
-                        moment(this.state.user.registrationDate).format(
-                          "DD/MM/YYYY" 
-                        ): "undefined"}
+                      {this.state.user ? this.state.user.email : "undefined"}
+                    </Card.Text>
+                    <Card.Text>
+                      {this.state.user
+                        ? "Member since: " +
+                          moment(this.state.user.registrationDate).format(
+                            "DD/MM/YYYY"
+                          )
+                        : "undefined"}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -121,13 +203,17 @@ export default class Profile extends Component {
                           <Card.Text className="mt-2">
                             Tasks{" "}
                             <Badge pill variant="primary">
-                              {this.state.stats ? this.state.stats.activeTasks : 0}
+                              {this.state.stats
+                                ? this.state.stats.activeTasks
+                                : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Projects{" "}
                             <Badge pill variant="primary">
-                            {this.state.stats ? this.state.stats.activeProjects : 0}
+                              {this.state.stats
+                                ? this.state.stats.activeProjects
+                                : 0}
                             </Badge>
                           </Card.Text>
                         </Card.Body>
@@ -142,19 +228,25 @@ export default class Profile extends Component {
                           <Card.Text className="mt-2">
                             Tasks{" "}
                             <Badge pill variant="success">
-                            {this.state.stats ? this.state.stats.completedTasks : 0}
+                              {this.state.stats
+                                ? this.state.stats.completedTasks
+                                : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Projects{" "}
                             <Badge pill variant="success">
-                            {this.state.stats ? this.state.stats.completedProjects : 0}
+                              {this.state.stats
+                                ? this.state.stats.completedProjects
+                                : 0}
                             </Badge>
                           </Card.Text>
                           <Card.Text>
                             Work Logs{" "}
                             <Badge pill variant="success">
-                            {this.state.stats ? this.state.stats.completedWorkLogs : 0}
+                              {this.state.stats
+                                ? this.state.stats.completedWorkLogs
+                                : 0}
                             </Badge>
                           </Card.Text>
                         </Card.Body>
@@ -166,34 +258,8 @@ export default class Profile extends Component {
                           <Card.Header className="t-bg-orange">
                             Recent Projects
                           </Card.Header>
-                          <Row className="mt-3">
-                            <Col>
-                              <Card
-                                bg="dark"
-                                text="light"
-                                className="tasky-profile-stat-card"
-                              >
-                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project1.projectName : "undefined"}</Card.Body>
-                              </Card>
-                            </Col>
-                            <Col>
-                              <Card
-                                bg="dark"
-                                text="light"
-                                className="tasky-profile-stat-card"
-                              >
-                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project2.projectName : "undefined"}</Card.Body>
-                              </Card>
-                            </Col>
-                            <Col>
-                              <Card
-                                bg="dark"
-                                text="light"
-                                className="tasky-profile-stat-card"
-                              >
-                                <Card.Body>{this.state.recentProjects ? this.state.recentProjects.project3.projectName : "undefined"}</Card.Body>
-                              </Card>
-                            </Col>
+                          <Row className="mt-3 justify-content-center">
+                            {this.renderRecentProjectCards()}
                           </Row>
                         </Card.Body>
                       </Card>
