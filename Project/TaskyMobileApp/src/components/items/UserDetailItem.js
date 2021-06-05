@@ -33,17 +33,10 @@ export default class UserDetailItem extends React.PureComponent {
             this.createItem(this.props.userData.totalProjects, 'Projects')}
           <View style={styles.verticalSeparator} />
           {this.props.userData.openTasks &&
-            this.createItem(
-              this.props.userData.openTasks,
-
-              'Open Tasks',
-            )}
+            this.createItem(this.props.userData.openTasks, 'Active Tasks')}
           <View style={styles.verticalSeparator} />
           {this.props.userData.resolvedTasks &&
-            this.createItem(
-              this.props.userData.resolvedTasks,
-              'Resolved Tasks',
-            )}
+            this.createItem(this.props.userData.resolvedTasks, 'Closed Tasks')}
         </View>
 
         <View style={styles.dividerHorizontal} />

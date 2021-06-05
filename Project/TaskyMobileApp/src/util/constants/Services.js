@@ -9,3 +9,4 @@ export const INSERT_WORKLOG_SERVICE = '/WorkLogs/Insert';
 export const GET_WORKLOGS_UNDER_TASK_SERVICE = '/WorkLogs/GetWorkLogs'
 export const GET_ACTIVITY_STREAM_SERVICE = '/WorkLogs/GetActivityStream'
 export const GET_SUB_TASKS = '/Tasks/GetSubTasks/'
+export const GET_USER_INFO ='/Users/GetUserInfo'

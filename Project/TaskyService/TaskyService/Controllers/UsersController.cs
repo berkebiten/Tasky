@@ -20,11 +20,15 @@ namespace TaskyService.Controllers
     {
         private readonly UserContext _context;
         private readonly MailTemplateContext _mailTemplateContext;
+        private readonly ProjectParticipantContext _projectContext;
+        private readonly TaskContext _taskContext;
 
-        public UsersController(UserContext context, MailTemplateContext mailTemplateContext)
+        public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext, TaskContext taskContext)
         {
             _context = context;
             _mailTemplateContext = mailTemplateContext;
+            _projectContext = projectContext;
+            _taskContext = taskContext;
         }
 
         [HttpPost]
@@ -162,6 +166,24 @@ namespace TaskyService.Controllers
             }
 
             return Ok(new { isSuccessful = true, data = new { user = user} });
+
+        }
+
+        [HttpGet]
+        [Route("GetUserInfo")]
+        public ActionResult GetUserInfo([FromHeader(Name = "Authorization")] string token)
+        {
+            Guid id = TokenService.getUserId(token);
+
+            var projects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id);
+            int projectCount = projects.Count();
+            var tasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id);
+            int closedTaskCount = tasks.Where(item => item.Status == 3).Count();
+            int activeTaskCount = tasks.Where(item => item.Status == 1).Count();
+
+            return Ok(new { isSuccessful = true, data = new { ProjectCount = projectCount,
+                                                              ClosedTaskCount = closedTaskCount,
+                                                              ActiveTaskCount = activeTaskCount } });
 
         }
 

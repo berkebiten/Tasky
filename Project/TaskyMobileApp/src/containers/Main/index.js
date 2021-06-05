@@ -25,6 +25,7 @@ import {
   GET_ACTIVITY_STREAM_SERVICE,
   GET_MY_TASKS_SERVICE,
   GET_PROJECTS_SERVICE,
+  GET_USER_INFO,
 } from '../../util/constants/Services';
 import ProjectItem from '../../components/items/ProjectItem';
 import {Colors} from '../../res/styles';
@@ -51,8 +52,22 @@ export default class Main extends React.Component {
 
   initialize = async () => {
     const user = await loadUser();
-    this.getProjects();
-    this.setState({userData: JSON.parse(user)});
+    this.setState({userData: JSON.parse(user)}, () => this.getUserInfo());
+  };
+
+  getUserInfo = async () => {
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_USER_INFO,
+      ServiceHelper.createOptionsJson(null, 'GET'),
+    );
+    if (responseData.data) {
+      this.setState(
+        {
+          userInfo: responseData.data,
+        },
+        () => this.getProjects(),
+      );
+    }
   };
 
   tweenHandler(ratio) {
@@ -228,17 +243,24 @@ export default class Main extends React.Component {
   };
 
   createHome = () => {
-    return (
-      <View style={{flex: 1}}>
+    if(this.state.userInfo){
+
+      return (
+        <View style={{flex: 1}}>
         <PersonalDescriptionItem
           user={this.state.userData ? this.state.userData : null}
-        />
+          />
         <UserDetailItem
-          userData={{resolvedTasks: 76, openTasks: 14, totalProjects: 25}}
-        />
+          userData={{
+            resolvedTasks: this.state.userInfo.closedTaskCount.toString(),
+            openTasks: this.state.userInfo.activeTaskCount.toString(),
+            totalProjects: this.state.userInfo.projectCount.toString(),
+          }}
+          />
         <Profile />
       </View>
     );
+  }
   };
 
   _onChangeKeyword = (keyword) => {
