@@ -155,10 +155,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_ProjectParticipant]
-AS SELECT b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Role
-FROM [dbo].[User] a,[dbo].[ProjectParticipant] b
-WHERE a.Id=b.UserId;
+AS
+SELECT        b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Role, c.Status AS ProjectStatus
+FROM            dbo.[User] AS a INNER JOIN
+                         dbo.ProjectParticipant AS b ON a.Id = b.UserId INNER JOIN
+                         dbo.Project AS c ON c.Id = b.ProjectId
 GO
+
 
 --WORKLOG CREATION
 SET ANSI_NULLS ON
@@ -266,3 +269,22 @@ AS SELECT f.Id, f.Name, f.Base64, f.TableName, f.DataId, f.CreatedBy, f.CreatedD
 FROM [dbo].[User] u,[dbo].[File] f
 WHERE f.CreatedBy=u.Id;
 GO
+
+--VW_RecentProjects
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[VW_RecentProjects]
+AS
+SELECT        TOP (100) PERCENT u.Id AS UserId, p.Id AS ProjectId, p.Name AS ProjectName
+FROM            dbo.[User] AS u LEFT OUTER JOIN
+                         dbo.Task AS t1 ON u.Id = t1.AssigneeId LEFT OUTER JOIN
+                         dbo.TaskOperation AS t2 ON t1.Id = t2.TaskId LEFT OUTER JOIN
+                         dbo.WorkLog AS w ON t1.Id = w.TaskId INNER JOIN
+                         dbo.Project AS p ON t1.ProjectId = p.Id
+ORDER BY t2.Date DESC, w.CreatedDate DESC
+GO
+
+
+

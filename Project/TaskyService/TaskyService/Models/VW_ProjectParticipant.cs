@@ -18,6 +18,7 @@ namespace TaskyService.Models
         public string RoleTitle { get; set; }
         [NotMapped]
         public string FullName { get; set; }
+        public bool ProjectStatus { get; set; }
 
     }
 }

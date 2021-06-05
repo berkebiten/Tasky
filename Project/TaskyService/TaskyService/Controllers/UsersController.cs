@@ -22,13 +22,17 @@ namespace TaskyService.Controllers
         private readonly MailTemplateContext _mailTemplateContext;
         private readonly ProjectParticipantContext _projectContext;
         private readonly TaskContext _taskContext;
+        private readonly WorkLogContext _workLogContext;
+        private readonly ProjectContext _projectOnlyContext;
 
-        public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext, TaskContext taskContext)
+        public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext, TaskContext taskContext, WorkLogContext workLogContext, ProjectContext projectOnlyContext)
         {
             _context = context;
             _mailTemplateContext = mailTemplateContext;
             _projectContext = projectContext;
             _taskContext = taskContext;
+            _workLogContext = workLogContext;
+            _projectOnlyContext = projectOnlyContext;
         }
 
         [HttpPost]
@@ -157,15 +161,114 @@ namespace TaskyService.Controllers
         [Route("GetProfile/{id}")]
         public async Task<ActionResult<dynamic>> GetProfile(Guid id)
         {
-
             var user = await _context.User.FindAsync(id);
+
+            var activeTasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id && item.Status == Convert.ToInt16(TaskStatuses.Active));
+            var closedTasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id && item.Status == Convert.ToInt16(TaskStatuses.Closed));
+            var workLogs = _workLogContext.VW_WorkLog.ToList().Where(item => item.UserId == id);
+            var activeProjects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id && item.ProjectStatus == true);
+            var closedProjects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id && item.ProjectStatus == false);
+
+            #region recentProjects doldurma
+            var recentProjects = _context.VW_RecentProjects.ToList().Where(item => item.UserId == id).GroupBy(item => item.ProjectName).Select(x => x.FirstOrDefault());
+
+            RecentThreeProjects recent3Projects = new RecentThreeProjects();
+
+            recent3Projects.project1 = new ProfileProjectCard();
+            recent3Projects.project2 = new ProfileProjectCard();
+            recent3Projects.project3 = new ProfileProjectCard();
+
+            var projects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id);
+            if (recentProjects.Any()) //en az 1 geliyorsa ilk projeyi ekle
+            {
+                recent3Projects.project1.projectId = recentProjects.ToList()[0].ProjectId;
+                recent3Projects.project1.projectName = recentProjects.ToList()[0].ProjectName;
+
+                if (recentProjects.Count() >= 2) //en az 2 geliyorsa ikinci projeyi ekle.
+                {
+                    recent3Projects.project2.projectId = recentProjects.ToList()[1].ProjectId;
+                    recent3Projects.project2.projectName = recentProjects.ToList()[1].ProjectName;
+
+                    if (recentProjects.Count() >= 3)//3 tane geliyorsa sorun yok.
+                    {
+                        recent3Projects.project3.projectId = recentProjects.ToList()[2].ProjectId;
+                        recent3Projects.project3.projectName = recentProjects.ToList()[2].ProjectName;
+                    }
+                    else //2tane geldi demektir.
+                    {
+                        if (projects.Count() >= 3) //3 veya daha fazla projesi varsa eklediklerimiz dışındakini al.
+                        {
+                            Guid lastProjectId = projects.Where(item => item.ProjectId != recent3Projects.project1.projectId && item.ProjectId != recent3Projects.project2.projectId).FirstOrDefault().ProjectId;
+                            var lastProject = await _projectOnlyContext.Project.FindAsync(lastProjectId);
+                            recent3Projects.project3.projectId = lastProject.Id;
+                            recent3Projects.project3.projectName = lastProject.Name;
+                        }
+                    }
+                }
+                else // sadece 1 tane geliyor demektir.
+                {
+                    if (projects.Count() >= 2) //daha çok varsa ama recentprojects'ten gelmiyorsa.
+                    {
+                        Guid lastProjectId = projects.Where(item => item.ProjectId != recent3Projects.project1.projectId).FirstOrDefault().ProjectId;
+                        var lastProject = await _projectOnlyContext.Project.FindAsync(lastProjectId);
+                        recent3Projects.project2.projectId = lastProject.Id;
+                        recent3Projects.project2.projectName = lastProject.Name;
+
+                        if (projects.Count() >= 3) //3. de var mı?
+                        {
+                            Guid lastProjectId3 = projects.Where(item => item.ProjectId != recent3Projects.project1.projectId && item.ProjectId != recent3Projects.project2.projectId).FirstOrDefault().ProjectId;
+                            var lastProject3 = await _projectOnlyContext.Project.FindAsync(lastProjectId3);
+                            recent3Projects.project3.projectId = lastProject3.Id;
+                            recent3Projects.project3.projectName = lastProject3.Name;
+                        }
+
+                    }
+                }
+            }
+            else// hiç gelmiyor demektir.
+            {
+
+                if (projects.Any())
+                {
+                    Guid lastProjectId = projects.FirstOrDefault().ProjectId;
+                    var lastProject = await _projectOnlyContext.Project.FindAsync(lastProjectId);
+                    recent3Projects.project1.projectId = lastProject.Id;
+                    recent3Projects.project1.projectName = lastProject.Name;
+                    if (projects.Count() >= 2) //daha çok varsa ama recentprojects'ten gelmiyorsa.
+                    {
+                        Guid lastProjectId2 = projects.Where(item => item.ProjectId != recent3Projects.project1.projectId).FirstOrDefault().ProjectId;
+                        var lastProject2 = await _projectOnlyContext.Project.FindAsync(lastProjectId2);
+                        recent3Projects.project2.projectId = lastProject2.Id;
+                        recent3Projects.project2.projectName = lastProject2.Name;
+
+                        if (projects.Count() >= 3) //3. de var mı?
+                        {
+                            Guid lastProjectId3 = projects.Where(item => item.ProjectId != recent3Projects.project1.projectId && item.ProjectId != recent3Projects.project2.projectId).FirstOrDefault().ProjectId;
+                            var lastProject3 = await _projectOnlyContext.Project.FindAsync(lastProjectId3);
+                            recent3Projects.project3.projectId = lastProject3.Id;
+                            recent3Projects.project3.projectName = lastProject3.Name;
+                        }
+
+                    }
+                }
+            }
+
+            #endregion
+
+            ProfileStats stats = new ProfileStats();
+
+            stats.activeTasks = activeTasks.Count();
+            stats.completedTasks = closedTasks.Count();
+            stats.activeProjects = activeProjects.Count();
+            stats.completedProjects = closedProjects.Count();
+            stats.completedWorkLogs = workLogs.Count();
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(new { isSuccessful = true, data = new { user = user} });
-
+            return Ok(new { isSuccessful = true, data = new { user = user, stats = stats, recentProjects = recent3Projects } });
         }
 
         [HttpGet]
@@ -180,9 +283,16 @@ namespace TaskyService.Controllers
             int closedTaskCount = tasks.Where(item => item.Status == 3).Count();
             int activeTaskCount = tasks.Where(item => item.Status == 1).Count();
 
-            return Ok(new { isSuccessful = true, data = new { ProjectCount = projectCount,
-                                                              ClosedTaskCount = closedTaskCount,
-                                                              ActiveTaskCount = activeTaskCount } });
+            return Ok(new
+            {
+                isSuccessful = true,
+                data = new
+                {
+                    ProjectCount = projectCount,
+                    ClosedTaskCount = closedTaskCount,
+                    ActiveTaskCount = activeTaskCount
+                }
+            });
 
         }
 
@@ -192,5 +302,26 @@ namespace TaskyService.Controllers
         }
 
 
+    }
+    public class ProfileStats
+    {
+        public int activeTasks { get; set; }
+        public int activeProjects { get; set; }
+        public int completedTasks { get; set; }
+        public int completedProjects { get; set; }
+        public int completedWorkLogs { get; set; }
+    }
+
+    public class RecentThreeProjects
+    {
+        public ProfileProjectCard project1 { get; set; }
+        public ProfileProjectCard project2 { get; set; }
+        public ProfileProjectCard project3 { get; set; }
+    }
+
+    public class ProfileProjectCard
+    {
+        public Guid projectId { get; set; }
+        public string projectName { get; set; }
     }
 }
