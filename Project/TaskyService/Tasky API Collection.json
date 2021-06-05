@@ -24,7 +24,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"firstName\": \"Oguz\",\n  \"lastName\": \"Yazan\",\n  \"password\": \"oguzyazan@gmail.com\",\n  \"email\": \"12345aA*\",\n  \"profileImage\": null\n}",
+					"raw": "{\n  \"firstName\": \"Oğuz Kaan\",\n  \"lastName\": \"Yazan\",\n  \"email\": \"oguz@gmail.com\",\n  \"password\": \"123\",\n  \"profileImage\": null\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -32,15 +32,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://192.168.1.38:5001/Users/Register",
-					"protocol": "http",
+					"raw": "{{TASKY_URL}}/Users/Register",
 					"host": [
-						"192",
-						"168",
-						"1",
-						"38"
+						"{{TASKY_URL}}"
 					],
-					"port": "5001",
 					"path": [
 						"Users",
 						"Register"
@@ -56,7 +51,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"oguz@gmail.com\",\n    \"password\": \"12345aA*\"\n}",
+					"raw": "{\n    \"email\":\"123\",\n    \"password\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -64,15 +59,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://192.168.1.38:5001/Users/Login",
-					"protocol": "http",
+					"raw": "{{TASKY_URL}}/Users/Login",
 					"host": [
-						"192",
-						"168",
-						"1",
-						"38"
+						"{{TASKY_URL}}"
 					],
-					"port": "5001",
 					"path": [
 						"Users",
 						"Login"
@@ -88,13 +78,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6ImZmOWE4Y2IzLWFkMjctNGU3Zi05MTZiLTA4ZDhmZGEwYThiZCIsIm5iZiI6MTYxODIzNzQ2NywiZXhwIjoxNjE4MjQxMDY3LCJpYXQiOjE2MTgyMzc0Njd9.Cj6DmESFz166Ib9kJxWb5SlF5-f1ZWKI0btRTaWAK60",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjIzODY2MjQsImV4cCI6MTYyMjM5MDIyNCwiaWF0IjoxNjIyMzg2NjI0fQ.ARf4rhiMiNxDYue1GPYOtlf9l1Xqnh7nCnZLSDEEYKg",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"ProjeAdı\",\n  \"description\": \"Açıklama\",\n  \"participants\": [\n    {\n      \"email\": \"berke@gmail.com\",\n      \"role\": 0\n    },\n        {\n      \"email\": \"emine@gmail.com\",\n      \"role\": 2\n    }\n  ]\n}",
+					"raw": "{\n  \"name\": \"Tasky\",\n  \"description\": \"Cross Platform Task Management System\",\n  \"participants\": [],\n  \"files\": [\"x\", \"y\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -102,15 +92,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://192.168.1.38:5001/Projects/Insert",
-					"protocol": "http",
+					"raw": "{{TASKY_URL}}/Projects/Insert",
 					"host": [
-						"192",
-						"168",
-						"1",
-						"38"
+						"{{TASKY_URL}}"
 					],
-					"port": "5001",
 					"path": [
 						"Projects",
 						"Insert"
@@ -121,21 +106,18 @@
 		},
 		{
 			"name": "Get My Projects",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6ImZmOWE4Y2IzLWFkMjctNGU3Zi05MTZiLTA4ZDhmZGEwYThiZCIsIm5iZiI6MTYxODIzNzQ2NywiZXhwIjoxNjE4MjQxMDY3LCJpYXQiOjE2MTgyMzc0Njd9.Cj6DmESFz166Ib9kJxWb5SlF5-f1ZWKI0btRTaWAK60",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMjIxMTU4MiwiZXhwIjoxNjIyMjE1MTgyLCJpYXQiOjE2MjIyMTE1ODJ9._Vrvikm-hoXMbI7A4fsU3O6kaOBdZpU5LEsZFCStv9Q",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\"count\": 8, \"startIndex\": 0}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -143,18 +125,409 @@
 					}
 				},
 				"url": {
-					"raw": "http://192.168.1.38:5001/Projects/GetMyProjects",
-					"protocol": "http",
+					"raw": "{{TASKY_URL}}/Projects/GetMyProjects",
 					"host": [
-						"192",
-						"168",
-						"1",
-						"38"
+						"{{TASKY_URL}}"
 					],
-					"port": "5001",
 					"path": [
 						"Projects",
 						"GetMyProjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Tasks",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcmltYXJ5c2lkIjoiNjhhMTAxYjAtNjljMC00NGI4LWZjNjktMDhkOTA5NzVhZTg2IiwibmJmIjoxNjE5NTI1NTUzLCJleHAiOjE2MTk1MjkxNTMsImlhdCI6MTYxOTUyNTU1M30.2_tA1DRJMqdimMTI4GrsyAgj4k5DQ43nW293pJXcvHw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"projectId\": \"e1160e77-c729-4907-3fcb-08d90701c3f7\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/GetTasks",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"GetTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Task",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYxOTI1NTc2MSwiZXhwIjoxNjE5MjU5MzYxLCJpYXQiOjE2MTkyNTU3NjF9.TdLnrHEl_Mqf1UaBngkDyctbsdh87nPnRBBJTZqmjW4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"projectId\": \"e1160e77-c729-4907-3fcb-08d90701c3f7\",\n  \"name\": \"Task Controller\",\n  \"description\": \"CRUD operations of Task will be implemented.\",\n  \"priority\": 0,\n  \"status\": 0,\n  \"dueDate\": \"2021-04-26\",\n  \"createdDate\": \"2021-04-24\",\n  \"assigneeId\" : \"084d86e0-ec4a-438a-0100-08d9070180e1\",\n  \"reporterId\": \"084d86e0-ec4a-438a-0100-08d9070180e1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/Insert",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"Insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMDQ3NzU4OSwiZXhwIjoxNjIwNDgxMTg5LCJpYXQiOjE2MjA0Nzc1ODl9.2Krx58_vINYgYhVVV53A7hruKriUNMqlaUifXv3N8rc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"47c341c5-c969-41bb-9cbd-08d90707948d\",\n    \"projectId\": \"e1160e77-c729-4907-3fcb-08d90701c3f7\",\n    \"title\": \"Task Controller\",\n    \"description\": \"CRUD operations of Task will be implemented.\",\n    \"dueDate\": \"2021-04-26T00:00:00\",\n    \"status\": 2\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/Update/47c341c5-c969-41bb-9cbd-08d90707948d",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"Update",
+						"47c341c5-c969-41bb-9cbd-08d90707948d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get My Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/GetMyTasks",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"GetMyTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Detail",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjI0MDEzMDcsImV4cCI6MTYyMjQwNDkwNywiaWF0IjoxNjIyNDAxMzA3fQ.oRCu27_joMOxsbks7eOzXuWQ3DNCJjWQHze0GpY7B98",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{TASKY_URL}}/Projects/GetById/86042dee-b0a4-4fe9-33e9-08d923923d91",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Projects",
+						"GetById",
+						"86042dee-b0a4-4fe9-33e9-08d923923d91"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Work Log",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMTY3OTgwNCwiZXhwIjoxNjIxNjgzNDA0LCJpYXQiOjE2MjE2Nzk4MDR9.b1TVZDiDCRPpjCAgdP4Qac16cerk51ywam97Of2XEWw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"description\": \"Sddsaads\", \"email\": \"2h\", \"taskId\": \"47c341c5-c969-41bb-9cbd-08d90707948d\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/WorkLogs/Insert",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"WorkLogs",
+						"Insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Activity Stream",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMTY3OTgwNCwiZXhwIjoxNjIxNjgzNDA0LCJpYXQiOjE2MjE2Nzk4MDR9.b1TVZDiDCRPpjCAgdP4Qac16cerk51ywam97Of2XEWw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{TASKY_URL}}/WorkLogs/GetActivityStream",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"WorkLogs",
+						"GetActivityStream"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Report",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMjI3NjUxOSwiZXhwIjoxNjIyMjgwMTE5LCJpYXQiOjE2MjIyNzY1MTl9.D6WqfHTDtuhdF-DDD-SjJz6uUnfzsdHbFvc-SxM1p_0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{TASKY_URL}}/Reports/GetProjectReport/e1160e77-c729-4907-3fcb-08d90701c3f7",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Reports",
+						"GetProjectReport",
+						"e1160e77-c729-4907-3fcb-08d90701c3f7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Role",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndXpAZ21haWwuY29tIiwicHJpbWFyeXNpZCI6IjA4NGQ4NmUwLWVjNGEtNDM4YS0wMTAwLTA4ZDkwNzAxODBlMSIsIm5iZiI6MTYyMjI3NjUxOSwiZXhwIjoxNjIyMjgwMTE5LCJpYXQiOjE2MjIyNzY1MTl9.D6WqfHTDtuhdF-DDD-SjJz6uUnfzsdHbFvc-SxM1p_0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{TASKY_URL}}/Projects/GetRole/e1160e77-c729-4907-3fcb-08d90701c3f7/084d86e0-ec4a-438a-0100-08d9070180e1",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Projects",
+						"GetRole",
+						"e1160e77-c729-4907-3fcb-08d90701c3f7",
+						"084d86e0-ec4a-438a-0100-08d9070180e1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task Status",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjIzNjcyMTAsImV4cCI6MTYyMjM3MDgxMCwiaWF0IjoxNjIyMzY3MjEwfQ.w86Z8qgIi5MVzXZV1q9D_7U5gScveVrCSWNI_3Bq7XM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"a36436b8-ba53-40cf-389e-08d91209464d\",\n    \"projectId\": \"e1160e77-c729-4907-3fcb-08d90701c3f7\",\n    \"title\": \"force\",\n    \"description\": \"update\",\n    \"assigneeId\": \"084d86e0-ec4a-438a-0100-08d9070180e1\",\n    \"reporterId\": \"084d86e0-ec4a-438a-0100-08d9070180e1\",\n    \"priority\": 0,\n    \"dueDate\": \"0001-01-01T00:00:00\",\n    \"createdDate\": \"2021-05-08T00:00:00\",\n    \"status\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/UpdateTaskStatus/a36436b8-ba53-40cf-389e-08d91209464d ",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"UpdateTaskStatus",
+						"a36436b8-ba53-40cf-389e-08d91209464d "
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Task Timeline",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjIzNjcyMTAsImV4cCI6MTYyMjM3MDgxMCwiaWF0IjoxNjIyMzY3MjEwfQ.w86Z8qgIi5MVzXZV1q9D_7U5gScveVrCSWNI_3Bq7XM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{TASKY_URL}}/Tasks/GetTaskTimeline/a36436b8-ba53-40cf-389e-08d91209464d",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Tasks",
+						"GetTaskTimeline",
+						"a36436b8-ba53-40cf-389e-08d91209464d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload File (Project)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjI0MDYxNTgsImV4cCI6MTYyMjQwOTc1OCwiaWF0IjoxNjIyNDA2MTU4fQ.79qfgBx45YGYO-bDYVVtjo3HhemmSBN2YM6q7IAtbDM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n    \"name\": \"Oguz dENEME\",\n    \"data\": \"dasdsa\"\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Projects/UploadFile/86042dee-b0a4-4fe9-33e9-08d923923d91",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Projects",
+						"UploadFile",
+						"86042dee-b0a4-4fe9-33e9-08d923923d91"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Participant",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{TASKY_URL}}/Projects/RemoveParticipant/c4461644-e846-4a34-e16d-08d925f71e3a",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Projects",
+						"RemoveParticipant",
+						"c4461644-e846-4a34-e16d-08d925f71e3a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manage Preferences",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjEyMyIsInByaW1hcnlzaWQiOiIwYjY4YzQyNC02Njg3LTRhYTQtNzk4My0wOGQ5MGQzNmRhM2IiLCJuYmYiOjE2MjI5MTM4NDYsImV4cCI6MTYyMjkxNzQ0NiwiaWF0IjoxNjIyOTEzODQ2fQ.LHI4IHDvH2f6vtG3Z2veDdxz9yh22yjECrpABgGNuEI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sendEmail\": true,\n    \"sendNotification\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TASKY_URL}}/Users/ManagePreferences",
+					"host": [
+						"{{TASKY_URL}}"
+					],
+					"path": [
+						"Users",
+						"ManagePreferences"
 					]
 				}
 			},
