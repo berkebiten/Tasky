@@ -81,7 +81,7 @@ export default class ProjectDetail extends Component {
       fileUpload: false,
       inviteParticipant: false,
       workLogModal: false,
-      selectedWorkLog: null
+      selectedWorkLog: null,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -183,11 +183,14 @@ export default class ProjectDetail extends Component {
         FileHelper.clearFiles();
         this.setState({ taskFormVisibility: false });
         this.fetchTaskList();
-        this.props.history.push({
-          pathname: "/project/" + this.state.projectId,
-          state: { activePage: "Board" },
-        });
-        window.location.reload();
+        if (this.state.activePage == "Board") {
+          this.props.history.push({
+            pathname: "/project/" + this.state.projectId,
+            state: { activePage: "Board" },
+          });
+
+          window.location.reload();
+        }
       } else {
         toast(response.message, {
           type: "error",

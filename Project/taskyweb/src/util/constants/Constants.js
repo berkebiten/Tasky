@@ -65,7 +65,7 @@ export const taskTableColumns = [
       },
     ],
     onFilter: (value, record) => {
-      return record.statusTitle.toLowerCase() === value
+      return record.statusTitle.toLowerCase() === value;
     },
     dataIndex: "statusTitle",
     render: (status) => {
@@ -95,12 +95,11 @@ export const taskTableColumns = [
     defaultSortOrder: "descend",
     sorter: (a, b) => a.dueDate > b.dueDate,
     render: (text) => {
+      let dateNow = new Date().setHours(0, 0, 0, 0);
       let color;
-      if (moment(text).format("DD/MM/YYYY") < moment().format("DD/MM/YYYY")) {
+      if (new Date(text).setHours(0,0,0,0) < dateNow) {
         color = "#ec6f75";
-      } else if (
-        moment(text).format("DD/MM/YYYY") == moment().format("DD/MM/YYYY")
-      ) {
+      } else if (new Date(text).setHours(0,0,0,0) === dateNow) {
         color = "#0275d8";
       }
       return (

@@ -286,7 +286,7 @@ export default class Task extends Component {
       ? moment(this.state.task.createdDate).format("DD/MM/YYYY")
       : "UNDEFINED";
     let due = this.state.task
-      ? moment(this.state.task.dueDate).format("DD/MM/YYYY")
+      ? this.state.task.dueDate
       : "UNDEFINED";
     let reporter = this.state.task
       ? this.state.task.reporterFullName
@@ -396,12 +396,26 @@ export default class Task extends Component {
   };
 
   renderDetailRow = (info, title, divClassName = "mt-4") => {
+    let dueClass = "";
+    
+    if (title == "Due Date") {
+      let dateNow = new Date().setHours(0, 0, 0, 0);
+      console.log(new Date(info).setHours(0,0,0,0));
+      console.log(dateNow);
+      console.log(new Date(info).setHours(0,0,0,0)<dateNow)
+      if (new Date(info).setHours(0, 0, 0, 0) < dateNow) {
+        dueClass = "-passed";
+      } else if (new Date(info).setHours(0, 0, 0, 0) === dateNow) {
+        dueClass = "-today";
+      }
+      info = moment(info).format("DD/MM/YYYY");
+    }
     return (
       <div className={divClassName}>
         <p className="task-detail-title">{title}</p>
         <Row className="ml-2">
           {this.renderProfileImage(title, info)}
-          <p className="task-detail-info">{info}</p>
+          <p className={"task-detail-info" + dueClass}>{info}</p>
         </Row>
       </div>
     );
@@ -567,7 +581,7 @@ export default class Task extends Component {
           type: "success",
         });
         this.resetTaskForm();
-        FileHelper.clearFiles()
+        FileHelper.clearFiles();
         this.setState({ taskFormVisibility: false });
         this.fetchSubtasks();
       } else {
