@@ -155,10 +155,16 @@ namespace TaskyService.Controllers
             {
                 var participant = new ProjectParticipant();
                 participant.ProjectId = project.Id;
-                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
-                participant.UserId = participantId;
+                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault();
+                if(participantId == null)
+                {
+                    continue;
+                }
+
+                participant.UserId = participantId.Id;
                 participant.Role = participantObj.role;
-                if (!ParticipantExists(participantId, project.Id))
+
+                if (!ParticipantExists(participantId.Id, project.Id))
                 {
                     _participantContext.Add(participant);
                 }

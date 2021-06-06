@@ -45,6 +45,9 @@ namespace TaskyService.Controllers
             if (user == null)
                 return NotFound(new { isSuccessful = false, message = "Email or Password is Invalid" });
 
+            if (user.ActivationStatus == false)
+                return NotFound(new { isSuccessful = false, message = "Please Verify Your Email" });
+
             var token = TokenService.CreateToken(user);
             user.Password = "";
             return Ok(new
@@ -311,6 +314,29 @@ namespace TaskyService.Controllers
             try
             {
             _context.SaveChanges();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return Ok();
+
+        }
+
+        [HttpPost]
+        [Route("VerifyEmail/{userId}")]
+        [AllowAnonymous]
+        public ActionResult VerifyEmail(Guid userId)
+        {
+            var user = _context.User.Find(userId);
+            user.ActivationStatus = true;
+            _context.User.Update(user);
+
+            try
+            {
+                _context.SaveChanges();
 
             }
             catch (DbUpdateConcurrencyException)
