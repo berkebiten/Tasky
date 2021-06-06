@@ -9,7 +9,7 @@ import {
   FormControl,
   Button,
   InputGroup,
-  Badge
+  Badge,
 } from "react-bootstrap";
 import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
@@ -95,8 +95,10 @@ export default class Projects extends Component {
         toast("Project is Created", {
           type: "success",
         });
-        this.setState({ projectFormVisibility: false });
-        this.getProjects();
+        this.submitParticipants = null;
+        this.setState({ projectFormVisibility: false, formObject: null }, () =>
+          this.getProjects()
+        );
       } else {
         toast(response.message, {
           type: "error",
@@ -245,7 +247,7 @@ export default class Projects extends Component {
                 </div>
               </Row>
             )}
-            {this.createProjectForm()}
+            {this.state.projectFormVisibility && this.createProjectForm()}
           </Container>
         </div>
       </div>

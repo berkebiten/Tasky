@@ -199,7 +199,7 @@ export default class ProjectDetail extends Component {
     });
   };
 
-  createProjectForm = () => {
+  createTaskForm = () => {
     return (
       <CustomModal
         isVisible={this.state.taskFormVisibility}
@@ -618,7 +618,8 @@ export default class ProjectDetail extends Component {
               )}
             </Card.Header>
             <Card.Body>
-              {this.createInviteParticipantModal()}
+              {this.state.inviteParticipant &&
+                this.createInviteParticipantModal()}
               {overview_participants.map((item, key) => {
                 var roleName =
                   this.getParticipantRoleName(item).toString() + "";
@@ -676,7 +677,7 @@ export default class ProjectDetail extends Component {
             </Card.Body>
           </Card>
         </Row>
-        {this.createFileUploadModal()}
+        {this.state.fileUpload && this.createFileUploadModal()}
       </Container>
     );
   };
@@ -859,8 +860,10 @@ export default class ProjectDetail extends Component {
           </Col>
           <Col className="project-detail-right" md={10}>
             {this.createContent()}
-            {this.state.selectedWorkLog && this.createWorkLogModal()}
-            {this.createProjectForm()}
+            {this.state.workLogModal &&
+              this.state.selectedWorkLog &&
+              this.createWorkLogModal()}
+            {this.state.taskFormVisibility && this.createTaskForm()}
           </Col>
         </Row>
       </div>

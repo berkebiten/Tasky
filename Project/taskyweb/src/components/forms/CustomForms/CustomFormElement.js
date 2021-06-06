@@ -18,11 +18,7 @@ export default class CustomFormElement extends Component {
               className="form-input-tasky"
               type={element.control.type}
               name={element.control.name}
-              value={
-                values && values[element.control.name]
-                  ? values[element.control.name]
-                  : null
-              }
+              value={values[element.control.name] || ""}
               onChange={this.props.handleChange}
               isValid={
                 this.props.touched[element.control.name] &&
@@ -106,7 +102,7 @@ export default class CustomFormElement extends Component {
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>
-        <br/>
+        <br />
         <input
           type="file"
           className="file-input"

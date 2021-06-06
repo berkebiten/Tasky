@@ -218,7 +218,7 @@ export default class Task extends Component {
           </Row>
         </Card>
         {this.createFilesCard()}
-        {this.createFileUploadModal()}
+        {this.state.fileUpload && this.createFileUploadModal()}
       </Container>
     );
   };
@@ -515,7 +515,6 @@ export default class Task extends Component {
 
   submitWorkLogForm = async (data) => {
     let date = moment(data.createdDate).format("YYYY-MM-DD");
-    let x = moment(date).format();
     let insertObject = {
       ...data,
       taskId: this.state.taskId,
@@ -693,8 +692,8 @@ export default class Task extends Component {
             {this.state.selectedWorkLog && this.createWorkLogModal()}
           </Col>
         </Row>
-        {this.createWorkLogForm()}
-        {this.createTaskForm()}
+        {this.state.workLogFormVisibility && this.createWorkLogForm()}
+        {this.state.taskFormVisibility && this.createTaskForm()}
       </div>
     );
   }

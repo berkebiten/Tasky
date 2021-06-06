@@ -23,7 +23,7 @@ export function CustomForm(props) {
       case "password":
       case "picker":
       case "date":
-        return yup.string().required("Required Field!");
+        return yup.string().required("Required Field!").nullable();
       case "checkbox":
         return yup.bool().required("Required Field!");
       case "email":
@@ -47,12 +47,16 @@ export function CustomForm(props) {
     }
   });
 
+  const onSubmit = (values, { resetForm }) => {
+    props.onSubmit(values, resetForm);
+  };
+
   let schema = yup.object().shape(elements);
   return (
     <Formik
       innerRef={(ref) => (formRef = ref)}
       validationSchema={schema}
-      onSubmit={props.onSubmit}
+      onSubmit={onSubmit}
       initialValues={props.initialValues ? props.initialValues : {}}
     >
       {({
@@ -65,6 +69,8 @@ export function CustomForm(props) {
         errors,
         setFieldValue,
         resetForm,
+        setValues,
+        handleReset,
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>

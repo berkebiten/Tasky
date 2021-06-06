@@ -10,7 +10,7 @@ export function InviteParticipantView(props) {
   let formRef;
 
   useEffect(() => {
-    props.handleSubmit(formRef.handleSubmit);
+    props.handleSubmit(formRef.handleSubmit)
   }, []);
 
   const getValidation = (type) => {
@@ -30,9 +30,8 @@ export function InviteParticipantView(props) {
   let elements = {};
 
   for (let i = 0; i < items.length; i++) {
-    elements["participantEmail" + i.toString()] = getValidation(
-      "participantEmail"
-    );
+    elements["participantEmail" + i.toString()] =
+      getValidation("participantEmail");
     elements["role" + i.toString()] = getValidation("role");
   }
 
@@ -71,7 +70,7 @@ export function InviteParticipantView(props) {
                       className="form-input-tasky"
                       type="email"
                       name={"participantEmail" + key.toString()}
-                      value={values["participantEmail" + key.toString()]}
+                      value={values["participantEmail" + key.toString()] || ""}
                       onChange={handleChange}
                       isValid={
                         touched["participantEmail" + key.toString()] &&
@@ -87,7 +86,7 @@ export function InviteParticipantView(props) {
                     <Form.Label>Role</Form.Label>
                     <Form.Control
                       name={"role" + key.toString()}
-                      value={values.role}
+                      value={values["role" + key.toString()] || ""}
                       onChange={handleChange}
                       className="form-input-tasky"
                       as="select"
