@@ -6,12 +6,11 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/modals/CustomModal";
 import EditProfileForm from "../../components/forms/EditProfileForm";
+import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
-  FileHelper,
-  ServiceHelper,
-  SessionHelper,
-} from "../../util/helpers";
-import { GET_PROFILE_SERVICE, UPDATE_USER_SERVICE } from "../../util/constants/Services";
+  GET_PROFILE_SERVICE,
+  UPDATE_USER_SERVICE,
+} from "../../util/constants/Services";
 import moment from "moment";
 export default class Profile extends Component {
   constructor(props) {
@@ -47,7 +46,7 @@ export default class Profile extends Component {
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
       if (response && response.isSuccessful && response.data) {
-        console.log(response.data);
+        SessionHelper.saveUser(response.data.user);
         this.setState({
           user: response.data.user,
           stats: response.data.stats,
@@ -131,9 +130,13 @@ export default class Profile extends Component {
   };
 
   submitEditProfileForm = async (data) => {
+    let files = FileHelper.getFiles();
     let newUser = this.state.user;
     newUser.FirstName = data.firstName;
     newUser.LastName = data.lastName;
+    if (files && files.length > 0) {
+      newUser.profileImage = files[0].data;
+    }
     await ServiceHelper.serviceHandler(
       UPDATE_USER_SERVICE + this.state.userId,
       ServiceHelper.createOptionsJson(JSON.stringify(newUser), "PUT")
@@ -142,11 +145,9 @@ export default class Profile extends Component {
         toast("Profile Info Updated.", {
           type: "success",
         });
-        this.resetEditProfileForm();
-        this.setState({ editProfileFormVisibility: false });
-        this.getProfile();
-        this.createEditProfileForm();
-        window.location.reload();
+        this.setState({ editProfileFormVisibility: false }, () =>
+          this.getProfile()
+        );
       } else {
         toast(response.message, {
           type: "error",
@@ -164,9 +165,15 @@ export default class Profile extends Component {
           <div>
             <EditProfileForm
               handleSubmit={(submit) => (this.submitEditProfileForm = submit)}
-              handleReset={(reset) => (this.resetEditProfileForm = reset)}
               onSubmit={this.submitEditProfileForm}
-              initialValues={ this.state.user ? {firstName:this.state.user.firstName, lastName:this.state.user.lastName}: null}
+              initialValues={
+                this.state.user
+                  ? {
+                      firstName: this.state.user.firstName,
+                      lastName: this.state.user.lastName,
+                    }
+                  : null
+              }
             />
           </div>
         }
@@ -233,9 +240,16 @@ export default class Profile extends Component {
                     <Row className="mt-2 ml-1 mr-1">
                       <Col md={10}></Col>
                       <Col md={2}>
-                          <Badge className="ml-5 clickable" pill variant="secondary" onClick={() => this.setState({ editProfileFormVisibility: true })}>
-                            <FiEdit2></FiEdit2>
-                          </Badge>
+                        <Badge
+                          className="ml-5 clickable"
+                          pill
+                          variant="secondary"
+                          onClick={() =>
+                            this.setState({ editProfileFormVisibility: true })
+                          }
+                        >
+                          <FiEdit2></FiEdit2>
+                        </Badge>
                         <a className="ml-1" href="/settings">
                           <Badge pill variant="secondary">
                             <FiSettings></FiSettings>
@@ -319,7 +333,8 @@ export default class Profile extends Component {
                 </Container>
               </Row>
             </Col>
-            {this.createEditProfileForm()}
+            {this.state.editProfileFormVisibility &&
+              this.createEditProfileForm()}
           </Container>
         </div>
       </div>
