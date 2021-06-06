@@ -45,7 +45,27 @@ export default class CustomFormElement extends Component {
         return this.createPicker(element, values);
       case "date":
         return this.createDatePicker(element, values);
+      case "checkbox":
+        return this.createCheckBox(element, values);
     }
+  };
+
+  createCheckBox = (element, values) => {
+    return (
+      <Form.Group>
+        <Form.Check
+          type="checkbox"
+          name={element.control.name}
+          label={element.label}
+          checked={
+            values && values[element.control.name]
+              ? values[element.control.name]
+              : false
+          }
+          onChange = {this.props.handleChange}
+        />
+      </Form.Group>
+    );
   };
 
   createTextArea = (element, values) => {
