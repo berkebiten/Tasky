@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TaskyService.Models
 {
-    public class ProjectParticipant
+    public class ProjectInvitation
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string Email { get; set; }
         public Guid ProjectId { get; set; }
         public Byte Role { get; set; }
-        public bool Status { get; set; }
     }
 }
