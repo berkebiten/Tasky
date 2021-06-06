@@ -28,6 +28,7 @@ import {
 } from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
+import { keys } from "@material-ui/core/styles/createBreakpoints";
 
 const startIndex = 0;
 const count = 9;
@@ -38,6 +39,7 @@ export default class Projects extends Component {
     this.state = {
       projectFormVisibility: false,
       base64: "x",
+      activePage: 1,
     };
     if (!SessionHelper.checkIsSessionLive()) {
       props.history.push("/");
@@ -155,7 +157,7 @@ export default class Projects extends Component {
   };
 
   handlePaginationChange = (e, { activePage }) => {
-    this.getProjects(activePage);
+    this.setState({ activePage: activePage });
   };
 
   onClickCard = (project) => {
@@ -169,26 +171,31 @@ export default class Projects extends Component {
     return (
       <Row className="mt-5 projects-row justify-content-center">
         {this.state.projects.map((item, key) => {
-          return (
-            <Col md={3}>
-              <Card
-                bg="dark"
-                text="light"
-                onClick={() => this.onClickCard(item)}
-                className="project-card mb-2 clickable"
-              >
-                <Card.Body>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    {item.projectManagerFirstName +
-                      " " +
-                      item.projectManagerLastName}
-                  </Card.Subtitle>
-                  <Card.Text>{item.description}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          );
+          if (
+            key >= (this.state.activePage - 1) * 8 &&
+            key < this.state.activePage * 8
+          ) {
+            return (
+              <Col md={3}>
+                <Card
+                  bg="dark"
+                  text="light"
+                  onClick={() => this.onClickCard(item)}
+                  className="project-card mb-2 clickable"
+                >
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      {item.projectManagerFirstName +
+                        " " +
+                        item.projectManagerLastName}
+                    </Card.Subtitle>
+                    <Card.Text>{item.description}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          }
         })}
       </Row>
     );
@@ -241,7 +248,7 @@ export default class Projects extends Component {
                     lastItem={null}
                     pointing
                     secondary
-                    totalPages={this.state.projectCount / 8}
+                    totalPages={this.state.projects.length / 8}
                     onPageChange={this.handlePaginationChange}
                   />
                 </div>
