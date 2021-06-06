@@ -10,8 +10,9 @@ import RegisterForm from "../../components/forms/RegisterForm";
 import { toast } from "react-toastify";
 import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import logo from "../../res/images/tasky-logo.png";
-import {Helmet} from 'react-helmet'
+import logo from "../../res/images/tasky-logo-1920.png";
+import logoDark from "../../res/images/tasky-logo-dark.png";
+import { Helmet } from "react-helmet";
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -51,11 +52,11 @@ export default class SignUp extends Component {
         <div className="auth-wrapper">
           <div className="auth-inner mt-5">
             <Row>
-              <Col xs={6} md={2} />
-              <Col xs={6} md={8}>
-                <Image src={logo} width="100%" className="mb-5" />
+              <Col xs={6} md={3} />
+              <Col xs={6} md={6}>
+                <Image src={logoDark} width="100%" className="mb-5" />
               </Col>
-              <Col xs={6} md={2} />
+              <Col xs={6} md={3} />
             </Row>
             <RegisterForm onSubmit={this.signUp} initialValues={null} />
             <p className="forgot-password text-right">

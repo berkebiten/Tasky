@@ -11,7 +11,7 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { Avatar, Dropdown } from "rsuite";
-import logo from "../res/images/tasky-logo-md.png";
+import logo from "../res/images/tasky-logo-1920.png";
 import { SessionHelper } from "../util/helpers";
 import { useRadioGroup } from "@material-ui/core";
 
@@ -29,9 +29,9 @@ class NavbarLogged extends Component {
         <Navbar.Brand href="/projects">
           <img
             src={logo}
-            width="80"
-            height="30"
-            className="d-inline-block align-top"
+            width="40"
+            height="40"
+            className="d-inline-block align-top clickable-logo"
           />
         </Navbar.Brand>
         <Nav className="mr-auto">

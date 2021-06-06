@@ -4,11 +4,11 @@ import { CustomForm } from "./CustomForms/CustomForm";
 function RegisterForm(props) {
   const formElements = [
     {
-      label: "Firstname",
+      label: "First Name",
       control: { type: "text", name: "firstname" },
     },
     {
-      label: "Lastname",
+      label: "Last Name",
       control: { type: "text", name: "lastname" },
     },
     {

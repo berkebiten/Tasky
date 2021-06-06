@@ -9,6 +9,7 @@ import {
   FormControl,
   Button,
   InputGroup,
+  Badge
 } from "react-bootstrap";
 import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
@@ -58,7 +59,7 @@ export default class Projects extends Component {
   };
 
   getProjects = async (page) => {
-    let reqBody = { startIndex: 0 , count: 1000 };
+    let reqBody = { startIndex: 0, count: 1000 };
     await ServiceHelper.serviceHandler(
       GET_PROJECTS_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
@@ -201,25 +202,28 @@ export default class Projects extends Component {
         <div className="auth-wrapper">
           <Container>
             <Row className="mt-4">
-              <h1 class="text-dark mx-auto">YOUR PROJECTS</h1>
+              <h1 class="text-dark mx-auto">MY PROJECTS</h1>
             </Row>
             <Row className="mt-4">
               <Form inline className="mx-auto">
                 <InputGroup className="mr-sm-2">
-                  <FormControl type="text" placeholder="Search Project" />
+                  <FormControl
+                    type="text"
+                    className="input-search-tasky-dark"
+                    placeholder="Search Project"
+                  />
                   <InputGroup.Append>
-                    <Button variant="outline-dark">
+                    <Button variant="" className="search-btn-bb-dark">
                       <BsSearch />
                     </Button>
                   </InputGroup.Append>
                 </InputGroup>
-
                 <Button
-                  variant="primary"
-                  className="mr-sm-2"
+                  className="ml-2 new-task"
+                  variant="dark"
                   onClick={() => this.setState({ projectFormVisibility: true })}
                 >
-                  <BsPlus />
+                  <Badge variant="primary">+</Badge> New
                 </Button>
               </Form>
             </Row>

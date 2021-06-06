@@ -10,7 +10,8 @@ import Navbar from "../../components/Navbar";
 import LoginForm from "../../components/forms/LoginForm";
 import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import logo from "../../res/images/tasky-logo.png";
+import logo from "../../res/images/tasky-logo-1920.png";
+import logoDark from "../../res/images/tasky-logo-dark.png";
 import {Helmet} from 'react-helmet'
 export default class SignIn extends Component {
   constructor(props) {
@@ -55,13 +56,16 @@ export default class SignIn extends Component {
         <div className="auth-wrapper">
           <div className="auth-inner mt-5">
             <Row>
-              <Col xs={6} md={2} />
-              <Col xs={6} md={8}>
-                <Image src={logo} width="100%" className="mb-5" />
+              <Col xs={6} md={3} />
+              <Col xs={6} md={6}>
+                <Image src={logoDark} width="100%" className="mb-5" />
               </Col>
-              <Col xs={6} md={2} />
+              <Col xs={6} md={3} />
             </Row>
             <LoginForm onSubmit={this.signIn} initialValues={null} />
+            <p className="forgot-password text-right">
+              Don't have an account? <a href="sign-up">Register</a>
+            </p>
           </div>
         </div>
       </div>
