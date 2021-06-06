@@ -156,12 +156,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_ProjectParticipant]
 AS
-SELECT        b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Role, c.Status AS ProjectStatus
+SELECT        b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Status, b.Role, c.Status AS ProjectStatus
 FROM            dbo.[User] AS a INNER JOIN
                          dbo.ProjectParticipant AS b ON a.Id = b.UserId INNER JOIN
                          dbo.Project AS c ON c.Id = b.ProjectId
-GO
 
+GO
 
 --WORKLOG CREATION
 SET ANSI_NULLS ON
@@ -290,3 +290,27 @@ GO
 ALTER TABLE [dbo].[User]
 ADD SendEmail BIT DEFAULT 1, SendNotification BIT DEFAULT 1
 
+--Project Invitation Creation
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProjectInvitation](
+	[Id] [uniqueidentifier] NOT NULL,
+	[ProjectId] [uniqueidentifier] NULL,
+	[Email] [nvarchar](max) NULL,
+	[Role] [tinyint] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[ProjectInvitation] ADD PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[ProjectInvitation]  WITH CHECK ADD FOREIGN KEY([ProjectId])
+REFERENCES [dbo].[Project] ([Id])
+GO
+
+--ALTER PROJECT PARTICIPANT
+ALTER TABLE [dbo].[ProjectParticipant]
+ADD Status BIT DEFAULT 1

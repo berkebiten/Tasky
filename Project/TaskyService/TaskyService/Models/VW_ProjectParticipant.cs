@@ -19,6 +19,7 @@ namespace TaskyService.Models
         [NotMapped]
         public string FullName { get; set; }
         public bool ProjectStatus { get; set; }
+        public bool Status { get; set; }
 
     }
 }

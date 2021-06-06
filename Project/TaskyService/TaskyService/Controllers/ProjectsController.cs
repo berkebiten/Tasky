@@ -28,13 +28,16 @@ namespace TaskyService.Controllers
         private readonly ProjectParticipantContext _participantContext;
         private readonly UserContext _userContext;
         private readonly FileContext _fileContext;
+        private readonly ProjectInvitationContext _invitationContext;
 
-        public ProjectsController(ProjectContext context, FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext)
+        public ProjectsController(ProjectContext context, ProjectInvitationContext invitationContext,
+            FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext)
         {
             _context = context;
             _participantContext = participantContext;
             _userContext = userContext;
             _fileContext = fileContext;
+            _invitationContext = invitationContext;
         }
 
         [HttpGet]
@@ -155,9 +158,15 @@ namespace TaskyService.Controllers
             {
                 var participant = new ProjectParticipant();
                 participant.ProjectId = project.Id;
+                participant.Status = false;
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault();
                 if(participantId == null)
                 {
+                    var invitation = new ProjectInvitation();
+                    invitation.Email = participantObj.email;
+                    invitation.Role = participantObj.role;
+                    invitation.ProjectId = project.Id;
+                    _invitationContext.Add(invitation);
                     continue;
                 }
 
@@ -188,6 +197,7 @@ namespace TaskyService.Controllers
                 await _context.SaveChangesAsync();
                 await _participantContext.SaveChangesAsync();
                 await _fileContext.SaveChangesAsync();
+                await _invitationContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -206,10 +216,20 @@ namespace TaskyService.Controllers
             {
                 var participant = new ProjectParticipant();
                 participant.ProjectId = id;
-                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault().Id;
-                participant.UserId = participantId;
+                participant.Status = false;
+                var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault();
+                if (participantId == null)
+                {
+                    var invitation = new ProjectInvitation();
+                    invitation.Email = participantObj.email;
+                    invitation.Role = participantObj.role;
+                    invitation.ProjectId = id;
+                    _invitationContext.Add(invitation);
+                    continue;
+                }
+                participant.UserId = participantId.Id;
                 participant.Role = participantObj.role;
-                if (!ParticipantExists(participantId, id))
+                if (!ParticipantExists(participantId.Id, id))
                 {
                     _participantContext.Add(participant);
                 }
@@ -222,6 +242,7 @@ namespace TaskyService.Controllers
             try
             {
                  await _participantContext.SaveChangesAsync();
+                 await _invitationContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

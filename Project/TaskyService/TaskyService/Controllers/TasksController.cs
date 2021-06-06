@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using TaskyService.DbContexts;
-using Newtonsoft.Json.Linq;
 using TaskyService.Services;
 using TaskyService.Models;
 using System.Collections;
@@ -39,14 +37,14 @@ namespace TaskyService.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetAllTasks()
+        public ActionResult<IEnumerable<Models.Task>> GetAllTasks()
         {
-            return await _context.Task.ToListAsync();
+            return  _context.Task.ToList();
         }
 
         [HttpPost]
         [Route("GetTasks")]
-        public async Task<ActionResult<dynamic>> GetTasks([FromHeader(Name = "Authorization")] string token, [FromBody] GetTasksBody requestBody)
+        public ActionResult<dynamic> GetTasks([FromHeader(Name = "Authorization")] string token, [FromBody] GetTasksBody requestBody)
         {
             var data = _context.VW_Task.ToList().Where(item => item.ProjectId == Guid.Parse(requestBody.projectId)).ToList();
             foreach (Models.VW_Task item in data)
@@ -62,9 +60,9 @@ namespace TaskyService.Controllers
 
         [Route("GetById/{id}")]
         [HttpGet]
-        public async Task<ActionResult<Models.Task>> GetProject(Guid id)
+        public ActionResult<Models.Task> GetProject(Guid id)
         {
-            var task = await _context.VW_Task.FindAsync(id);
+            var task = _context.VW_Task.Find(id);
             task.StatusTitle = Enum.GetName(typeof(TaskStatuses), task.Status);
             task.AssigneeFullName = task.AssigneeFirstName + " " + task.AssigneeLastName;
             task.ReporterFullName = task.ReporterFirstName + " " + task.ReporterLastName;
@@ -93,7 +91,7 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("UploadFile/{id}")]
-        public IActionResult UploadFile(Guid id, [FromBody] List<File64> files, [FromHeader(Name = "Authorization")] String token)
+        public ActionResult UploadFile(Guid id, [FromBody] List<File64> files, [FromHeader(Name = "Authorization")] String token)
         {
             var userId = TokenService.getUserId(token);
             foreach (File64 file64 in files)
@@ -123,7 +121,7 @@ namespace TaskyService.Controllers
 
         [HttpPut]
         [Route("Update/{id}")]
-        public async Task<IActionResult> PutTask(Guid id, Models.Task task)
+        public ActionResult PutTask(Guid id, Models.Task task)
         {
             if (id != task.Id)
             {
@@ -134,7 +132,7 @@ namespace TaskyService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -153,7 +151,7 @@ namespace TaskyService.Controllers
 
         [HttpPut]
         [Route("UpdateTaskStatus/{id}")]
-        public async Task<IActionResult> UpdateTaskStatus(Guid id, Models.Task task, [FromHeader(Name = "Authorization")] string token)
+        public ActionResult UpdateTaskStatus(Guid id, Models.Task task, [FromHeader(Name = "Authorization")] string token)
         {
             if (id != task.Id)
             {
@@ -174,8 +172,8 @@ namespace TaskyService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
-                await _operationContext.SaveChangesAsync();
+                 _context.SaveChanges();
+                 _operationContext.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -195,7 +193,7 @@ namespace TaskyService.Controllers
 
         [HttpGet]
         [Route("GetTaskTimeline/{id}")]
-        public IActionResult GetTaskTimeline(Guid id)
+        public ActionResult GetTaskTimeline(Guid id)
         {
             var operations = _operationContext.VW_TaskOperation.ToList().Where(operation => operation.TaskId == id).ToList();
             foreach(VW_TaskOperation operation in operations)
@@ -211,7 +209,7 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("Insert")]
-        public async Task<ActionResult<Models.Task>> PostProject(Models.Task task, [FromHeader(Name = "Authorization")] String token)
+        public ActionResult<Models.Task> PostProject(Models.Task task, [FromHeader(Name = "Authorization")] String token)
         {
             task.CreatedDate = DateTime.Now.Date;
             task.Status = 0;
@@ -231,8 +229,8 @@ namespace TaskyService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
-                await _fileContext.SaveChangesAsync();
+                 _context.SaveChanges();
+                 _fileContext.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -244,23 +242,23 @@ namespace TaskyService.Controllers
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        public async Task<IActionResult> DeleteTask(Guid id)
+        public ActionResult DeleteTask(Guid id)
         {
-            var project = await _context.Task.FindAsync(id);
+            var project =  _context.Task.Find(id);
             if (project == null)
             {
                 return NotFound();
             }
 
             _context.Task.Remove(project);
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
 
             return NoContent();
         }
 
         [HttpPost]
         [Route("GetMyTasks")]
-        public async Task<ActionResult<dynamic>> GetMyTasks([FromHeader(Name = "Authorization")] string token)
+        public ActionResult<dynamic> GetMyTasks([FromHeader(Name = "Authorization")] string token)
         {
             var userId = TokenService.getUserId(token);
             var data = _context.VW_Task.ToList().Where(item => item.AssigneeId == userId).ToList();
@@ -277,7 +275,7 @@ namespace TaskyService.Controllers
 
         [HttpGet]
         [Route("GetSubTasks/{taskId}")]
-        public async Task<ActionResult<dynamic>> GetSubTasks(Guid taskId)
+        public ActionResult<dynamic> GetSubTasks(Guid taskId)
         {
             var data = _context.VW_Task.ToList().Where(item => item.RootId == taskId).ToList();
             foreach (Models.VW_Task item in data)
