@@ -8,6 +8,7 @@ import Profile from "./containers/Profile";
 import Task from "./containers/Task";
 import Tasks from './containers/Tasks'
 import ActivityStream from './containers/ActivityStream'
+import Settings from './containers/Settings'
 import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -63,6 +64,7 @@ function App(props) {
           <Route path="/MyTasks" component={Tasks} />
           <Route path="/ActivityStream" component={ActivityStream} />
           <Route path="/VerifyEmail/:userId" render={(props) => <VerifyEmail {...props} />} />
+          <Route path="/settings" component={Settings} />
         </Switch>
       </Router>
     </Spin>

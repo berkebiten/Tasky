@@ -75,7 +75,7 @@ export default class Profile extends Component {
               <Card
                 bg="dark"
                 text="light"
-                className="tasky-profile-stat-card clickable"
+                className="tasky-profile-stat-card clickable-pc"
                 onClick={() =>
                   this.onClickCard(this.state.recentProjects.project1)
                 }
@@ -91,7 +91,7 @@ export default class Profile extends Component {
               <Card
                 bg="dark"
                 text="light"
-                className="tasky-profile-stat-card clickable"
+                className="tasky-profile-stat-card clickable-pc"
                 onClick={() =>
                   this.onClickCard(this.state.recentProjects.project2)
                 }
@@ -107,7 +107,7 @@ export default class Profile extends Component {
               <Card
                 bg="dark"
                 text="light"
-                className="tasky-profile-stat-card clickable"
+                className="tasky-profile-stat-card clickable-pc"
                 onClick={() =>
                   this.onClickCard(this.state.recentProjects.project3)
                 }
