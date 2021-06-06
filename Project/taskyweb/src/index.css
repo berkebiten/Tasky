@@ -695,6 +695,12 @@ p + p {
   box-shadow: 0 5px 5px -5px rgba(130, 149, 235, 0.1), 0 8px 32px -8px hsla(202, 97%, 60%, 0.10), 0 -6px 32px -6px hsla(214, 98%, 59%, 0.02);
 }
 
+.clickable-pc:hover{
+  cursor:pointer;
+  transform: scale(1.03);
+  box-shadow: 0 0 11px rgba(235, 217, 115, 0.2); 
+}
+
 .centered-image{
   margin-top:10px;
   width:100%;
