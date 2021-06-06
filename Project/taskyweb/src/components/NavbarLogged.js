@@ -92,12 +92,7 @@ class NavbarLogged extends Component {
             <FiSettings className="mr-sm-2" />
             Settings
           </Dropdown.Item>
-          <Dropdown.Item
-            onSelect={() => this.props.history.push("/preferences")}
-          >
-            <FiSliders className="mr-sm-2" />
-            Preferences
-          </Dropdown.Item>
+          
           <Dropdown.Item
             onSelect={() => {
               SessionHelper.removeUser();

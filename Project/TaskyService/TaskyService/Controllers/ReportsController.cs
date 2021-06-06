@@ -20,7 +20,7 @@ namespace TaskyService.Controllers
         private readonly TaskContext _taskContext;
         private readonly WorkLogContext _workLogContext;
 
-        public ReportsController(ProjectContext context, TaskContext taskContext,WorkLogContext workLogContext , ProjectParticipantContext participantContext, UserContext userContext)
+        public ReportsController(ProjectContext context, TaskContext taskContext, WorkLogContext workLogContext, ProjectParticipantContext participantContext, UserContext userContext)
         {
             _projectContext = context;
             _participantContext = participantContext;
@@ -44,15 +44,16 @@ namespace TaskyService.Controllers
             report.TaskStatusReport = GetTaskStatusReport(project.Id);
             report.TotalWorkHour = GetTotalWorkHour(project.Id);
             report.WorkHoursReport = GetWorkHours(project.Id);
+            report.TaskStatusReportByMember = GetTaskStatusReportByMember(project.Id);
             return Ok(new { isSuccessfull = true, data = report });
         }
 
-        private int GetTaskCount (Guid id)
+        private int GetTaskCount(Guid id)
         {
             return _taskContext.VW_Task.ToList().Where(task => task.ProjectId == id).ToList().Count();
         }
 
-        private ParticipantReport[] GetParticipantReport (Guid id)
+        private ParticipantReport[] GetParticipantReport(Guid id)
         {
             var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id);
             ParticipantReport[] participantReport = new ParticipantReport[3];
@@ -70,19 +71,20 @@ namespace TaskyService.Controllers
             member.Fill = "#4594b4";
             foreach (VW_ProjectParticipant participant in participants)
             {
-                if (participant.Role == (Byte) RoleTitles.ProjectManager)
+                if (participant.Role == (Byte)RoleTitles.ProjectManager)
                 {
                     manager.Count = manager.Count + 1;
 
-                }else if (participant.Role == (Byte)RoleTitles.TeamMember)
+                }
+                else if (participant.Role == (Byte)RoleTitles.TeamMember)
                 {
-                    member.Count = member.Count + 1; 
+                    member.Count = member.Count + 1;
                 }
                 else
                 {
                     watcher.Count = watcher.Count + 1;
                 }
-                
+
             }
             participantReport[0] = manager;
             participantReport[1] = watcher;
@@ -90,13 +92,13 @@ namespace TaskyService.Controllers
             return participantReport;
         }
 
-        private TaskStatusReport[] GetTaskStatusReport (Guid id)
+        private TaskStatusReport[] GetTaskStatusReport(Guid id)
         {
             var tasks = _taskContext.VW_Task.ToList().Where(item => item.ProjectId == id);
             TaskStatusReport[] taskReport = new TaskStatusReport[4];
 
 
-            foreach( TaskStatuses status in Enum.GetValues(typeof(TaskStatuses)))
+            foreach (TaskStatuses status in Enum.GetValues(typeof(TaskStatuses)))
             {
                 TaskStatusReport newStatus = new TaskStatusReport();
                 newStatus.Count = 0;
@@ -121,7 +123,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            foreach(VW_Task task in tasks)
+            foreach (VW_Task task in tasks)
             {
                 taskReport[task.Status].Count = taskReport[task.Status].Count + 1;
 
@@ -131,11 +133,11 @@ namespace TaskyService.Controllers
 
         }
 
-        private double GetTotalWorkHour (Guid id)
+        private double GetTotalWorkHour(Guid id)
         {
             double workHour = 0;
             var workLogs = _workLogContext.VW_WorkLog.ToList().Where(item => item.ProjectId == id);
-            foreach(VW_WorkLog workLog in workLogs)
+            foreach (VW_WorkLog workLog in workLogs)
             {
                 if (workLog.Duration.Contains("h"))
                 {
@@ -151,10 +153,10 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return Double.Parse(String.Format("{0:0.00}", workHour));      
+            return Double.Parse(String.Format("{0:0.00}", workHour));
         }
 
-        private WorkHoursReport[] GetWorkHours (Guid id)
+        private WorkHoursReport[] GetWorkHours(Guid id)
         {
             double workHour = 0;
             var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2).ToList();
@@ -189,6 +191,59 @@ namespace TaskyService.Controllers
             }
             return workHoursReports;
         }
+
+        private TaskStatusReportByMember GetTaskStatusReportByMember(Guid id)
+        {
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2).ToList();
+            TaskStatusReportByMember taskStatusReportByMember = new TaskStatusReportByMember();
+
+            taskStatusReportByMember.memberTaskStatuses = new MemberTaskStatus[participants.Count];
+            int index = 0;
+            foreach (VW_ProjectParticipant participant in participants)
+            {
+                MemberTaskStatus memberTaskStatus = new MemberTaskStatus();
+                var tasks = _taskContext.VW_Task.ToList().Where(item => item.ProjectId == id && item.AssigneeId == participant.UserId);
+                TaskStatusReport[] taskReport = new TaskStatusReport[4];
+
+
+                foreach (TaskStatuses status in Enum.GetValues(typeof(TaskStatuses)))
+                {
+                    TaskStatusReport newStatus = new TaskStatusReport();
+                    newStatus.Count = 0;
+                    switch (status)
+                    {
+                        case 0:
+                            newStatus.Status = "To-Do";
+                            taskReport[(int)status] = newStatus;
+                            break;
+                        case (TaskStatuses)1:
+                            newStatus.Status = "Active";
+                            taskReport[(int)status] = newStatus;
+                            break;
+                        case (TaskStatuses)2:
+                            newStatus.Status = "Resolved";
+                            taskReport[(int)status] = newStatus;
+                            break;
+                        default:
+                            newStatus.Status = "Closed";
+                            taskReport[(int)status] = newStatus;
+                            break;
+                    }
+                }
+
+                foreach (VW_Task task in tasks)
+                {
+                    taskReport[task.Status].Count = taskReport[task.Status].Count + 1;
+                }
+
+                memberTaskStatus.FullName = participant.FirstName + " " + participant.LastName;
+                memberTaskStatus.taskStatusCount = taskReport;
+                taskStatusReportByMember.memberTaskStatuses[index] = memberTaskStatus;
+                index++;
+            }
+
+            return taskStatusReportByMember;
+        }
     }
 
     public class ParticipantReport
@@ -209,4 +264,16 @@ namespace TaskyService.Controllers
         public string FullName { get; set; }
         public double WorkHour { get; set; }
     }
+
+    public class TaskStatusReportByMember
+    {
+        public MemberTaskStatus[] memberTaskStatuses { get; set; }
+    }
+
+    public class MemberTaskStatus
+    {
+        public string FullName { get; set; }
+        public TaskStatusReport[] taskStatusCount { get; set; }
+    }
+
 }
