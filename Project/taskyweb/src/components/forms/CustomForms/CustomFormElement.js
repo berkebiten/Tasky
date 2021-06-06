@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { FileHelper } from "../../../util/helpers";
+import FormCheck from 'react-bootstrap/FormCheck';
 
 export default class CustomFormElement extends Component {
   createElement = () => {
@@ -52,17 +53,17 @@ export default class CustomFormElement extends Component {
 
   createCheckBox = (element, values) => {
     return (
-      <Form.Group>
+      <Form.Group className="pf">
+        <FormCheck.Label>{element.label}</FormCheck.Label>
         <Form.Check
           type="checkbox"
           name={element.control.name}
-          label={element.label}
           checked={
             values && values[element.control.name]
               ? values[element.control.name]
               : false
           }
-          onChange = {this.props.handleChange}
+          onChange={this.props.handleChange}
         />
       </Form.Group>
     );

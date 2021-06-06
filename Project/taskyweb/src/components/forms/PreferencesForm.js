@@ -11,18 +11,18 @@ function PreferencesForm(props) {
     {
       label: "Allow Emails",
       control: { type: "checkbox", name: "allowEmail" },
-      
-    }
+    },
   ];
 
   return (
     <div>
       <CustomForm
+        className="pf"
         formElements={formElements}
         onSubmit={props.onSubmit}
         initialValues={props.initialValues ? props.initialValues : {}}
         handleSubmit={props.handleSubmit}
-        buttonTitle="Save Preferences"
+        buttonTitle="Save"
         handleReset={props.handleReset ? props.handleReset : null}
       />
     </div>

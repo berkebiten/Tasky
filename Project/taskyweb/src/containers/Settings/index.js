@@ -87,25 +87,35 @@ export default class Settings extends Component {
         </Helmet>
         <NavbarLogged />
         <div className="auth-wrapper">
-          <div className="auth-inner mt-5">
-            <Row>
-              <Col xs={6} md={3} />
-              <Col xs={6} md={6}>
-                <Image src={logoDark} width="100%" className="mb-5" />
-              </Col>
-              <Col xs={6} md={3} />
+          <div className="projects-inner">
+            <Row className="mb-5">
+              <h1 class="text-dark mx-auto">SETTINGS</h1>
             </Row>
-            <PreferencesForm
-              onSubmit={this.savePreferences}
-              initialValues={{
-                allowNotification: this.state.user.sendNotification,
-                allowEmail: this.state.user.sendEmail,
-              }}
-            />
-            <ChangePasswordForm
-              onSubmit={this.changePassword}
-              initialValues={null}
-            />
+            <Row className="settings-row">
+              <Col md={3} className="br">
+                <Image src={logoDark} width="70%" className="centered" />
+              </Col>
+              <Col md={3} className="br">
+                <div className="centered">
+                  <PreferencesForm
+                    onSubmit={this.savePreferences}
+                    initialValues={{
+                      allowNotification: this.state.user.sendNotification,
+                      allowEmail: this.state.user.sendEmail,
+                    }}
+                  />
+                </div>
+              </Col>
+
+              <Col md={6}>
+                <div className="cp">
+                  <ChangePasswordForm
+                    onSubmit={this.changePassword}
+                    initialValues={null}
+                  />
+                </div>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
