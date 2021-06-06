@@ -310,7 +310,7 @@ namespace TaskyService.Controllers
 
             try
             {
-            _context.SaveChanges();
+                _context.SaveChanges();
 
             }
             catch (DbUpdateConcurrencyException)
@@ -322,7 +322,40 @@ namespace TaskyService.Controllers
 
         }
 
+        [HttpPut]
+        [Route("ChangePassword/{id}")]
+        public async Task<IActionResult> ChangePassword(Guid id, ChangePwModel model)
+        {
+            
+            User oldUser = _context.User.Find(id);
 
+            if (BC.Verify(model.oldPassword, oldUser.Password))
+            {
+                oldUser.Password = BC.HashPassword(model.newPassword);
+                _context.Entry(oldUser).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return Ok(new { isSuccessful = true, message = "Updated." });
+            }
+            else
+            {
+                return Ok(new { isSuccessful = false, message = "Current Password does not match." });
+            }
+        }
 
         private bool UserExists(Guid id)
         {
@@ -357,6 +390,12 @@ namespace TaskyService.Controllers
     {
         public bool SendEmail { get; set; }
         public bool SendNotification { get; set; }
+    }
+
+    public class ChangePwModel
+    {
+        public string oldPassword { get; set; }
+        public string newPassword { get; set; }
     }
 
 }
