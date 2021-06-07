@@ -5,7 +5,12 @@ function TaskForm(props) {
   const formElements = [
     {
       label: "Duration",
-      control: { type: "text", name: "duration" },
+      control: {
+        type: "text",
+        name: "duration",
+        validation: "\\d[hHmMdD]",
+        validationMessage: "Invalid time duration entered. (eg. 1d 2h 30m)",
+      },
     },
     {
       label: "Date",
