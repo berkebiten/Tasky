@@ -19,6 +19,7 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import CustomCard from "../material-components/CustomCard";
 import HourIcon from "@material-ui/icons/QueryBuilder";
 import TaskIcon from "@material-ui/icons/FormatListBulleted";
+import { Loader } from "rsuite";
 
 export default class ReportView extends Component {
   constructor(props) {
@@ -132,13 +133,9 @@ export default class ReportView extends Component {
       );
       console.log(this.state.ts_bymember);
       return (
-        <BarChart
-          width={730}
-          height={250}
-          data={this.state.ts_bymember}
-        >
+        <BarChart width={730} height={250} data={this.state.ts_bymember}>
           <CartesianGrid strokeDasharray="4 4" />
-          <XAxis dataKey="name" />          
+          <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
@@ -226,7 +223,16 @@ export default class ReportView extends Component {
         </Container>
       );
     } else {
-      return null;
+      return (
+        <Loader
+          size="lg"
+          content="Loading..."
+          speed="slow"
+          className="loader"
+          center
+          vertical
+        />
+      );
     }
   }
 }

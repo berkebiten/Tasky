@@ -12,6 +12,7 @@ import {
   UPDATE_USER_SERVICE,
 } from "../../util/constants/Services";
 import moment from "moment";
+import { Loader } from "rsuite";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -182,6 +183,148 @@ export default class Profile extends Component {
     );
   };
 
+  createContent = () => {
+    if (!this.state.user || !this.state.recentProjects || !this.state.stats) {
+      return (
+        <div className="mt-5">
+          <Loader
+            size="lg"
+            content="Loading..."
+            speed="slow"
+            className="loader"
+            center
+            vertical
+          />
+        </div>
+      );
+    }
+    return (
+      <Row className="mx-auto mt-4 ">
+        <Card
+          className="tasky-profile-card justify-content-center"
+          bg="dark"
+          text="light"
+          style={{ width: "25%" }}
+        >
+          <div className="centered-image">
+            <Card.Img
+              className="tasky-profile-image"
+              variant="top"
+              src={
+                this.state.user && this.state.user.profileImage
+                  ? this.state.user.profileImage
+                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+              }
+              size="small"
+            />
+          </div>
+          <Card.Body className="mt-2">
+            <Card.Title>
+              {this.state.user
+                ? this.state.user.firstName + " " + this.state.user.lastName
+                : "undefined"}
+            </Card.Title>
+            <Card.Text>
+              {this.state.user ? this.state.user.email : "undefined"}
+            </Card.Text>
+            <Card.Text>
+              {this.state.user
+                ? "Member since: " +
+                  moment(this.state.user.registrationDate).format("DD/MM/YYYY")
+                : "undefined"}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Container className="dark-profile-container" style={{ width: "75%" }}>
+          {this.state.userId === SessionHelper.loadUser().id ? (
+            <Row className="mt-2 ml-1 mr-1">
+              <Col md={10}></Col>
+              <Col md={2}>
+                <Badge
+                  className="ml-5 clickable"
+                  pill
+                  variant="secondary"
+                  onClick={() =>
+                    this.setState({ editProfileFormVisibility: true })
+                  }
+                >
+                  <FiEdit2></FiEdit2>
+                </Badge>
+                <a className="ml-1" href="/settings">
+                  <Badge pill variant="secondary">
+                    <FiSettings></FiSettings>
+                  </Badge>
+                </a>
+              </Col>
+            </Row>
+          ) : null}
+          <Row className="mt-2 ml-1 mr-1">
+            <Col md={2.5} className="tasky-profile-stat-col">
+              <Card text="light" className="tasky-profile-stat-card">
+                <Card.Body>
+                  <Card.Header className="t-bg-primary">Active</Card.Header>
+                  <Card.Text className="mt-2">
+                    Tasks{" "}
+                    <Badge pill variant="primary">
+                      {this.state.stats ? this.state.stats.activeTasks : 0}
+                    </Badge>
+                  </Card.Text>
+                  <Card.Text>
+                    Projects{" "}
+                    <Badge pill variant="primary">
+                      {this.state.stats ? this.state.stats.activeProjects : 0}
+                    </Badge>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={2.5} className="tasky-profile-stat-col">
+              <Card text="light" className="tasky-profile-stat-card">
+                <Card.Body>
+                  <Card.Header className="t-bg-success">Completed</Card.Header>
+                  <Card.Text className="mt-2">
+                    Tasks{" "}
+                    <Badge pill variant="success">
+                      {this.state.stats ? this.state.stats.completedTasks : 0}
+                    </Badge>
+                  </Card.Text>
+                  <Card.Text>
+                    Projects{" "}
+                    <Badge pill variant="success">
+                      {this.state.stats
+                        ? this.state.stats.completedProjects
+                        : 0}
+                    </Badge>
+                  </Card.Text>
+                  <Card.Text>
+                    Work Logs{" "}
+                    <Badge pill variant="success">
+                      {this.state.stats
+                        ? this.state.stats.completedWorkLogs
+                        : 0}
+                    </Badge>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col className="tasky-profile-stat-col">
+              <Card text="light" className="tasky-profile-stat-card">
+                <Card.Body>
+                  <Card.Header className="t-bg-orange">
+                    Recent Projects
+                  </Card.Header>
+                  <Row className="mt-3 justify-content-center">
+                    {this.renderRecentProjectCards()}
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </Row>
+    );
+  };
+
   render() {
     return (
       <div>
@@ -191,148 +334,7 @@ export default class Profile extends Component {
         <NavbarLogged />
         <div className="auth-wrapper">
           <Container>
-            <Col className="mx-auto">
-              <Row className="mx-auto mt-4 ">
-                <Card
-                  className="tasky-profile-card justify-content-center"
-                  bg="dark"
-                  text="light"
-                  style={{ width: "25%" }}
-                >
-                  <div className="centered-image">
-                    <Card.Img
-                      className="tasky-profile-image"
-                      variant="top"
-                      src={
-                        this.state.user && this.state.user.profileImage
-                          ? this.state.user.profileImage
-                          : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                      }
-                      size="small"
-                    />
-                  </div>
-                  <Card.Body className="mt-2">
-                    <Card.Title>
-                      {this.state.user
-                        ? this.state.user.firstName +
-                          " " +
-                          this.state.user.lastName
-                        : "undefined"}
-                    </Card.Title>
-                    <Card.Text>
-                      {this.state.user ? this.state.user.email : "undefined"}
-                    </Card.Text>
-                    <Card.Text>
-                      {this.state.user
-                        ? "Member since: " +
-                          moment(this.state.user.registrationDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        : "undefined"}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-                <Container
-                  className="dark-profile-container"
-                  style={{ width: "75%" }}
-                >
-                  {this.state.userId === SessionHelper.loadUser().id ? (
-                    <Row className="mt-2 ml-1 mr-1">
-                      <Col md={10}></Col>
-                      <Col md={2}>
-                        <Badge
-                          className="ml-5 clickable"
-                          pill
-                          variant="secondary"
-                          onClick={() =>
-                            this.setState({ editProfileFormVisibility: true })
-                          }
-                        >
-                          <FiEdit2></FiEdit2>
-                        </Badge>
-                        <a className="ml-1" href="/settings">
-                          <Badge pill variant="secondary">
-                            <FiSettings></FiSettings>
-                          </Badge>
-                        </a>
-                      </Col>
-                    </Row>
-                  ) : null}
-                  <Row className="mt-2 ml-1 mr-1">
-                    <Col md={2.5} className="tasky-profile-stat-col">
-                      <Card text="light" className="tasky-profile-stat-card">
-                        <Card.Body>
-                          <Card.Header className="t-bg-primary">
-                            Active
-                          </Card.Header>
-                          <Card.Text className="mt-2">
-                            Tasks{" "}
-                            <Badge pill variant="primary">
-                              {this.state.stats
-                                ? this.state.stats.activeTasks
-                                : 0}
-                            </Badge>
-                          </Card.Text>
-                          <Card.Text>
-                            Projects{" "}
-                            <Badge pill variant="primary">
-                              {this.state.stats
-                                ? this.state.stats.activeProjects
-                                : 0}
-                            </Badge>
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col md={2.5} className="tasky-profile-stat-col">
-                      <Card text="light" className="tasky-profile-stat-card">
-                        <Card.Body>
-                          <Card.Header className="t-bg-success">
-                            Completed
-                          </Card.Header>
-                          <Card.Text className="mt-2">
-                            Tasks{" "}
-                            <Badge pill variant="success">
-                              {this.state.stats
-                                ? this.state.stats.completedTasks
-                                : 0}
-                            </Badge>
-                          </Card.Text>
-                          <Card.Text>
-                            Projects{" "}
-                            <Badge pill variant="success">
-                              {this.state.stats
-                                ? this.state.stats.completedProjects
-                                : 0}
-                            </Badge>
-                          </Card.Text>
-                          <Card.Text>
-                            Work Logs{" "}
-                            <Badge pill variant="success">
-                              {this.state.stats
-                                ? this.state.stats.completedWorkLogs
-                                : 0}
-                            </Badge>
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col className="tasky-profile-stat-col">
-                      <Card text="light" className="tasky-profile-stat-card">
-                        <Card.Body>
-                          <Card.Header className="t-bg-orange">
-                            Recent Projects
-                          </Card.Header>
-                          <Row className="mt-3 justify-content-center">
-                            {this.renderRecentProjectCards()}
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </Container>
-              </Row>
-            </Col>
+            <Col className="mx-auto">{this.createContent()}</Col>
             {this.state.editProfileFormVisibility &&
               this.createEditProfileForm()}
           </Container>

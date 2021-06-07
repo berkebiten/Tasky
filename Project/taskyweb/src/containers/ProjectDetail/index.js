@@ -40,6 +40,7 @@ import {
 import { Icon, Label } from "semantic-ui-react";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 import WorkLogForm from "../../components/forms/WorkLogForm";
+import { Loader } from "rsuite";
 
 const menuItems = [
   {
@@ -444,6 +445,22 @@ export default class ProjectDetail extends Component {
   };
 
   createOverview = () => {
+    if (
+      !this.state.projectParticipants ||
+      !this.state.boardData ||
+      !this.state.project
+    ) {
+      return (
+        <Loader
+          size="lg"
+          content="Loading..."
+          speed="slow"
+          className="loader"
+          center
+          vertical
+        />
+      );
+    }
     var overview_participants =
       this.state.projectParticipants &&
       this.state.projectParticipants.length > 0
@@ -703,6 +720,18 @@ export default class ProjectDetail extends Component {
   };
 
   createBoard = () => {
+    if (!this.state.boardData) {
+      return (
+        <Loader
+          size="lg"
+          content="Loading..."
+          speed="slow"
+          className="loader"
+          center
+          vertical
+        />
+      );
+    }
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
@@ -746,6 +775,7 @@ export default class ProjectDetail extends Component {
           <TableView
             columns={taskTableColumns(this.state.projectParticipants)}
             tableData={this.state.tableData}
+            loading={!this.state.projectParticipants || !this.state.tableData}
           />
         </Row>
       </Container>
@@ -759,6 +789,9 @@ export default class ProjectDetail extends Component {
           columns={activityTableColumns(this.state.projectParticipants)}
           tableData={this.state.projectWorkLogs}
           onDoubleClickRow={this.onDoubleClickActivityRow}
+          loading={
+            !this.state.projectParticipants || !this.state.projectWorkLogs
+          }
         />
       </Container>
     );

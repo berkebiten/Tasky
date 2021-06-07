@@ -52,7 +52,11 @@ export default class Tasks extends Component {
 
   createTasks = () => {
     return (
-      <TableView columns={taskTableColumns()} tableData={this.state.tasks} />
+      <TableView
+        columns={taskTableColumns()}
+        tableData={this.state.tasks}
+        loading={!this.state.tasks}
+      />
     );
   };
 

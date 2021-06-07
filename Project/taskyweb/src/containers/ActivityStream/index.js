@@ -42,6 +42,7 @@ export default class ActivityStream extends Component {
       <TableView
         columns={activityTableColumns()}
         tableData={this.state.activities}
+        loading={!this.state.activities}
       />
     );
   };

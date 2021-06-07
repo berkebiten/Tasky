@@ -728,5 +728,8 @@ p + p {
 
 .pf{
   text-align:center !important;
-  
+}
+
+.loader{
+  color: var(--tasky-dark);
 }

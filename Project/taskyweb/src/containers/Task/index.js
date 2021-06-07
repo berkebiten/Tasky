@@ -28,7 +28,7 @@ import {
 } from "../../util/constants/Constants";
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import TaskForm from "../../components/forms/TaskForm";
-import { Timeline } from "rsuite";
+import { Loader, Timeline } from "rsuite";
 
 const menuItems = [
   {
@@ -167,6 +167,18 @@ export default class Task extends Component {
   };
 
   createDetail = () => {
+    if (!this.state.task || !this.state.taskTimeline) {
+      return (
+        <Loader
+          size="lg"
+          content="Loading..."
+          speed="slow"
+          className="loader"
+          center
+          vertical
+        />
+      );
+    }
     let title = this.state.task ? this.state.task.title : "UNDEFINED";
     let status = this.state.task ? this.state.task.status : -1;
     let stateName = "";
@@ -482,6 +494,7 @@ export default class Task extends Component {
           <TableView
             columns={taskTableColumns(this.state.projectParticipants)}
             tableData={this.state.subTasks}
+            loading={!this.state.projectParticipants || !this.state.subTasks}
           />
         </Row>
       </Container>
@@ -507,6 +520,7 @@ export default class Task extends Component {
             columns={activityTableColumns(this.state.projectParticipants)}
             tableData={this.state.workLogs}
             onDoubleClickRow={this.onDoubleClickActivityRow}
+            loading={!this.state.projectParticipants || !this.state.workLogs}
           />
         </Row>
       </Container>

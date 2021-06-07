@@ -132,6 +132,7 @@ export default class TableView extends Component {
         className="task-list"
         columns={this.getColumns()}
         dataSource={this.props.tableData}
+        loading={this.props.loading ? this.props.loading : false}
         bordered
       />
     );
