@@ -48,6 +48,22 @@ namespace TaskyService.Controllers
             if (user.ActivationStatus == false)
                 return NotFound(new { isSuccessful = false, message = "Please Verify Your Email" });
 
+            if(model.FcmToken != null)
+            {
+                user.FirebaseToken = model.FcmToken;
+                _context.User.Update(user);
+
+                try
+                {
+                    _context.SaveChanges();
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
+
             var token = TokenService.CreateToken(user);
             user.Password = "";
             return Ok(new
