@@ -11,8 +11,8 @@ using System.Collections;
 
 enum TaskStatuses
 {
-    ToDo = 0,   
-    Active = 1,  
+    ToDo = 0,
+    Active = 1,
     Resolved = 2,
     Closed = 3,
 }
@@ -27,19 +27,29 @@ namespace TaskyService.Controllers
         private readonly TaskContext _context;
         private readonly TaskOperationContext _operationContext;
         private readonly FileContext _fileContext;
+        private readonly UserContext _userContext;
+        private readonly MailTemplateContext _mailTemplateContext;
+        private readonly ProjectContext _projectContext;
 
-        public TasksController(TaskContext context, TaskOperationContext operationContext, FileContext fileContext)
+
+        private readonly string directory = Settings.WebDirectory;
+
+        public TasksController(TaskContext context, TaskOperationContext operationContext, FileContext fileContext,
+            UserContext userContext, MailTemplateContext mailTemplateContext, ProjectContext projectContext)
         {
             _context = context;
             _operationContext = operationContext;
             _fileContext = fileContext;
+            _userContext = userContext;
+            _mailTemplateContext = mailTemplateContext;
+            _projectContext = projectContext;
         }
 
         [HttpGet]
         [Route("GetAll")]
         public ActionResult<IEnumerable<Models.Task>> GetAllTasks()
         {
-            return  _context.Task.ToList();
+            return _context.Task.ToList();
         }
 
         [HttpPost]
@@ -54,7 +64,7 @@ namespace TaskyService.Controllers
                 item.ReporterFullName = item.ReporterFirstName + " " + item.ReporterLastName;
 
             }
-            return Ok(new { isSuccessful = true, data = new { tasks = data} });
+            return Ok(new { isSuccessful = true, data = new { tasks = data } });
 
         }
 
@@ -133,6 +143,28 @@ namespace TaskyService.Controllers
             try
             {
                 _context.SaveChanges();
+
+
+                #region send mail to assignee
+                var assignee = _userContext.User.Find(task.AssigneeId);
+                Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", assignee.FirstName);
+                ht.Add("[LINK]", directory + "task/" + task.Id);
+                ht.Add("[TASKNAME]", task.Title);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
+                #endregion
+
+                #region send mail to reporter
+                if (task.AssigneeId != task.ReporterId)
+                {
+                    var reporter = _userContext.User.Find(task.ReporterId);
+                    Hashtable ht2 = new Hashtable();
+                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                    ht2.Add("[LINK]", directory + "task/" + task.Id);
+                    ht2.Add("[TASKNAME]", task.Title);
+                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+                }
+                #endregion
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -145,6 +177,7 @@ namespace TaskyService.Controllers
                     throw;
                 }
             }
+
 
             return Ok(new { isSuccessful = true, message = "Task is Updated Successfuly" });
         }
@@ -172,8 +205,30 @@ namespace TaskyService.Controllers
 
             try
             {
-                 _context.SaveChanges();
-                 _operationContext.SaveChanges();
+                _context.SaveChanges();
+                _operationContext.SaveChanges();
+
+                #region send mail to assignee
+                var assignee = _userContext.User.Find(task.AssigneeId);
+                Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", assignee.FirstName);
+                ht.Add("[LINK]", directory + "task/" + task.Id);
+                ht.Add("[TASKNAME]", task.Title);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
+                #endregion
+
+
+                #region send mail to reporter
+                if (task.AssigneeId != task.ReporterId)
+                {
+                    var reporter = _userContext.User.Find(task.ReporterId);
+                    Hashtable ht2 = new Hashtable();
+                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                    ht2.Add("[LINK]", directory + "task/" + task.Id);
+                    ht2.Add("[TASKNAME]", task.Title);
+                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+                }
+                #endregion
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -196,14 +251,14 @@ namespace TaskyService.Controllers
         public ActionResult GetTaskTimeline(Guid id)
         {
             var operations = _operationContext.VW_TaskOperation.ToList().Where(operation => operation.TaskId == id).ToList();
-            foreach(VW_TaskOperation operation in operations)
+            foreach (VW_TaskOperation operation in operations)
             {
                 operation.OldStatusTitle = Enum.GetName(typeof(TaskStatuses), operation.OldStatus);
                 operation.NewStatusTitle = Enum.GetName(typeof(TaskStatuses), operation.NewStatus);
                 operation.UserFullName = operation.UserFirstName + " " + operation.UserLastName;
             }
 
-            return Ok(new { data = operations});
+            return Ok(new { data = operations });
 
         }
 
@@ -229,8 +284,31 @@ namespace TaskyService.Controllers
 
             try
             {
-                 _context.SaveChanges();
-                 _fileContext.SaveChanges();
+                _context.SaveChanges();
+                _fileContext.SaveChanges();
+
+                string projectName = _projectContext.Project.Find(task.ProjectId).Name;
+
+                #region send mail to assignee
+                var assignee = _userContext.User.Find(task.AssigneeId);
+                Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", assignee.FirstName);
+                ht.Add("[LINK]", directory + "task/" + task.Id);
+                ht.Add("[PROJECTNAME]", projectName);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_assigned", assignee.Email, "", ht);
+                #endregion
+
+                #region send mail to reporter
+                if (task.AssigneeId != task.ReporterId)
+                {
+                    var reporter = _userContext.User.Find(task.ReporterId);
+                    Hashtable ht2 = new Hashtable();
+                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                    ht2.Add("[LINK]", directory + "task/" + task.Id);
+                    ht2.Add("[PROJECTNAME]", projectName);
+                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_created", reporter.Email, "", ht2);
+                }
+                #endregion
             }
             catch (DbUpdateException)
             {
@@ -244,14 +322,14 @@ namespace TaskyService.Controllers
         [Route("Delete/{id}")]
         public ActionResult DeleteTask(Guid id)
         {
-            var project =  _context.Task.Find(id);
+            var project = _context.Task.Find(id);
             if (project == null)
             {
                 return NotFound();
             }
 
             _context.Task.Remove(project);
-             _context.SaveChanges();
+            _context.SaveChanges();
 
             return NoContent();
         }
@@ -296,7 +374,7 @@ namespace TaskyService.Controllers
 
     public class GetTasksBody
     {
-       public string projectId { get; set; }
+        public string projectId { get; set; }
     }
 
 }

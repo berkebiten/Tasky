@@ -29,15 +29,19 @@ namespace TaskyService.Controllers
         private readonly UserContext _userContext;
         private readonly FileContext _fileContext;
         private readonly ProjectInvitationContext _invitationContext;
+        private readonly MailTemplateContext _mailTemplateContext;
+
+        private readonly string directory = Settings.WebDirectory;
 
         public ProjectsController(ProjectContext context, ProjectInvitationContext invitationContext,
-            FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext)
+            FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext , MailTemplateContext mailTemplateContext)
         {
             _context = context;
             _participantContext = participantContext;
             _userContext = userContext;
             _fileContext = fileContext;
             _invitationContext = invitationContext;
+            _mailTemplateContext = mailTemplateContext;
         }
 
         [HttpGet]
@@ -268,6 +272,27 @@ namespace TaskyService.Controllers
             try
             {
                 _participantContext.SaveChanges();
+
+                var user = _userContext.User.Find(participant.UserId);
+                var project = _context.Project.Find(participant.ProjectId);
+                var projectOwner = _userContext.User.Find(project.ProjectManagerId);
+
+                #region send mail to removed user
+                Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", user.FirstName);
+                ht.Add("[PROJECTNAME]", project.Name);
+                ht.Add("[PROJECTOWNERNAME]", projectOwner.FirstName + " " + projectOwner.LastName);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("removed_from_project", user.Email, "", ht);
+                #endregion
+
+                #region send mail to project owner
+                Hashtable ht2 = new Hashtable();
+                ht2.Add("[FIRSTNAME]", projectOwner.FirstName);
+                ht2.Add("[PARTICIPANTNAME]", user.FirstName + " " + user.LastName);
+                ht2.Add("[PROJECTNAME]", project.Name);
+                string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("participant_left", projectOwner.Email, "", ht2);
+
+                #endregion
             }
             catch (DbUpdateException)
             {

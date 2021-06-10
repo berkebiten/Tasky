@@ -25,6 +25,8 @@ namespace TaskyService.Controllers
         private readonly WorkLogContext _workLogContext;
         private readonly ProjectContext _projectOnlyContext;
 
+        private readonly string directory = Settings.WebDirectory;
+
         public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext, TaskContext taskContext, WorkLogContext workLogContext, ProjectContext projectOnlyContext)
         {
             _context = context;
@@ -138,6 +140,13 @@ namespace TaskyService.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                #region send activation email
+                Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", user.FirstName);
+                ht.Add("[LINK]", directory + "VerifyEmail/" + user.Id);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("register_activation", user.Email, "", ht);
+                #endregion
             }
             catch (DbUpdateException)
             {
@@ -150,10 +159,7 @@ namespace TaskyService.Controllers
                     throw;
                 }
             }
-            Hashtable ht = new Hashtable();
-            ht.Add("[FIRSTNAME]", user.FirstName);
-            ht.Add("[LINK]", "instagram.com/berkebiten");
-            string response = new MailService(_mailTemplateContext).SendMailFromTemplate("register_activation", user.Email, "", ht);
+           
 
 
 
@@ -348,6 +354,8 @@ namespace TaskyService.Controllers
         {
             var user = _context.User.Find(userId);
             user.ActivationStatus = true;
+            user.SendEmail = true;
+            user.SendNotification = true;
             _context.User.Update(user);
 
             try
