@@ -13,6 +13,7 @@ namespace TaskyService.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Status { get; set; }
+        public Guid ProjectManagerId { get; set; }
         public string ProjectManagerFirstName { get; set; }
         public string ProjectManagerLastName { get; set; }
         [NotMapped]

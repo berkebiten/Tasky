@@ -140,7 +140,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new { isSuccessfull = true });
         }
 
         [HttpPost]
