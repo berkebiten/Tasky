@@ -156,7 +156,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[VW_ProjectParticipant]
 AS
-SELECT        b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Status, b.Role, c.Status AS ProjectStatus
+SELECT        b.UserId, b.Id, b.ProjectId, a.FirstName, a.LastName, a.ProfileImage, b.Status, b.Role, c.Status AS ProjectStatus, c.Name as ProjectName
 FROM            dbo.[User] AS a INNER JOIN
                          dbo.ProjectParticipant AS b ON a.Id = b.UserId INNER JOIN
                          dbo.Project AS c ON c.Id = b.ProjectId

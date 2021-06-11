@@ -129,6 +129,7 @@ export default class TableView extends Component {
             onMouseLeave: (event) => {}, // mouse leave row
           };
         }}
+        pagination={this.props.pagination ? this.props.pagination : null}
         className="task-list"
         columns={this.getColumns()}
         dataSource={this.props.tableData}

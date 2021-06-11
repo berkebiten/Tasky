@@ -14,6 +14,7 @@ namespace TaskyService.Models
         public string LastName { get; set; }
         public string profileImage { get; set; }
         public Byte Role { get; set; }
+        public string ProjectName { get; set; }
         [NotMapped]
         public string RoleTitle { get; set; }
         [NotMapped]

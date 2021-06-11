@@ -191,6 +191,8 @@ namespace TaskyService.Controllers
         public async Task<ActionResult<dynamic>> GetProfile(Guid id)
         {
             var user = await _context.User.FindAsync(id);
+            var invitations = _projectContext.VW_ProjectParticipant.ToList()
+                            .Where(item => item.UserId == id && item.Status == false).ToList();
 
             var activeTasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id && item.Status == Convert.ToInt16(TaskStatuses.Active));
             var closedTasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id && item.Status == Convert.ToInt16(TaskStatuses.Closed));
@@ -297,7 +299,8 @@ namespace TaskyService.Controllers
                 return NotFound();
             }
 
-            return Ok(new { isSuccessful = true, data = new { user = user, stats = stats, recentProjects = recent3Projects } });
+            return Ok(new { isSuccessful = true, data = new { user = user, stats = stats,
+                            recentProjects = recent3Projects, invitations = invitations } });
         }
 
 
