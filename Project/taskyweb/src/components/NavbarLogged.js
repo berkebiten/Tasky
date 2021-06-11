@@ -95,7 +95,6 @@ class NavbarLogged extends Component {
           
           <Dropdown.Item
             onSelect={() => {
-              SessionHelper.removeUser();
               this.props.history.push("/logout");
             }}
           >
