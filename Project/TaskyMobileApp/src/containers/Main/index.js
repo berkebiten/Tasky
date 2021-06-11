@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Button,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View, FlatList, TextInput, TouchableOpacity} from 'react-native';
 import {HeaderView} from '../../components/views';
 import {NavigationActions, SafeAreaView, StackActions} from 'react-navigation';
 import {
@@ -28,13 +22,14 @@ import {
   GET_USER_INFO,
 } from '../../util/constants/Services';
 import ProjectItem from '../../components/items/ProjectItem';
-import {Colors} from '../../res/styles';
+import {Colors, Fonts} from '../../res/styles';
 import debounce from 'lodash.debounce';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import TaskItem from '../../components/items/TaskItem';
 import WorkLogItem from '../../components/items/WorkLogItem';
 import Profile from '../Profile';
 import NoContentView from '../../components/views/NoContentView';
+import {Button, Text} from 'native-base';
 
 export default class Main extends React.Component {
   constructor(props, context) {
@@ -243,24 +238,26 @@ export default class Main extends React.Component {
   };
 
   createHome = () => {
-    if(this.state.userInfo){
-
+    if (this.state.userInfo) {
       return (
         <View style={{flex: 1}}>
-        <PersonalDescriptionItem
-          user={this.state.userData ? this.state.userData : null}
+          <PersonalDescriptionItem
+            user={this.state.userInfo.user ? this.state.userInfo.user : null}
           />
-        <UserDetailItem
-          userData={{
-            resolvedTasks: this.state.userInfo.closedTaskCount.toString(),
-            openTasks: this.state.userInfo.activeTaskCount.toString(),
-            totalProjects: this.state.userInfo.projectCount.toString(),
-          }}
+          <UserDetailItem
+            userData={{
+              resolvedTasks: this.state.userInfo.closedTaskCount.toString(),
+              openTasks: this.state.userInfo.activeTaskCount.toString(),
+              totalProjects: this.state.userInfo.projectCount.toString(),
+            }}
           />
-        <Profile />
-      </View>
-    );
-  }
+          <Profile
+            user={this.state.userInfo.user}
+            getUserInfo={() => this.getUserInfo()}
+          />
+        </View>
+      );
+    }
   };
 
   _onChangeKeyword = (keyword) => {
@@ -355,35 +352,6 @@ export default class Main extends React.Component {
   };
 
   render() {
-    const modules = [
-      {
-        iconName: 'user',
-        onPress: () => NavigationHelper.navigate(SCREEN_ENUMS.PROFILE),
-        menuTitle: 'Profile',
-      },
-      {
-        iconName: 'settings',
-        onPress: () => console.warn('user preferences'),
-        menuTitle: 'User Preferences',
-      },
-      {
-        iconName: 'logout',
-        onPress: async () => {
-          await logout();
-          NavigationHelper.dispatch(
-            StackActions.reset({
-              index: 0,
-              actions: [
-                NavigationActions.navigate({
-                  routeName: SCREEN_ENUMS.SIGN_IN,
-                }),
-              ],
-            }),
-          );
-        },
-        menuTitle: 'Logout',
-      },
-    ];
     return (
       <View style={{flex: 1}}>
         <View style={styles.drawercontainer}>
@@ -407,7 +375,7 @@ export default class Main extends React.Component {
             }}
             rightItem={<Ionicons name="notifications" size={28} color="#fff" />}
             rightItemOnPress={() => {
-              console.warn('Notifications');
+              NavigationHelper.navigate(SCREEN_ENUMS.NOTIFICATIONS);
             }}
           />
           <SafeAreaView style={{flex: 1}}>

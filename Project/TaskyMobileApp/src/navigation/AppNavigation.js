@@ -8,6 +8,7 @@ import {
   ProfileScreen,
   TaskScreen,
   ProjectScreen,
+  NotificationsScreen,
 } from '../screens';
 import {SCREEN_ENUMS} from '../util/constants/Enums';
 import {loadLoginObject} from '../util/storage/AsyncStorage';
@@ -35,6 +36,9 @@ const ScreenStack = createStackNavigator(
     },
     [SCREEN_ENUMS.PROJECT]: {
       screen: ProjectScreen,
+    },
+    [SCREEN_ENUMS.NOTIFICATIONS]: {
+      screen: NotificationsScreen,
     },
   },
   {headerMode: null},

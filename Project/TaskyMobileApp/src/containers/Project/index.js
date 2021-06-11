@@ -17,6 +17,7 @@ import {Colors, Fonts, Metrics} from '../../res/styles';
 import debounce from 'lodash.debounce';
 import {NavigationHelper, ServiceHelper} from '../../util/helpers';
 import {
+  GET_PROJECT_DETAIL,
   GET_PROJECT_PARTICIPANTS_SERVICE,
   GET_TASKS_SERVICE,
 } from '../../util/constants/Services';
@@ -31,7 +32,7 @@ export default class Project extends Component {
     super(props);
     this.onChangeTextDelayed = debounce(this._onChangeKeyword, 1000);
     this.state = {
-      project: props.navigation.state.params.project,
+      projectId: props.navigation.state.params.project.id,
       activeTab: 'Overview',
       keyword: '',
       modal: false,
@@ -43,7 +44,22 @@ export default class Project extends Component {
   }
 
   initialize = () => {
-    this.fetchTaskList();
+    this.getDetail();
+  };
+
+  getDetail = async () => {
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_PROJECT_DETAIL + this.state.projectId,
+      ServiceHelper.createOptionsJson(null, 'GET'),
+    );
+    if (responseData.data) {
+      this.setState(
+        {
+          project: responseData.data,
+        },
+        () => this.fetchTaskList(),
+      );
+    }
   };
 
   fetchTaskList = async () => {
@@ -328,6 +344,9 @@ export default class Project extends Component {
   };
 
   render() {
+    if (!this.state.project) {
+      return null;
+    }
     return (
       <View style={{flex: 1}}>
         <HeaderView

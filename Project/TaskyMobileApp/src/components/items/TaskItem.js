@@ -13,16 +13,16 @@ export default class TaskItem extends React.PureComponent {
     let color;
     switch (statusTitle) {
       case 'Active':
-        color = '#aadd77';
+        color = '#0275d8';
         break;
       case 'ToDo':
-        color = '#7ea4b3';
+        color = '#464a50';
         break;
       case 'Resolved':
-        color = '#fdca96';
+        color = '#9c64b3';
         break;
       case 'Closed':
-        color = '#00b300';
+        color = '#5cb85c';
         break;
     }
 

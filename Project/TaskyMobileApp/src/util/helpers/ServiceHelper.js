@@ -2,7 +2,7 @@ import {RootViewHelper} from '.';
 
 export default class ServiceHelper {
   static autoLoginEnabled;
-  static baseUrl = 'http://192.168.1.37:5001';
+  static baseUrl = 'http://192.168.1.33:5001';
   static userId;
   static username;
   static password;

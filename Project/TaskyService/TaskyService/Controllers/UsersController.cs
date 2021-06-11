@@ -302,7 +302,11 @@ namespace TaskyService.Controllers
         public ActionResult GetUserInfo([FromHeader(Name = "Authorization")] string token)
         {
             Guid id = TokenService.getUserId(token);
-
+            var user = _context.User.Find(id);
+            if(user == null)
+            {
+                return NoContent();
+            }
             var projects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id);
             int projectCount = projects.Count();
             var tasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id);
@@ -316,7 +320,8 @@ namespace TaskyService.Controllers
                 {
                     ProjectCount = projectCount,
                     ClosedTaskCount = closedTaskCount,
-                    ActiveTaskCount = activeTaskCount
+                    ActiveTaskCount = activeTaskCount,
+                    User = user
                 }
             });
 
@@ -343,7 +348,7 @@ namespace TaskyService.Controllers
                 throw;
             }
 
-            return Ok();
+            return Ok(new { isSuccessfull= true });
 
         }
 

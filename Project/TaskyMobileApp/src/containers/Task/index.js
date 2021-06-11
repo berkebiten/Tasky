@@ -21,6 +21,8 @@ import {
   GET_WORKLOGS_UNDER_TASK_SERVICE,
   INSERT_WORKLOG_SERVICE,
   GET_SUB_TASKS,
+  GET_TASK_DETAIL,
+  UPDATE_TASK_STATUS,
 } from '../../util/constants/Services';
 import debounce from 'lodash.debounce';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -34,14 +36,30 @@ export default class Task extends Component {
     super(props);
     this.onChangeTextDelayed = debounce(this._onChangeKeyword, 1000);
     this.state = {
-      task: props.navigation.state.params.task,
+      taskId: props.navigation.state.params.task.id,
       activeTab: 'Overview',
       workLogFormVisibility: false,
+      isFabOpen: false,
     };
   }
 
   componentDidMount = () => {
-    this.fetchWorkLogs();
+    this.getDetail();
+  };
+
+  getDetail = async () => {
+    const responseData = await ServiceHelper.serviceHandler(
+      GET_TASK_DETAIL + this.state.taskId,
+      ServiceHelper.createOptionsJson(null, 'GET'),
+    );
+    if (responseData.data) {
+      this.setState(
+        {
+          task: responseData.data,
+        },
+        () => this.fetchWorkLogs(),
+      );
+    }
   };
 
   createTaskDetail = () => {
@@ -95,6 +113,43 @@ export default class Task extends Component {
     );
   };
 
+  updateTaskStatus = async (status) => {
+    let task = this.state.task;
+    let body = {
+      id: task.id,
+      projectId: task.projectId,
+      title: task.title,
+      description: task.description,
+      assigneeId: task.assigneeId,
+      reporterId: task.reporterId,
+      priority: task.priority,
+      dueDate: task.dueDate,
+      createdDate: task.createdDate,
+      status: status,
+    };
+    console.warn(body);
+    const responseData = await ServiceHelper.serviceHandler(
+      UPDATE_TASK_STATUS + this.state.task.id,
+      ServiceHelper.createOptionsJson(JSON.stringify(body), 'PUT'),
+    );
+    if (responseData && responseData.isSuccessful) {
+      this.setState({isFabOpen: false});
+      Toast.show({
+        text: 'Task is Updated',
+        type: 'success',
+        duration: 7000,
+      });
+      this.getDetail();
+    } else {
+      Toast.show({
+        text:
+          responseData && responseData.message ? responseData.message : 'Error',
+        type: 'danger',
+        duration: 7000,
+      });
+    }
+  };
+
   createInfo = (title, info) => {
     return (
       <Item
@@ -104,15 +159,59 @@ export default class Task extends Component {
           marginHorizontal: Metrics.WIDTH * 0.05,
         }}>
         <Label>{title}</Label>
-        <Text
+        <View
           style={{
-            color: Colors.lightBlack,
-            fontSize: Fonts.moderateScale(16),
-            marginVertical: 10,
-            alignSelf: 'flex-start',
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          {info}
-        </Text>
+          <Text
+            style={{
+              color: Colors.lightBlack,
+              fontSize: Fonts.moderateScale(16),
+              marginVertical: 10,
+              alignSelf: 'flex-start',
+            }}>
+            {info}
+          </Text>
+          {title === 'Status' && (
+            <FAB.Group
+              fabStyle={styles.statusFAB}
+              open={this.state.isFabOpen}
+              style={{marginBottom: 10}}
+              icon={'circle-edit-outline'}
+              actions={[
+                {
+                  icon: 'alarm-multiple',
+                  label: 'ToDo',
+                  color: '#464a50',
+                  onPress: () => this.updateTaskStatus(0),
+                },
+                {
+                  icon: 'clock-start',
+                  label: 'Active',
+                  color: '#0275d8',
+                  onPress: () => this.updateTaskStatus(1),
+                },
+                {
+                  icon: 'alert-circle-check',
+                  label: 'Resolved',
+                  color: '#9c64b3',
+                  onPress: () => this.updateTaskStatus(2),
+                },
+                {
+                  icon: 'check',
+                  label: 'Closed',
+                  color: '#5cb85c',
+                  onPress: () => this.updateTaskStatus(3),
+                },
+              ]}
+              onStateChange={() =>
+                this.setState({isFabOpen: !this.state.isFabOpen})
+              }
+            />
+          )}
+        </View>
         <View style={styles.fieldDivider} />
       </Item>
     );
@@ -138,9 +237,9 @@ export default class Task extends Component {
       return (
         <TaskItem
           item={item.item}
-          onPress={() =>
-            NavigationHelper.navigate(SCREEN_ENUMS.TASK, {task: item.item})
-          }
+          onPress={() => {
+            NavigationHelper.navigate(SCREEN_ENUMS.TASK, {task: item.item});
+          }}
         />
       );
     } else {
@@ -360,6 +459,9 @@ export default class Task extends Component {
   };
 
   render() {
+    if (!this.state.task) {
+      return null;
+    }
     return (
       <View style={{flex: 1}}>
         <HeaderView title={this.state.task ? this.state.task.title : 'TASK'} />

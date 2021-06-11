@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   ratingTextBg: {
     width: Metrics.WIDTH * 0.14,
     height: Metrics.WIDTH * 0.14,
-    backgroundColor: '#0691ce',
     justifyContent: 'center',
   },
 

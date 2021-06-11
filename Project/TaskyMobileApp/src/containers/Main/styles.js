@@ -106,10 +106,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  footerTab:{
-    justifyContent:'flex-end'
+  footerTab: {
+    justifyContent: 'flex-end',
   },
-
 
   modelTopBar: {
     width: Metrics.WIDTH * 0.97,

@@ -38,6 +38,14 @@ const styles = StyleSheet.create({
     backgroundColor:'#2d324f'
   },
 
+  statusFAB: {
+    backgroundColor:'#2d324f',
+    height: 40,
+    width: 40,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+
   modelTopBar: {
     width: Metrics.WIDTH * 0.97,
     height: 40,

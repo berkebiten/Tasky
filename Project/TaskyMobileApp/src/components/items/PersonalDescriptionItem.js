@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, I18nManager} from 'react-native';
 import {Metrics, Fonts} from '../../res/styles';
+import images from '../../res/styles/images';
 
 export default class PersonalDescriptionItem extends React.PureComponent {
   constructor(props) {
@@ -11,7 +12,11 @@ export default class PersonalDescriptionItem extends React.PureComponent {
     return this.props.user ? (
       <View style={styles.main}>
         <Image
-          source={{uri: this.props.user.profileImage}}
+          source={
+            this.props.user.profileImage
+              ? {uri: this.props.user.profileImage}
+              : images.user
+          }
           style={styles.profileImg}
         />
 
@@ -36,6 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: Metrics.WIDTH * 0.12,
     alignSelf: 'center',
     marginTop: Metrics.HEIGHT * 0.03,
+    borderWidth:1,
   },
 
   nameTxt: {
@@ -43,6 +49,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.type.SFUIDisplayMedium,
     fontSize: Fonts.moderateScale(18),
     alignSelf: 'center',
-    marginTop: 10
+    marginTop: 10,
   },
 });
