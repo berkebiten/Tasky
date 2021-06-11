@@ -66,7 +66,7 @@ namespace TaskyService.Controllers
                 count = requestBody.count;
             }
             Guid id = TokenService.getUserId(token);
-            var myProjects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == id).ToList();
+            var myProjects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == id && item.Status == true).ToList();
             var myProjectIds = new ArrayList();
             foreach (ProjectParticipant projectParticipant in myProjects)
             {
@@ -389,7 +389,8 @@ namespace TaskyService.Controllers
         public IActionResult GetRole(Guid projectId, Guid userId)
         {
             var participant = _participantContext.VW_ProjectParticipant.ToList().Where(
-                participant => participant.UserId == userId && participant.ProjectId == projectId
+                participant => participant.UserId == userId && participant.ProjectId == projectId &&
+                participant.Status == true
                 ).FirstOrDefault();
             if(participant == null)
             {
