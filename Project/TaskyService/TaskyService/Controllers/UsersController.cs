@@ -24,10 +24,13 @@ namespace TaskyService.Controllers
         private readonly TaskContext _taskContext;
         private readonly WorkLogContext _workLogContext;
         private readonly ProjectContext _projectOnlyContext;
+        private readonly NotificationContext _notificationContext;
 
         private readonly string directory = Settings.WebDirectory;
 
-        public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext, TaskContext taskContext, WorkLogContext workLogContext, ProjectContext projectOnlyContext)
+        public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext,
+                                TaskContext taskContext, WorkLogContext workLogContext, ProjectContext projectOnlyContext,
+                                NotificationContext notificationContext)
         {
             _context = context;
             _mailTemplateContext = mailTemplateContext;
@@ -35,6 +38,7 @@ namespace TaskyService.Controllers
             _taskContext = taskContext;
             _workLogContext = workLogContext;
             _projectOnlyContext = projectOnlyContext;
+            _notificationContext = notificationContext;
         }
 
         [HttpPost]
@@ -410,6 +414,18 @@ namespace TaskyService.Controllers
             {
                 return Ok(new { isSuccessful = false, message = "Current Password does not match." });
             }
+        }
+
+
+        [HttpGet]
+        [Route("GetNotifications")]
+        public IActionResult GetNotifications([FromHeader(Name = "Authorization")] string token)
+        {
+            var userId = TokenService.getUserId(token);
+            var notifications = _notificationContext.Notification.ToList().Where(item => item.UserId == userId).ToList();
+
+            return Ok(new { data = notifications });
+
         }
 
         private bool UserExists(Guid id)

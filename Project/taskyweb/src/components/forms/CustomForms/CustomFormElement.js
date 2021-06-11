@@ -2,7 +2,8 @@ import { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { FileHelper } from "../../../util/helpers";
-import FormCheck from 'react-bootstrap/FormCheck';
+import FormCheck from "react-bootstrap/FormCheck";
+import moment from "moment";
 
 export default class CustomFormElement extends Component {
   createElement = () => {

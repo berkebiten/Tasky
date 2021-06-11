@@ -30,11 +30,13 @@ namespace TaskyService.Controllers
         private readonly FileContext _fileContext;
         private readonly ProjectInvitationContext _invitationContext;
         private readonly MailTemplateContext _mailTemplateContext;
+        private readonly NotificationContext _notificationContext;
 
         private readonly string directory = Settings.WebDirectory;
 
         public ProjectsController(ProjectContext context, ProjectInvitationContext invitationContext,
-            FileContext fileContext, ProjectParticipantContext participantContext, UserContext userContext , MailTemplateContext mailTemplateContext)
+            FileContext fileContext, NotificationContext notificationContext, ProjectParticipantContext participantContext,
+            UserContext userContext , MailTemplateContext mailTemplateContext)
         {
             _context = context;
             _participantContext = participantContext;
@@ -42,6 +44,7 @@ namespace TaskyService.Controllers
             _fileContext = fileContext;
             _invitationContext = invitationContext;
             _mailTemplateContext = mailTemplateContext;
+            _notificationContext = notificationContext;
         }
 
         [HttpGet]
@@ -216,6 +219,7 @@ namespace TaskyService.Controllers
         public async Task<IActionResult> InviteParticipant(Guid id, List<Participant> participants)
         {
             var userList = _userContext.User.ToList();
+            var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
             foreach (Participant participantObj in participants)
             {
                 var participant = new ProjectParticipant();
@@ -235,6 +239,12 @@ namespace TaskyService.Controllers
                 participant.Role = participantObj.role;
                 if (!ParticipantExists(participantId.Id, id))
                 {
+                    var notification = NotificationService.PROJECT_INVITATION;
+                    notification.Body = String.Format(notification.Body, project.ProjectManagerFirstName + " " + project.ProjectManagerLastName);
+                    notification.DataId = project.Id;
+                    notification.UserId = participant.UserId;
+                    notification.WebUrl = String.Format(notification.WebUrl, id);
+                    _notificationContext.Add(notification);
                     _participantContext.Add(participant);
                 }
                 else
@@ -247,6 +257,7 @@ namespace TaskyService.Controllers
             {
                  await _participantContext.SaveChangesAsync();
                  await _invitationContext.SaveChangesAsync();
+                await _notificationContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

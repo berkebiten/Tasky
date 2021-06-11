@@ -45,6 +45,9 @@ namespace TaskyService
                        opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             services.AddDbContext<ProjectInvitationContext>(opt =>
                        opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            services.AddDbContext<NotificationContext>(opt =>
+                       opt.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+
 
 
             services.AddControllers();

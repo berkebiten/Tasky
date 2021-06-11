@@ -30,12 +30,13 @@ namespace TaskyService.Controllers
         private readonly UserContext _userContext;
         private readonly MailTemplateContext _mailTemplateContext;
         private readonly ProjectContext _projectContext;
-
+        private readonly NotificationContext _notificationContext;
 
         private readonly string directory = Settings.WebDirectory;
 
         public TasksController(TaskContext context, TaskOperationContext operationContext, FileContext fileContext,
-            UserContext userContext, MailTemplateContext mailTemplateContext, ProjectContext projectContext)
+            UserContext userContext, MailTemplateContext mailTemplateContext, ProjectContext projectContext,
+            NotificationContext notificationContext)
         {
             _context = context;
             _operationContext = operationContext;
@@ -43,6 +44,7 @@ namespace TaskyService.Controllers
             _userContext = userContext;
             _mailTemplateContext = mailTemplateContext;
             _projectContext = projectContext;
+            _notificationContext = notificationContext;
         }
 
         [HttpGet]
@@ -192,6 +194,16 @@ namespace TaskyService.Controllers
             }
 
             var oldTask = _context.VW_Task.ToList().Where(item => item.Id == task.Id).FirstOrDefault();
+            var assignee = _userContext.User.Find(task.AssigneeId);
+            var reporter = _userContext.User.Find(task.ReporterId);
+            var user = _userContext.User.Find(TokenService.getUserId(token));
+
+            var notification = NotificationService.TASK_UPDATE;
+            notification.DataId = id;
+            notification.Body = String.Format(notification.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status));
+            notification.UserId = reporter.Id;
+            notification.WebUrl = String.Format(notification.WebUrl, task.Id);
+            _notificationContext.Add(notification);
 
             TaskOperation operation = new TaskOperation();
             operation.Id = new Guid();
@@ -207,9 +219,9 @@ namespace TaskyService.Controllers
             {
                 _context.SaveChanges();
                 _operationContext.SaveChanges();
+                _notificationContext.SaveChanges();
 
                 #region send mail to assignee
-                var assignee = _userContext.User.Find(task.AssigneeId);
                 Hashtable ht = new Hashtable();
                 ht.Add("[FIRSTNAME]", assignee.FirstName);
                 ht.Add("[LINK]", directory + "task/" + task.Id);
@@ -221,7 +233,6 @@ namespace TaskyService.Controllers
                 #region send mail to reporter
                 if (task.AssigneeId != task.ReporterId)
                 {
-                    var reporter = _userContext.User.Find(task.ReporterId);
                     Hashtable ht2 = new Hashtable();
                     ht2.Add("[FIRSTNAME]", reporter.FirstName);
                     ht2.Add("[LINK]", directory + "task/" + task.Id);
@@ -268,7 +279,18 @@ namespace TaskyService.Controllers
         {
             task.CreatedDate = DateTime.Now.Date;
             task.Status = 0;
+            var reporter_ = _userContext.User.Find(TokenService.getUserId(token));
             _context.Add(task);
+
+            #region send notification to assignee
+            var notification = NotificationService.ASSIGN_TASK;
+            notification.Title = String.Format(notification.Title, reporter_.FirstName + " " + reporter_.LastName);
+            notification.Body = String.Format(notification.Body, task.Title);
+            notification.DataId = task.Id;
+            notification.WebUrl = String.Format(notification.WebUrl, task.Id);
+            notification.UserId = task.AssigneeId;
+            _notificationContext.Add(notification);
+            #endregion
 
             foreach (File64 file64 in task.Files)
             {
@@ -286,6 +308,7 @@ namespace TaskyService.Controllers
             {
                 _context.SaveChanges();
                 _fileContext.SaveChanges();
+                _notificationContext.SaveChanges();
 
                 string projectName = _projectContext.Project.Find(task.ProjectId).Name;
 

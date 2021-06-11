@@ -671,7 +671,7 @@ export default class ProjectDetail extends Component {
           </Card>
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
-          <Card className="file-card overflow-auto">
+          <Card className="project-detail-card">
             <Card.Header style={{ width: "100%" }}>
               Files
               {this.state.userRole !== "Watcher" && (
