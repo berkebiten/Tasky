@@ -29,7 +29,7 @@ export default class Profile extends Component {
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
-      props.history.push("/");
+      props.history.push("/logout");
     }
   }
 

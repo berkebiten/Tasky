@@ -88,7 +88,7 @@ export default class ProjectDetail extends Component {
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
-      props.history.push("/");
+      props.history.push("/logout");
     }
   }
 

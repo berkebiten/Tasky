@@ -42,7 +42,7 @@ export default class Projects extends Component {
       activePage: 1,
     };
     if (!SessionHelper.checkIsSessionLive()) {
-      props.history.push("/");
+      props.history.push("/logout");
     }
   }
 

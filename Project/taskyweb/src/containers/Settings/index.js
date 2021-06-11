@@ -21,7 +21,7 @@ export default class Settings extends Component {
     this.state = { user: SessionHelper.loadUser() };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
-      props.history.push("/");
+      props.history.push("/logout");
     }
   }
 
