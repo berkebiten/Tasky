@@ -63,6 +63,7 @@ export default class Task extends Component {
       taskFormVisibility: false,
       selectedWorkLog: null,
       fileUpload: false,
+      updateTask: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -230,6 +231,7 @@ export default class Task extends Component {
           </Row>
         </Card>
         {this.createFilesCard()}
+        {this.state.updateTask && this.createUpdateTaskForm()}
         {this.state.fileUpload && this.createFileUploadModal()}
       </Container>
     );
@@ -630,6 +632,39 @@ export default class Task extends Component {
       />
     );
   };
+
+  createUpdateTaskForm = () => {
+    let task = { ...this.state.task };
+    task.dueDate = new Date(moment(task.dueDate));
+    return (
+      <CustomModal
+        isVisible={this.state.updateTask}
+        onClose={() => this.setState({ updateTask: false })}
+        content={
+          <div>
+            <TaskForm
+              handleSubmit={(submit) => (this.updateTask = submit)}
+              onSubmit={this.updateTask}
+              initialValues={task}
+              participants={
+                this.state.projectParticipants &&
+                this.state.projectParticipants.length > 0
+                  ? this.state.projectParticipants.filter(
+                      (participant) => participant.role !== 2
+                    )
+                  : []
+              }
+            />
+          </div>
+        }
+        title={"LOG WORK"}
+      />
+    );
+  };
+
+  updateTask = (data) => {
+    console.log(data)
+  }
 
   createContent = () => {
     switch (this.state.activePage) {

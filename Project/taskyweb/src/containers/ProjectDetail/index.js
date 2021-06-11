@@ -41,6 +41,8 @@ import { Icon, Label } from "semantic-ui-react";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import { Loader } from "rsuite";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const menuItems = [
   {
@@ -444,6 +446,10 @@ export default class ProjectDetail extends Component {
     );
   };
 
+  deleteProject = () => {
+    console.log('delete')
+  }
+
   createOverview = () => {
     if (
       !this.state.projectParticipants ||
@@ -504,6 +510,30 @@ export default class ProjectDetail extends Component {
 
     return (
       <Container className="dark-overview-container">
+        <Row className="mt-2 project-detail-row mx-auto">
+          {this.state.userRole !== "Watcher" && (
+            <Button
+              className="ml-2 delete-project"
+              variant="dark"
+              onClick={() => confirmAlert({
+                title: "Warning!",
+                message: "Are you sure to delete the project?",
+                buttons: [
+                  {
+                    label: "Yes",
+                    onClick: () => this.deleteProject(),
+                  },
+                  {
+                    label: "No",
+                    onClick: () => null,
+                  },
+                ],
+              })}
+            >
+              <Badge variant="primary">x</Badge> Close Project
+            </Button>
+          )}
+        </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
             <Card.Header>About</Card.Header>
@@ -817,7 +847,6 @@ export default class ProjectDetail extends Component {
   };
 
   taskBoardExtractor = (tasks) => {
-    console.log(tasks);
     return {
       columns: [
         {
