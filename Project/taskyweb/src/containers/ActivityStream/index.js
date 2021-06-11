@@ -12,7 +12,7 @@ export default class ActivityStream extends Component {
     super(props);
     this.state = {};
     if (!SessionHelper.checkIsSessionLive()) {
-      props.history.push("/");
+      props.history.push("/logout");
     }
   }
 

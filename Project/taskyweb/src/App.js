@@ -9,6 +9,9 @@ import Task from "./containers/Task";
 import Tasks from './containers/Tasks'
 import ActivityStream from './containers/ActivityStream'
 import Settings from './containers/Settings'
+import Logout from './containers/Settings'
+import VerifyEmail from "./containers/VerifyEmail";
+
 import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -19,7 +22,6 @@ import "semantic-ui-css/semantic.min.css";
 import "../node_modules/antd/dist/antd.css";
 import "react-toastify/dist/ReactToastify.css";
 import "../node_modules/react-datepicker/dist/react-datepicker.css";
-import VerifyEmail from "./containers/VerifyEmail";
 
 function App(props) {
   const [loading, setLoading] = useState(false);
@@ -65,6 +67,7 @@ function App(props) {
           <Route path="/ActivityStream" component={ActivityStream} />
           <Route path="/VerifyEmail/:userId" render={(props) => <VerifyEmail {...props} />} />
           <Route path="/settings" component={Settings} />
+          <Route path="/logout" component={Logout} />
         </Switch>
       </Router>
     </Spin>
