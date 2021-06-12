@@ -140,7 +140,7 @@ namespace TaskyService.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new { isSuccessfull = true });
         }
 
         [HttpPost]
@@ -358,6 +358,27 @@ namespace TaskyService.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("Accept/{id}")]
+        public IActionResult AcceptInvitation(Guid id)
+        {
+            var participant = _participantContext.ProjectParticipant.Find(id);
+            participant.Status = true;
+            _participantContext.Entry(participant).State = EntityState.Modified;
+            _participantContext.SaveChanges();
+            return Ok(new { isSuccessfull = true });
+        }
+
+        [HttpDelete]
+        [Route("Decline/{id}")]
+        public IActionResult DeclineInvitation(Guid id)
+        {
+            var participant = _participantContext.ProjectParticipant.Find(id);
+            _participantContext.ProjectParticipant.Remove(participant);
+            _participantContext.SaveChanges();
+            return Ok(new { isSuccessfull = true });
         }
 
         [HttpGet]

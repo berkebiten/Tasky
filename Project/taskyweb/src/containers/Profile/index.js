@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
-import { Card, Col, Row, Container, Badge } from "react-bootstrap";
+import { Card, Col, Row, Container, Badge, Button } from "react-bootstrap";
 import { FiEdit2, FiSettings } from "react-icons/fi";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
@@ -8,11 +8,15 @@ import CustomModal from "../../components/modals/CustomModal";
 import EditProfileForm from "../../components/forms/EditProfileForm";
 import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
 import {
+  ACCEPT_INVITATION,
+  DECLINE_INVITATION,
   GET_PROFILE_SERVICE,
   UPDATE_USER_SERVICE,
 } from "../../util/constants/Services";
 import moment from "moment";
 import { Loader } from "rsuite";
+import { invitationTableColumns } from "../../util/constants/Constants";
+import TableView from "../../components/views/TableView";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +30,7 @@ export default class Profile extends Component {
             )
           : null,
       editProfileFormVisibility: false,
+      showInvitations: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -52,6 +57,7 @@ export default class Profile extends Component {
           user: response.data.user,
           stats: response.data.stats,
           recentProjects: response.data.recentProjects,
+          invitations: response.data.invitations,
         });
       }
     });
@@ -183,6 +189,62 @@ export default class Profile extends Component {
     );
   };
 
+  acceptInvitation = async (id) => {
+    await ServiceHelper.serviceHandler(
+      ACCEPT_INVITATION + id,
+      ServiceHelper.createOptionsJson(null, "POST")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("Invitation Accepted.", {
+          type: "success",
+        });
+        this.setState({ showInvitations: false }, () => this.getProfile());
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  declineInvitation = async (id) => {
+    await ServiceHelper.serviceHandler(
+      DECLINE_INVITATION + id,
+      ServiceHelper.createOptionsJson(null, "DELETE")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("Invitation Declined.", {
+          type: "success",
+        });
+        this.setState({ showInvitations: false }, () => this.getProfile());
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createInvitations = () => {
+    return (
+      <CustomModal
+        isVisible={this.state.showInvitations}
+        onClose={() => this.setState({ showInvitations: false })}
+        title="Project Invitations"
+        content={
+          <TableView
+            columns={invitationTableColumns(
+              this.acceptInvitation,
+              this.declineInvitation
+            )}
+            tableData={this.state.invitations}
+            pagination={{ defaultPageSize: 3 }}
+          />
+        }
+      />
+    );
+  };
+
   createContent = () => {
     if (!this.state.user || !this.state.recentProjects || !this.state.stats) {
       return (
@@ -199,129 +261,150 @@ export default class Profile extends Component {
       );
     }
     return (
-      <Row className="mx-auto mt-4 ">
-        <Card
-          className="tasky-profile-card justify-content-center"
-          bg="dark"
-          text="light"
-          style={{ width: "25%" }}
-        >
-          <div className="centered-image">
-            <Card.Img
-              className="tasky-profile-image"
-              variant="top"
-              src={
-                this.state.user && this.state.user.profileImage
-                  ? this.state.user.profileImage
-                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-              }
-              size="small"
-            />
-          </div>
-          <Card.Body className="mt-2">
-            <Card.Title>
-              {this.state.user
-                ? this.state.user.firstName + " " + this.state.user.lastName
-                : "undefined"}
-            </Card.Title>
-            <Card.Text>
-              {this.state.user ? this.state.user.email : "undefined"}
-            </Card.Text>
-            <Card.Text>
-              {this.state.user
-                ? "Member since: " +
-                  moment(this.state.user.registrationDate).format("DD/MM/YYYY")
-                : "undefined"}
-            </Card.Text>
-          </Card.Body>
-        </Card>
-        <Container className="dark-profile-container" style={{ width: "75%" }}>
-          {this.state.userId === SessionHelper.loadUser().id ? (
-            <Row className="mt-2 ml-1 mr-1">
-              <Col md={10}></Col>
-              <Col md={2}>
-                <Badge
-                  className="ml-5 clickable"
-                  pill
-                  variant="secondary"
-                  onClick={() =>
-                    this.setState({ editProfileFormVisibility: true })
-                  }
-                >
-                  <FiEdit2></FiEdit2>
-                </Badge>
-                <a className="ml-1" href="/settings">
-                  <Badge pill variant="secondary">
-                    <FiSettings></FiSettings>
+      <div>
+        <Row className="mx-auto mt-4 ">
+          <Card
+            className="tasky-profile-card justify-content-center"
+            bg="dark"
+            text="light"
+            style={{ width: "25%" }}
+          >
+            <div className="centered-image">
+              <Card.Img
+                className="tasky-profile-image"
+                variant="top"
+                src={
+                  this.state.user && this.state.user.profileImage
+                    ? this.state.user.profileImage
+                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                }
+                size="small"
+              />
+            </div>
+            <Card.Body className="mt-2">
+              <Card.Title>
+                {this.state.user
+                  ? this.state.user.firstName + " " + this.state.user.lastName
+                  : "undefined"}
+              </Card.Title>
+              <Card.Text>
+                {this.state.user ? this.state.user.email : "undefined"}
+              </Card.Text>
+              <Card.Text>
+                {this.state.user
+                  ? "Member since: " +
+                    moment(this.state.user.registrationDate).format(
+                      "DD/MM/YYYY"
+                    )
+                  : "undefined"}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <Container
+            className="dark-profile-container"
+            style={{ width: "75%" }}
+          >
+            {this.state.userId === SessionHelper.loadUser().id ? (
+              <Row className="mt-2 ml-1 mr-1">
+                <Col md={10}></Col>
+                <Col md={2}>
+                  <Badge
+                    className="ml-5 clickable"
+                    pill
+                    variant="secondary"
+                    onClick={() =>
+                      this.setState({ editProfileFormVisibility: true })
+                    }
+                  >
+                    <FiEdit2></FiEdit2>
                   </Badge>
-                </a>
+                  <a className="ml-1" href="/settings">
+                    <Badge pill variant="secondary">
+                      <FiSettings></FiSettings>
+                    </Badge>
+                  </a>
+                </Col>
+              </Row>
+            ) : null}
+            <Row className="mt-2 ml-1 mr-1">
+              <Col md={2.5} className="tasky-profile-stat-col">
+                <Card text="light" className="tasky-profile-stat-card">
+                  <Card.Body>
+                    <Card.Header className="t-bg-primary">Active</Card.Header>
+                    <Card.Text className="mt-2">
+                      Tasks{" "}
+                      <Badge pill variant="primary">
+                        {this.state.stats ? this.state.stats.activeTasks : 0}
+                      </Badge>
+                    </Card.Text>
+                    <Card.Text>
+                      Projects{" "}
+                      <Badge pill variant="primary">
+                        {this.state.stats ? this.state.stats.activeProjects : 0}
+                      </Badge>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={2.5} className="tasky-profile-stat-col">
+                <Card text="light" className="tasky-profile-stat-card">
+                  <Card.Body>
+                    <Card.Header className="t-bg-success">
+                      Completed
+                    </Card.Header>
+                    <Card.Text className="mt-2">
+                      Tasks{" "}
+                      <Badge pill variant="success">
+                        {this.state.stats ? this.state.stats.completedTasks : 0}
+                      </Badge>
+                    </Card.Text>
+                    <Card.Text>
+                      Projects{" "}
+                      <Badge pill variant="success">
+                        {this.state.stats
+                          ? this.state.stats.completedProjects
+                          : 0}
+                      </Badge>
+                    </Card.Text>
+                    <Card.Text>
+                      Work Logs{" "}
+                      <Badge pill variant="success">
+                        {this.state.stats
+                          ? this.state.stats.completedWorkLogs
+                          : 0}
+                      </Badge>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col className="tasky-profile-stat-col">
+                <Card text="light" className="tasky-profile-stat-card">
+                  <Card.Body>
+                    <Card.Header className="t-bg-orange">
+                      Recent Projects
+                    </Card.Header>
+                    <Row className="mt-3 justify-content-center">
+                      {this.renderRecentProjectCards()}
+                    </Row>
+                  </Card.Body>
+                </Card>
               </Col>
             </Row>
-          ) : null}
-          <Row className="mt-2 ml-1 mr-1">
-            <Col md={2.5} className="tasky-profile-stat-col">
-              <Card text="light" className="tasky-profile-stat-card">
-                <Card.Body>
-                  <Card.Header className="t-bg-primary">Active</Card.Header>
-                  <Card.Text className="mt-2">
-                    Tasks{" "}
-                    <Badge pill variant="primary">
-                      {this.state.stats ? this.state.stats.activeTasks : 0}
-                    </Badge>
-                  </Card.Text>
-                  <Card.Text>
-                    Projects{" "}
-                    <Badge pill variant="primary">
-                      {this.state.stats ? this.state.stats.activeProjects : 0}
-                    </Badge>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={2.5} className="tasky-profile-stat-col">
-              <Card text="light" className="tasky-profile-stat-card">
-                <Card.Body>
-                  <Card.Header className="t-bg-success">Completed</Card.Header>
-                  <Card.Text className="mt-2">
-                    Tasks{" "}
-                    <Badge pill variant="success">
-                      {this.state.stats ? this.state.stats.completedTasks : 0}
-                    </Badge>
-                  </Card.Text>
-                  <Card.Text>
-                    Projects{" "}
-                    <Badge pill variant="success">
-                      {this.state.stats
-                        ? this.state.stats.completedProjects
-                        : 0}
-                    </Badge>
-                  </Card.Text>
-                  <Card.Text>
-                    Work Logs{" "}
-                    <Badge pill variant="success">
-                      {this.state.stats
-                        ? this.state.stats.completedWorkLogs
-                        : 0}
-                    </Badge>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col className="tasky-profile-stat-col">
-              <Card text="light" className="tasky-profile-stat-card">
-                <Card.Body>
-                  <Card.Header className="t-bg-orange">
-                    Recent Projects
-                  </Card.Header>
-                  <Row className="mt-3 justify-content-center">
-                    {this.renderRecentProjectCards()}
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </Row>
+            {this.state.invitations && this.state.invitations.length > 0 && (
+              <Row className="mx-auto mt-4 ml-4 ">
+                <Button
+                  variant="primary"
+                  onClick={() => this.setState({ showInvitations: true })}
+                >
+                  Project Invitations{"  "}
+                  <Badge variant="light">{this.state.invitations.length}</Badge>
+                </Button>
+                {this.createInvitations()}
+              </Row>
+            )}
+          </Container>
+        </Row>
+      </div>
     );
   };
 

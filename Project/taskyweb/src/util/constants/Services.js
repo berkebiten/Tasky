@@ -30,3 +30,6 @@ export const CHANGE_PASSWORD_SERVICE = "/Users/ChangePassword/";
 export const GET_NOTIFICATIONS = "/Users/GetNotifications/";
 export const GET_NEW_NOTIFICATIONS = "/Users/GetNewNotifications/";
 export const SET_READ_NOTIFICATION = "/Users/SetReadNotification/";
+export const UPDATE_PROJECT = "/Projects/Update/";
+export const ACCEPT_INVITATION = "/Projects/Accept/";
+export const DECLINE_INVITATION = "/Projects/Decline/";

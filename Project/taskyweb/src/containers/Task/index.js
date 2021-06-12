@@ -263,14 +263,15 @@ export default class Task extends Component {
         <Card className="ml-3 task-detail-card" style={{ width: "96%" }}>
           <Card.Header>
             Files
-            {this.state.userRole !== "Watcher" && (
-              <Button
-                className="pull-right"
-                onClick={() => this.setState({ fileUpload: true })}
-              >
-                Upload File
-              </Button>
-            )}
+            {this.state.userRole !== "Watcher" &&
+              this.state.task.projectStatus && (
+                <Button
+                  className="pull-right"
+                  onClick={() => this.setState({ fileUpload: true })}
+                >
+                  Upload File
+                </Button>
+              )}
           </Card.Header>
           <Card.Body>
             <Row>
@@ -482,7 +483,7 @@ export default class Task extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" && (
+          {this.state.userRole !== "Watcher" && this.state.task.projectStatus && (
             <Button
               className="ml-2 new-task"
               variant="dark"
@@ -507,7 +508,7 @@ export default class Task extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" && (
+          {this.state.userRole !== "Watcher" && this.state.task.projectStatus && (
             <Button
               className="ml-2 new-task"
               variant="dark"
@@ -663,8 +664,8 @@ export default class Task extends Component {
   };
 
   updateTask = (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   createContent = () => {
     switch (this.state.activePage) {

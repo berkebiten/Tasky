@@ -26,6 +26,7 @@ import {
   GET_TASKS_SERVICE,
   INSERT_TASK_SERVICE,
   INVITE_PARTICIPANT,
+  UPDATE_PROJECT,
   UPDATE_TASK_STATUS_SERVICE,
   UPLOAD_PROJECT_FILE,
 } from "../../util/constants/Services";
@@ -41,8 +42,8 @@ import { Icon, Label } from "semantic-ui-react";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import { Loader } from "rsuite";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const menuItems = [
   {
@@ -446,9 +447,27 @@ export default class ProjectDetail extends Component {
     );
   };
 
-  deleteProject = () => {
-    console.log('delete')
-  }
+  closeProject = async () => {
+    let body = {
+      ...this.state.project,
+      status: false,
+    };
+    await ServiceHelper.serviceHandler(
+      UPDATE_PROJECT + this.state.projectId,
+      ServiceHelper.createOptionsJson(JSON.stringify(body), "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("Project Closed.", {
+          type: "success",
+        });
+        this.getProjectDetail();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
 
   createOverview = () => {
     if (
@@ -511,28 +530,31 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" && (
-            <Button
-              className="ml-2 delete-project"
-              variant="dark"
-              onClick={() => confirmAlert({
-                title: "Warning!",
-                message: "Are you sure to delete the project?",
-                buttons: [
-                  {
-                    label: "Yes",
-                    onClick: () => this.deleteProject(),
-                  },
-                  {
-                    label: "No",
-                    onClick: () => null,
-                  },
-                ],
-              })}
-            >
-              <Badge variant="primary">x</Badge> Close Project
-            </Button>
-          )}
+          {this.state.userRole !== "Watcher" &&
+            this.state.project.status !== false && (
+              <Button
+                className="ml-2 delete-project"
+                variant="dark"
+                onClick={() =>
+                  confirmAlert({
+                    title: "Warning!",
+                    message: "Are you sure to delete the project?",
+                    buttons: [
+                      {
+                        label: "Yes",
+                        onClick: () => this.closeProject(),
+                      },
+                      {
+                        label: "No",
+                        onClick: () => null,
+                      },
+                    ],
+                  })
+                }
+              >
+                <Badge variant="primary">x</Badge> Close Project
+              </Button>
+            )}
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
@@ -644,9 +666,7 @@ export default class ProjectDetail extends Component {
                     <Col md={6}></Col>
                   </Row>
                 </Col>
-                <Col md={1}>
-                  {/*<Button className="rounded">Project Report</Button>*/}
-                </Col>
+                <Col md={1}></Col>
               </Row>
             </Card.Body>
           </Card>
@@ -655,14 +675,15 @@ export default class ProjectDetail extends Component {
           <Card className="project-detail-card">
             <Card.Header>
               Participants
-              {this.state.userRole === "ProjectManager" && (
-                <Button
-                  onClick={() => this.setState({ inviteParticipant: true })}
-                  className="pull-right"
-                >
-                  Invite Participant
-                </Button>
-              )}
+              {this.state.userRole === "ProjectManager" &&
+                this.state.project.status && (
+                  <Button
+                    onClick={() => this.setState({ inviteParticipant: true })}
+                    className="pull-right"
+                  >
+                    Invite Participant
+                  </Button>
+                )}
             </Card.Header>
             <Card.Body>
               {this.state.inviteParticipant &&
@@ -704,7 +725,7 @@ export default class ProjectDetail extends Component {
           <Card className="project-detail-card">
             <Card.Header style={{ width: "100%" }}>
               Files
-              {this.state.userRole !== "Watcher" && (
+              {this.state.userRole !== "Watcher" && this.state.project.status && (
                 <Button
                   className="pull-right"
                   onClick={() => this.setState({ fileUpload: true })}
@@ -765,7 +786,7 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" && (
+          {this.state.userRole !== "Watcher" && this.state.project.status && (
             <Button
               className="ml-2 new-task"
               variant="dark"
@@ -780,7 +801,9 @@ export default class ProjectDetail extends Component {
             boardData={this.state.boardData ? this.state.boardData : []}
             onCardDragEnd={this.onCardDragEnd}
             boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
-            disableCardDrag={this.state.userRole === "Watcher"}
+            disableCardDrag={
+              this.state.userRole === "Watcher" || !this.state.project.status
+            }
           />
         </Row>
       </Container>
@@ -791,15 +814,17 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" && (
-            <Button
-              className="ml-2 new-task"
-              variant="dark"
-              onClick={() => this.setState({ taskFormVisibility: true })}
-            >
-              <Badge variant="primary">+</Badge> New
-            </Button>
-          )}
+          {this.state.userRole !== "Watcher" &&
+            this.state.project &&
+            this.state.project.status && (
+              <Button
+                className="ml-2 new-task"
+                variant="dark"
+                onClick={() => this.setState({ taskFormVisibility: true })}
+              >
+                <Badge variant="primary">+</Badge> New
+              </Button>
+            )}
         </Row>
         <Row className="project-detail-row mx-auto">
           <TableView

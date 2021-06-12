@@ -25,6 +25,7 @@ namespace TaskyService.Models
         public DateTime DueDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? RootId { get; set; }
+        public bool ProjectStatus { get; set; }
         [NotMapped]
         public string StatusTitle { get; set; }
         [NotMapped]

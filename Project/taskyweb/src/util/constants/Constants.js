@@ -1,5 +1,6 @@
 import moment from "moment";
-import { Tag } from "antd";
+import { Tag, Space } from "antd";
+import { Button } from "react-bootstrap";
 export const activityTableColumns = (participants) => {
   if (participants) {
     participants.map((item, key) => {
@@ -134,3 +135,31 @@ export const taskTableColumns = (participants) => {
     },
   ];
 };
+
+export const invitationTableColumns = (accept, decline) => [
+  {
+    title: "Project Name",
+    dataIndex: "projectName",
+    key: "projectName",
+  },
+  {
+    title: "Action",
+    key: "action",
+    render: (text, record) => (
+      <Space size="middle">
+        <Button
+          onClick={() => accept(record.id)}
+          style={{ backgroundColor: "green" }}
+        >
+          Accept
+        </Button>
+        <Button
+          onClick={() => decline(record.id)}
+          style={{ backgroundColor: "red" }}
+        >
+          Decline
+        </Button>
+      </Space>
+    ),
+  },
+];
