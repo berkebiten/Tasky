@@ -29,7 +29,7 @@ import TaskItem from '../../components/items/TaskItem';
 import WorkLogItem from '../../components/items/WorkLogItem';
 import Profile from '../Profile';
 import NoContentView from '../../components/views/NoContentView';
-import {Button, Text} from 'native-base';
+import {Badge} from 'react-native-paper';
 
 export default class Main extends React.Component {
   constructor(props, context) {
@@ -373,7 +373,22 @@ export default class Main extends React.Component {
                 }),
               );
             }}
-            rightItem={<Ionicons name="notifications" size={28} color="#fff" />}
+            rightItem={
+              <View>
+                <Ionicons name="notifications" size={28} color="#fff" />
+                {this.state.userInfo && (
+                  <Badge
+                    style={{
+                      position: 'absolute',
+                      top: -5,
+                      right: -5,
+                      backgroundColor: '#0275d8',
+                    }}>
+                    {this.state.userInfo.notificationCount}
+                  </Badge>
+                )}
+              </View>
+            }
             rightItemOnPress={() => {
               NavigationHelper.navigate(SCREEN_ENUMS.NOTIFICATIONS);
             }}

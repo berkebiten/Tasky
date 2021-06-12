@@ -319,6 +319,7 @@ namespace TaskyService.Controllers
             var tasks = _taskContext.VW_Task.ToList().Where(item => item.AssigneeId == id);
             int closedTaskCount = tasks.Where(item => item.Status == 3).Count();
             int activeTaskCount = tasks.Where(item => item.Status == 1).Count();
+            int notificationCount = _notificationContext.Notification.ToList().Where(item => item.UserId == user.Id && item.IsRead == false).Count();
 
             return Ok(new
             {
@@ -328,6 +329,7 @@ namespace TaskyService.Controllers
                     ProjectCount = projectCount,
                     ClosedTaskCount = closedTaskCount,
                     ActiveTaskCount = activeTaskCount,
+                    NotificationCount = notificationCount,
                     User = user
                 }
             });
