@@ -879,12 +879,32 @@ p + p {
   overflow-x: hidden;
 }
 
-
-
 .notifications-container p {
   margin-top: 20px;
   margin-bottom: 20px !important;
   color: var(--main-bg-color);
   font-weight: bold;
   font-size: 16px;
+}
+
+.task-d-us{
+  margin-left:0px !important;
+  padding:0 !important;
+}
+
+.dd-wrapper{
+  width:25%;
+  height:100%;
+  background-color: var(--bs-dark);
+}
+
+.task-d-us .rs-btn{
+  padding:0 !important;
+}
+
+.dd-wrapper .rs-dropdown-menu{
+  padding:0!important;
+  border: 3px solid var(--bs-dark);
+  border-radius: 0 !important;
+
 }

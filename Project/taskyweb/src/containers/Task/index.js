@@ -18,6 +18,7 @@ import {
   INSERT_WORK_LOG_SERVICE,
   GET_TASK_TIMELINE,
   UPLOAD_TASK_FILE,
+  UPDATE_TASK_STATUS_SERVICE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import { toast } from "react-toastify";
@@ -29,6 +30,8 @@ import {
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import TaskForm from "../../components/forms/TaskForm";
 import { Loader, Timeline } from "rsuite";
+import { Dropdown } from "rsuite";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 const menuItems = [
   {
@@ -160,6 +163,40 @@ export default class Task extends Component {
     });
   };
 
+  updateTaskStatus = async (value) => {
+    if (this.state.task && this.state.projectId) {
+      let t = this.state.task;
+      let taskObject = {
+        id: t.id,
+        projectId: this.state.projectId,
+        title: t.title,
+        description: t.description,
+        assigneeId: t.assigneeId,
+        reporterId: t.reporterId,
+        priority: t.priority,
+        dueDate: t.dueDate,
+        createdDate: t.createdDate,
+        status: value,
+      };
+      await ServiceHelper.serviceHandler(
+        UPDATE_TASK_STATUS_SERVICE + "/" + t.id,
+        ServiceHelper.createOptionsJson(JSON.stringify(taskObject), "PUT")
+      ).then((response) => {
+        if (response && response.isSuccessful) {
+          toast("Task Updated.", {
+            type: "success",
+          });
+
+          this.getTaskDetail();
+        } else {
+          toast(response.message, {
+            type: "error",
+          });
+        }
+      });
+    }
+  };
+
   goBack = () => {
     this.props.history.push({
       pathname: "/project/" + this.state.projectId,
@@ -210,6 +247,45 @@ export default class Task extends Component {
             <Row className="mx-auto">
               <Col md={1} className={"state-bar-" + stateName}>
                 <p className="centered">{stateName.toUpperCase()}</p>
+              </Col>
+              <Col className="task-d-us" md={1}>
+                <div className="dd-wrapper">
+                  <Dropdown
+                    className="dark-dd"
+                    W
+                    noCaret
+                    icon={<ArrowForwardIosIcon></ArrowForwardIosIcon>}
+                  >
+                    <Dropdown.Item
+                      disabled={stateName.toUpperCase() === "TODO"}
+                      onSelect={() => this.updateTaskStatus(0)}
+                      className="state-bar-todo"
+                    >
+                      ToDo
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      disabled={stateName.toUpperCase() === "ACTIVE"}
+                      onSelect={() => this.updateTaskStatus(1)}
+                      className="state-bar-active"
+                    >
+                      Active
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      disabled={stateName.toUpperCase() === "RESOLVED"}
+                      onSelect={() => this.updateTaskStatus(2)}
+                      className="state-bar-resolved"
+                    >
+                      Resolved
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      disabled={stateName.toUpperCase() === "CLOSED"}
+                      onSelect={() => this.updateTaskStatus(3)}
+                      className="state-bar-closed"
+                    >
+                      Closed
+                    </Dropdown.Item>
+                  </Dropdown>
+                </div>
               </Col>
               <Col md={5} className="task-title">
                 <h2> {title} </h2>
