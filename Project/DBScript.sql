@@ -327,3 +327,5 @@ CREATE TABLE Notification(
     IsRead BIT NOT NULL,
     FOREIGN KEY (UserId) REFERENCES [dbo].[User](id)
 )
+
+ALTER TABLE Notification ADD RegDate datetime

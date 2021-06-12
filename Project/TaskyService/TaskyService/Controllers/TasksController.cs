@@ -199,10 +199,12 @@ namespace TaskyService.Controllers
             var user = _userContext.User.Find(TokenService.getUserId(token));
 
             var notification = NotificationService.TASK_UPDATE;
+            notification.Id = new Guid();
             notification.DataId = id;
             notification.Body = String.Format(notification.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status));
             notification.UserId = reporter.Id;
             notification.WebUrl = String.Format(notification.WebUrl, task.Id);
+            notification.RegDate = DateTime.Now;
             _notificationContext.Add(notification);
 
             TaskOperation operation = new TaskOperation();

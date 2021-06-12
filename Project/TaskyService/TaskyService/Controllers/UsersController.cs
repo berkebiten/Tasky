@@ -54,7 +54,7 @@ namespace TaskyService.Controllers
             if (user.ActivationStatus == false)
                 return NotFound(new { isSuccessful = false, message = "Please Verify Your Email" });
 
-            if(model.FcmToken != null)
+            if (model.FcmToken != null)
             {
                 user.FirebaseToken = model.FcmToken;
                 _context.User.Update(user);
@@ -163,7 +163,7 @@ namespace TaskyService.Controllers
                     throw;
                 }
             }
-           
+
 
 
 
@@ -307,7 +307,7 @@ namespace TaskyService.Controllers
         {
             Guid id = TokenService.getUserId(token);
             var user = _context.User.Find(id);
-            if(user == null)
+            if (user == null)
             {
                 return NoContent();
             }
@@ -352,7 +352,7 @@ namespace TaskyService.Controllers
                 throw;
             }
 
-            return Ok(new { isSuccessfull= true });
+            return Ok(new { isSuccessfull = true });
 
         }
 
@@ -385,7 +385,7 @@ namespace TaskyService.Controllers
         [Route("ChangePassword/{id}")]
         public async Task<IActionResult> ChangePassword(Guid id, ChangePwModel model)
         {
-            
+
             User oldUser = _context.User.Find(id);
 
             if (BC.Verify(model.oldPassword, oldUser.Password))
@@ -422,9 +422,39 @@ namespace TaskyService.Controllers
         public IActionResult GetNotifications([FromHeader(Name = "Authorization")] string token)
         {
             var userId = TokenService.getUserId(token);
-            var notifications = _notificationContext.Notification.ToList().Where(item => item.UserId == userId).ToList();
+            var notifications = _notificationContext.Notification.ToList().Where(item => item.UserId == userId).OrderBy(item => item.IsRead).ToList();
 
             return Ok(new { data = notifications });
+        }
+
+        [HttpGet]
+        [Route("GetNewNotifications")]
+        public IActionResult GetNewNotifications([FromHeader(Name = "Authorization")] string token)
+        {
+            var userId = TokenService.getUserId(token);
+            var notifications = _notificationContext.Notification.ToList().Where(item => item.UserId == userId && item.IsRead == false).OrderByDescending(item => item.RegDate).ToList();
+
+            return Ok(new { data = notifications });
+        }
+
+        [HttpPut]
+        [Route("SetReadNotification/{id}")]
+        public async Task<IActionResult> SetReadNotification(Guid id)
+        {
+            Notification oldNotification = _notificationContext.Notification.Find(id);
+
+            oldNotification.IsRead = true;
+            _notificationContext.Entry(oldNotification).State = EntityState.Modified;
+
+            try
+            {
+                await _notificationContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(new { isSuccessful = true, message = "Updated." });
 
         }
 

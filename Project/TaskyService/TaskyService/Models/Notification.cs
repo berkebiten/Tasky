@@ -14,5 +14,6 @@ namespace TaskyService.Models
         public string WebUrl { get; set; }
         public string MobileScreen { get; set; }
         public bool IsRead { get; set; }
+        public DateTime RegDate { get; set; }
     }
 }
