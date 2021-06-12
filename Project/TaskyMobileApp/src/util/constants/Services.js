@@ -15,3 +15,6 @@ export const GET_PROJECT_DETAIL = "/Projects/GetById/";
 export const GET_TASK_DETAIL = "/Tasks/GetById/";
 export const EDIT_PROFILE = "/Users/Update/"
 export const UPDATE_TASK_STATUS = '/Tasks/UpdateTaskStatus/'
+export const GET_NOTIFICATIONS = "/Users/GetNotifications/";
+export const GET_NEW_NOTIFICATIONS = "/Users/GetNewNotifications/";
+export const SET_READ_NOTIFICATION = "/Users/SetReadNotification/";

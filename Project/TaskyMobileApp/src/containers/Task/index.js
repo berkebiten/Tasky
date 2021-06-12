@@ -127,7 +127,6 @@ export default class Task extends Component {
       createdDate: task.createdDate,
       status: status,
     };
-    console.warn(body);
     const responseData = await ServiceHelper.serviceHandler(
       UPDATE_TASK_STATUS + this.state.task.id,
       ServiceHelper.createOptionsJson(JSON.stringify(body), 'PUT'),

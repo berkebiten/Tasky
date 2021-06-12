@@ -1,20 +1,10 @@
+import moment from 'moment';
+import {Right} from 'native-base';
 import React, {Component} from 'react';
 import {Text, Image, StyleSheet, View, TouchableOpacity} from 'react-native';
-import { Colors, Fonts, Metrics} from '../../res/styles';
+import {Colors, Fonts, Metrics} from '../../res/styles';
 import images from '../../res/styles/images';
 
-const profileImageTwo =
-  'https://media-exp1.licdn.com/dms/image/C4E03AQHEEtmS2CQOzg/profile-displayphoto-shrink_200_200/0/1535834186551?e=1626912000&v=beta&t=SlCE8S_OxdcTxr-0T0947Pb6QRL8l6UzBicVwciO-No';
-
-const item = {
-  id: 1,
-  name: 'Bilal Dursun',
-  postImage: '',
-  profileImage: {uri: profileImageTwo},
-  time: 'dsa',
-  description:
-    'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-};
 export default class NotificationItem extends Component {
   constructor(props) {
     super(props);
@@ -24,11 +14,25 @@ export default class NotificationItem extends Component {
     return (
       <View style={styles.rowHeaderView}>
         <Image style={styles.profileImg} source={images.notification} />
-        <View
-          style={{
-            ...styles.rowDescriptionView,
-          }}>
-          <Text style={styles.rowDescTxt}>{item.description}</Text>
+        <View>
+          <View style={styles.ratingDateView}>
+            <View style={styles.ratingStar}>
+              <Text style={styles.user}>
+                {this.props.item.title}
+              </Text>
+            </View>
+            <Right>
+              <Text style={styles.rowDateTxt}>
+                {moment(this.props.item.regDate).format('DD/MM/YYYY')}
+              </Text>
+            </Right>
+          </View>
+          <View
+            style={{
+              ...styles.rowDescriptionView,
+            }}>
+            <Text style={styles.rowDescTxt}>{this.props.item.body}</Text>
+          </View>
         </View>
       </View>
     );
@@ -36,7 +40,7 @@ export default class NotificationItem extends Component {
 
   getContainerStyle = () => {
     let containerStyle = styles.rowBg;
-    if (this.props.item === 'x') {
+    if (this.props.item && !this.props.item.isRead) {
       containerStyle = {...containerStyle, ...styles.shadow};
     }
     return containerStyle;
@@ -44,7 +48,9 @@ export default class NotificationItem extends Component {
 
   createContent = () => {
     return (
-      <TouchableOpacity style={this.getContainerStyle()}>
+      <TouchableOpacity
+        style={this.getContainerStyle()}
+        onPress={() => this.props.onPress()}>
         {this.createHeader()}
       </TouchableOpacity>
     );
@@ -53,7 +59,9 @@ export default class NotificationItem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.props.item === 'x' && <View style={styles.line} />}
+        {this.props.item && !this.props.item.isRead && (
+          <View style={styles.line} />
+        )}
         {this.createContent()}
       </View>
     );
@@ -123,5 +131,32 @@ const styles = StyleSheet.create({
     color: '#6f6f6f',
     fontSize: Fonts.moderateScale(15),
     textAlign: 'left',
+  },
+
+  ratingDateView: {
+    flexDirection: 'row',
+    marginRight: Metrics.WIDTH * 0.045,
+    justifyContent: 'flex-start',
+    width: Metrics.WIDTH * 0.665,
+  },
+
+  ratingStar: {
+    alignItems: 'center',
+    marginLeft: Metrics.WIDTH * 0.02,
+  },
+
+  user: {
+    fontSize: Fonts.moderateScale(15),
+    fontFamily: Fonts.type.sfuiDisplayRegular,
+    color: Colors.darktext,
+    fontWeight: 'bold',
+    width: Metrics.WIDTH * 0.45,
+    marginTop: 5
+  },
+
+  rowDateTxt: {
+    color: '#adadad',
+    fontSize: Fonts.moderateScale(13.5),
+    fontFamily: Fonts.type.sfuiDisplayRegular,
   },
 });
