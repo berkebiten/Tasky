@@ -28,6 +28,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-minimal-pie-chart": "^8.2.0",
+    "react-notification-center": "^1.2.2",
     "react-pro-sidebar": "^0.6.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",

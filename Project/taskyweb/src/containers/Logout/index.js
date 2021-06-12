@@ -13,7 +13,7 @@ export default class Logout extends Component {
 
   logout = () => {
     SessionHelper.removeUser();
-    props.history.push("/sign-in");
+    this.props.history.push("/sign-in");
   };
 
   render() {

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Avatar, Dropdown } from "rsuite";
 import { withRouter } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FiSettings, FiUser, FiLogOut, FiSliders } from "react-icons/fi";
@@ -10,10 +11,10 @@ import {
   Button,
   InputGroup,
 } from "react-bootstrap";
-import { Avatar, Dropdown } from "rsuite";
 import logo from "../res/images/tasky-logo-1920.png";
 import { SessionHelper } from "../util/helpers";
 import { useRadioGroup } from "@material-ui/core";
+import NotificationCenter from "../components/material-components/NotificationCenter"
 
 class NavbarLogged extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class NavbarLogged extends Component {
             </InputGroup.Append>
           </InputGroup>
         </Form>
+        <NotificationCenter/>
         <Dropdown
           placement="bottomEnd"
           className="mr-sm-2 "
