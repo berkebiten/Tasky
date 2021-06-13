@@ -23,6 +23,7 @@ export const UPLOAD_PROJECT_FILE = "/Projects/UploadFile/";
 export const UPLOAD_TASK_FILE = "/Tasks/UploadFile/";
 export const INVITE_PARTICIPANT = "/Projects/InviteParticipant/";
 export const REMOVE_PARTICIPANT = "/Projects/RemoveParticipant/";
+export const LEAVE_PROJECT = "/Projects/LeaveProject/";
 export const GET_MY_TASKS = "/Tasks/GetMyTasks";
 export const GET_ACTIVITY_STREAM = "/WorkLogs/GetActivityStream";
 export const VERIFY_EMAIL = "/Users/VerifyEmail/";

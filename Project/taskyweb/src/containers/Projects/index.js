@@ -20,6 +20,7 @@ import {
   RootViewHelper,
   ServiceHelper,
   SessionHelper,
+  TextHelper,
 } from "../../util/helpers";
 import { Helmet } from "react-helmet";
 import {
@@ -184,13 +185,13 @@ export default class Projects extends Component {
                   className="project-card mb-2 clickable"
                 >
                   <Card.Body>
-                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Title>{TextHelper.getSmallText(item.name,15)}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                       {item.projectManagerFirstName +
                         " " +
                         item.projectManagerLastName}
                     </Card.Subtitle>
-                    <Card.Text>{item.description}</Card.Text>
+                    <Card.Text>{TextHelper.getSmallText(item.description,50)}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
