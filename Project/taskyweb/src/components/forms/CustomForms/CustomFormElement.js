@@ -54,11 +54,12 @@ export default class CustomFormElement extends Component {
 
   createCheckBox = (element, values) => {
     return (
-      <Form.Group className="pf">
-        <FormCheck.Label>{element.label}</FormCheck.Label>
+      <>
+      <Form.Group>
         <Form.Check
           type="checkbox"
           name={element.control.name}
+          label = {element.label}
           checked={
             values && values[element.control.name]
               ? values[element.control.name]
@@ -67,6 +68,7 @@ export default class CustomFormElement extends Component {
           onChange={this.props.handleChange}
         />
       </Form.Group>
+      </>
     );
   };
 

@@ -448,7 +448,7 @@ html,
 }
 
 .ant-table-tbody :nth-child(even) {
-  background-color: var(--main-light-blue);
+  background-color: #ebedf0;
 }
 
 .ant-table-tbody :nth-child(odd) {

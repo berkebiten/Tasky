@@ -5,17 +5,17 @@ import { CustomForm } from "./CustomForms/CustomForm";
 function PreferencesForm(props) {
   const formElements = [
     {
-      label: "Allow Notifications",
+      label: "Notifications",
       control: { type: "checkbox", name: "allowNotification" },
     },
     {
-      label: "Allow Emails",
+      label: "Emails",
       control: { type: "checkbox", name: "allowEmail" },
     },
   ];
 
   return (
-    <div>
+    <div className="justify-content-center">
       <CustomForm
         className="pf"
         formElements={formElements}
