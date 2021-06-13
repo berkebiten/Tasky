@@ -175,7 +175,7 @@ namespace TaskyService.Controllers
                     Hashtable ht = new Hashtable();
                     ht.Add("[FIRSTNAME]", "");
                     ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
-                    ht.Add("[LINK]", directory + "sign-up/");
+                    ht.Add("[LINK]", directory + "sign-up/" + project.Id);
                     string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
                     #endregion
 
@@ -250,7 +250,7 @@ namespace TaskyService.Controllers
                     Hashtable ht = new Hashtable();
                     ht.Add("[FIRSTNAME]", "");
                     ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
-                    ht.Add("[LINK]", directory + "sign-up/");
+                    ht.Add("[LINK]", directory + "sign-up/"+id);
                     string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
                     #endregion
 
