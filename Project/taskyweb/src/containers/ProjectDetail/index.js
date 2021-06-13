@@ -4,6 +4,7 @@ import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
 import ReportView from "../../components/views/ReportView";
+import { MdRemoveCircle } from "react-icons/md";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {
   Card,
@@ -29,6 +30,7 @@ import {
   UPDATE_PROJECT,
   UPDATE_TASK_STATUS_SERVICE,
   UPLOAD_PROJECT_FILE,
+  REMOVE_PARTICIPANT,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -469,6 +471,24 @@ export default class ProjectDetail extends Component {
     });
   };
 
+  removeParticipant = async (item) => {
+    await ServiceHelper.serviceHandler(
+      REMOVE_PARTICIPANT + item.id,
+      ServiceHelper.createOptionsJson(null, "DELETE")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast(response.message, {
+          type: "success",
+        });
+        window.location.reload();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
   createOverview = () => {
     if (
       !this.state.projectParticipants ||
@@ -691,24 +711,51 @@ export default class ProjectDetail extends Component {
               {overview_participants.map((item, key) => {
                 var roleName =
                   this.getParticipantRoleName(item).toString() + "";
+                let visibleClass =
+                  roleName !== "owner" &&
+                  this.state.project.projectManagerId === this.state.user.id
+                    ? "visible"
+                    : "invisible";
                 return (
                   <div className="project-participant-card ml-3">
-                    <OverlayTrigger
-                      key={item.id}
-                      placement={"top-start"}
-                      overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
-                    >
-                      <Image
-                        className={
-                          "project-participant-image " + roleName + "-border"
-                        }
-                        src={
-                          item.profileImage
-                            ? item.profileImage
-                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                        }
-                      />
-                    </OverlayTrigger>
+                    <div className="participant-orient">
+                      <OverlayTrigger
+                        key={item.id}
+                        placement={"top-start"}
+                        overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
+                      >
+                        <Image
+                          className={
+                            "project-participant-image " + roleName + "-border"
+                          }
+                          src={
+                            item.profileImage
+                              ? item.profileImage
+                              : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                          }
+                        />
+                      </OverlayTrigger>
+
+                      <Button
+                        className={"remove-p " + visibleClass}
+                        onClick={() => confirmAlert({
+                          title: "Warning!",
+                          message: "Are you sure you want to remove "+ item.fullName +" from project?",
+                          buttons: [
+                            {
+                              label: "Yes",
+                              onClick: () => this.removeParticipant(item),
+                            },
+                            {
+                              label: "No",
+                              onClick: () => null,
+                            },
+                          ],
+                        })}
+                      >
+                        <MdRemoveCircle />
+                      </Button>
+                    </div>
                     <div className="project-participant-name text-center">
                       {item.firstName}
                     </div>
