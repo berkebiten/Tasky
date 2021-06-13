@@ -774,6 +774,31 @@ p + p {
   color: white;
 }
 
+.remove-p {
+  position: absolute;
+  top: -4;
+  right: 0;
+  padding:0!important;
+  background:none !important;
+  border:none !important;
+  border-radius:100% !important;
+  color:var(--toast-error) !important;
+}
+
+
+.remove-p:hover {
+  background:none;
+  border:none;
+  color:var(--toast-error)
+}
+
+.participant-orient {
+  width:60px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
 .not-container {
   min-width: 300px;
   max-height: 500px;
@@ -887,24 +912,50 @@ p + p {
   font-size: 16px;
 }
 
-.task-d-us{
-  margin-left:0px !important;
-  padding:0 !important;
+.task-d-us {
+  margin-left: 0px !important;
+  padding: 0 !important;
 }
 
-.dd-wrapper{
-  width:25%;
-  height:100%;
+.dd-wrapper {
+  width: 25%;
+  height: 100%;
   background-color: var(--bs-dark);
 }
 
-.task-d-us .rs-btn{
-  padding:0 !important;
+.task-d-us .rs-btn {
+  padding: 0 !important;
 }
 
-.dd-wrapper .rs-dropdown-menu{
-  padding:0!important;
+.dd-wrapper .rs-dropdown-menu {
+  padding: 0 !important;
   border: 3px solid var(--bs-dark);
   border-radius: 0 !important;
+}
 
+.react-confirm-alert{
+  background-color:var(--bs-dark);
+  border:3px solid var(--main-md-blue);
+
+}
+.react-confirm-alert-body{
+  background-color:var(--bs-dark) !important;
+  color:var(--bs-light) !important;
+}
+.react-confirm-alert-body h1{
+  color:var(--toast-error) !important;
+}
+
+.react-confirm-alert-button-group button:first-child{
+  background-color:var(--toast-success) !important;
+  color:var(--bs-dark) !important;
+  font-weight:bold;
+}
+.react-confirm-alert-button-group button:last-child{
+  background-color:var(--toast-error) !important;
+  color:var(--bs-dark) !important;
+  font-weight:bold;
+}
+.react-confirm-alert-overlay{
+  background-color:rgba(87, 96, 114, 0.9) !important;
 }
