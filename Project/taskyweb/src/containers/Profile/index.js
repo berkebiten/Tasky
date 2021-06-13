@@ -269,7 +269,7 @@ export default class Profile extends Component {
             text="light"
             style={{ width: "25%" }}
           >
-            <div className="centered-image">
+            <div className="centered-image ">
               <Card.Img
                 className="tasky-profile-image"
                 variant="top"
