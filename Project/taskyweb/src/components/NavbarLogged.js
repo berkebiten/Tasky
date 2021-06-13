@@ -46,20 +46,6 @@ class NavbarLogged extends Component {
             Activity Stream
           </Nav.Link>
         </Nav>
-        <Form inline>
-          <InputGroup className="mr-sm-5">
-            <FormControl
-              className="input-search-tasky"
-              type="text"
-              placeholder="Search"
-            />
-            <InputGroup.Append>
-              <Button variant="dark" className="border-b">
-                <BsSearch />
-              </Button>
-            </InputGroup.Append>
-          </InputGroup>
-        </Form>
         <NotificationCenter/>
         <Dropdown
           placement="bottomEnd"
