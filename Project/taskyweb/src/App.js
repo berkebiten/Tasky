@@ -64,7 +64,7 @@ function App(props) {
           <Route exact path="/" component={SignIn} />
           <Route path="/Projects" component={Projects} />
           <Route path="/sign-in" component={SignIn} />
-          <Route path="/sign-up" component={SignUp} />
+          <Route path="/sign-up/:projectId?" render={(props) => <SignUp {...props} />}  />
           <Route path="/project/:id" render={(props) => <ProjectDetail {...props} />} />
           <Route path="/task/:id" render={(props) => <Task {...props} />} />
           <Route path="/profile/:id" render={(props) => <Profile {...props} />} />

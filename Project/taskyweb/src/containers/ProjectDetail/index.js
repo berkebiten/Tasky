@@ -550,7 +550,7 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" &&
+          {this.state.userRole === "ProjectManager" &&
             this.state.project.status !== false && (
               <Button
                 className="ml-2 delete-project"

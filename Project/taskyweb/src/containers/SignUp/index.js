@@ -17,6 +17,15 @@ import { Helmet } from "react-helmet";
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      projectId:
+        props.match && props.match.params && props.match.params.projectId
+          ? props.match.params.projectId.slice(
+              props.match.params.projectId.indexOf("=") + 1,
+              props.match.params.projectId.length
+            )
+          : null,
+    };
     let a = SessionHelper.checkIsSessionLive();
     if (a) {
       props.history.push("/projects");
@@ -28,6 +37,7 @@ export default class SignUp extends Component {
       lastname: data.lastname,
       email: data.email,
       password: data.password,
+      projectId: this.state.projectId ? this.state.projectId : null,
     };
     await ServiceHelper.serviceHandler(
       REGISTER_SERVICE,

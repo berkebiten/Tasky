@@ -157,6 +157,7 @@ namespace TaskyService.Controllers
             _context.Add(project);
             manager.ProjectId = project.Id;
             manager.Role = 1;
+            manager.Status = true;
             _participantContext.Add(manager);
             var userList = _userContext.User.ToList();
 
@@ -167,8 +168,17 @@ namespace TaskyService.Controllers
                 participant.ProjectId = project.Id;
                 participant.Status = false;
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault();
+                var managerUser = _userContext.User.Find(manager.UserId);
                 if(participantId == null)
                 {
+                    #region send activation email
+                    Hashtable ht = new Hashtable();
+                    ht.Add("[FIRSTNAME]", "");
+                    ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
+                    ht.Add("[LINK]", directory + "sign-up/");
+                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
+                    #endregion
+
                     var invitation = new ProjectInvitation();
                     invitation.Email = participantObj.email;
                     invitation.Role = participantObj.role;
@@ -182,6 +192,13 @@ namespace TaskyService.Controllers
 
                 if (!ParticipantExists(participantId.Id, project.Id))
                 {
+                    #region send activation email
+                    Hashtable ht = new Hashtable();
+                    ht.Add("[FIRSTNAME]", participantId.FirstName + " " + participantId.LastName);
+                    ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
+                    ht.Add("[LINK]", directory + "profile/" + participant.UserId);
+                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
+                    #endregion
                     _participantContext.Add(participant);
                 }
             }
@@ -216,7 +233,7 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("InviteParticipant/{id}")]
-        public async Task<IActionResult> InviteParticipant(Guid id, List<Participant> participants)
+        public async Task<IActionResult> InviteParticipant(Guid id, List<Participant> participants, [FromHeader(Name = "Authorization")] String token)
         {
             var userList = _userContext.User.ToList();
             var project = _context.VW_Project.ToList().Where(item => item.Id == id).FirstOrDefault();
@@ -225,9 +242,18 @@ namespace TaskyService.Controllers
                 var participant = new ProjectParticipant();
                 participant.ProjectId = id;
                 participant.Status = false;
+                var managerUser = _userContext.User.Find(TokenService.getUserId(token));
                 var participantId = userList.Where(item => item.Email == participantObj.email).FirstOrDefault();
                 if (participantId == null)
                 {
+                    #region send activation email
+                    Hashtable ht = new Hashtable();
+                    ht.Add("[FIRSTNAME]", "");
+                    ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
+                    ht.Add("[LINK]", directory + "sign-up/");
+                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
+                    #endregion
+
                     var invitation = new ProjectInvitation();
                     invitation.Email = participantObj.email;
                     invitation.Role = participantObj.role;
@@ -250,6 +276,13 @@ namespace TaskyService.Controllers
                         RegDate = DateTime.Now,
 
                     };
+                    #region send activation email
+                    Hashtable ht = new Hashtable();
+                    ht.Add("[FIRSTNAME]", participantId.FirstName + " " + participantId.LastName);
+                    ht.Add("[PROJECTMANAGER]", managerUser.FirstName + " " + managerUser.LastName);
+                    ht.Add("[LINK]", directory + "profile/" + participant.UserId);
+                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("invite_to_project", participantObj.email, "", ht);
+                    #endregion
                     _notificationContext.Add(notification);
                     _participantContext.Add(participant);
                 }

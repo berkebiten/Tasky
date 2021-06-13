@@ -25,12 +25,13 @@ namespace TaskyService.Controllers
         private readonly WorkLogContext _workLogContext;
         private readonly ProjectContext _projectOnlyContext;
         private readonly NotificationContext _notificationContext;
+        private readonly ProjectInvitationContext _invitationContext;
 
         private readonly string directory = Settings.WebDirectory;
 
         public UsersController(UserContext context, MailTemplateContext mailTemplateContext, ProjectParticipantContext projectContext,
                                 TaskContext taskContext, WorkLogContext workLogContext, ProjectContext projectOnlyContext,
-                                NotificationContext notificationContext)
+                                NotificationContext notificationContext, ProjectInvitationContext invitationContext)
         {
             _context = context;
             _mailTemplateContext = mailTemplateContext;
@@ -39,6 +40,7 @@ namespace TaskyService.Controllers
             _workLogContext = workLogContext;
             _projectOnlyContext = projectOnlyContext;
             _notificationContext = notificationContext;
+            _invitationContext = invitationContext;
         }
 
         [HttpPost]
@@ -134,7 +136,7 @@ namespace TaskyService.Controllers
         [HttpPost]
         [Route("Register")]
         [AllowAnonymous]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public ActionResult<User> PostUser(User user)
 
         {
             user.ActivationStatus = false;
@@ -142,9 +144,30 @@ namespace TaskyService.Controllers
             user.RegistrationDate = DateTime.Now.Date;
             user.Password = BC.HashPassword(user.Password);
             _context.User.Add(user);
+            if(user.ProjectId != null)
+            {
+                var invitation = _invitationContext.ProjectInvitation.ToList().Where(item =>
+                                 item.Email == user.Email && item.ProjectId == user.ProjectId).FirstOrDefault();
+
+                if (invitation != null)
+                {
+                    var participant = new ProjectParticipant
+                    {
+                        ProjectId = invitation.ProjectId,
+                        Role = invitation.Role,
+                        UserId = user.Id,
+                        Status = true
+                    };
+                    _projectContext.Add(participant);
+                    _invitationContext.Remove(invitation);
+                }
+            }
+            
             try
             {
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
+                 _projectContext.SaveChanges();
+                 _invitationContext.SaveChanges();
 
                 #region send activation email
                 Hashtable ht = new Hashtable();
