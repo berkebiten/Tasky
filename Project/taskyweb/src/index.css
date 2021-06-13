@@ -312,7 +312,8 @@ html,
 }
 
 .tasky-profile-image {
-  width: 75% !important;
+  width: 200px !important;
+  height: 200px !important;
   border: 5px solid var(--main-blue);
   border-radius: 100% 100% 100% 100% !important;
   padding: 5px;
@@ -712,6 +713,9 @@ p + p {
   margin-top: 10px;
   width: 100%;
   text-align: center;
+}
+.pp{
+  height:268px;
 }
 
 .cp {
