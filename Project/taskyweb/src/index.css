@@ -324,7 +324,7 @@ html,
   height: 100%;
   padding: 0 !important;
   margin: 0 !important;
-  max-width: 50%;
+  max-width: 100% !important;
 }
 .project-detail-left {
   padding: 0 !important;
@@ -775,14 +775,18 @@ p + p {
 }
 
 .remove-p {
-  position: absolute;
-  top: -4;
-  right: 0;
+  position:absolute;
+  top:0;
+  left:0;
   padding:0!important;
   background:none !important;
   border:none !important;
   border-radius:100% !important;
   color:var(--toast-error) !important;
+}
+
+.re-icon{
+  font-size:20px;
 }
 
 

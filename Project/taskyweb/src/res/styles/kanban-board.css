@@ -33,10 +33,9 @@
 .react-kanban-column {
   padding: 7px;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  border-bottom:none;
   margin: 5px;
-  min-height:540px !important;
-  max-height:600px !important;
+  min-height:75vh !important;
+  max-height:85vh !important;
   overflow-y: scroll;
 }
 

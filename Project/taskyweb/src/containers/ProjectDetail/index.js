@@ -804,54 +804,64 @@ export default class ProjectDetail extends Component {
                     : "invisible";
                 return (
                   <div className="project-participant-card ml-3">
-                    <div className="participant-orient">
-                      <OverlayTrigger
-                        key={item.id}
-                        placement={"top-start"}
-                        overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
-                      >
-                        <Image
-                          className={
-                            "project-participant-image " + roleName + "-border"
-                          }
-                          src={
-                            item.profileImage
-                              ? item.profileImage
-                              : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                          }
-                        />
-                      </OverlayTrigger>
-
-                      <Button
-                        className={"remove-p " + visibleClass}
-                        onClick={() =>
-                          confirmAlert({
-                            title: "Warning!",
-                            message:
-                              "Are you sure you want to remove " +
-                              item.fullName +
-                              " from project?",
-                            buttons: [
-                              {
-                                label: "Yes",
-                                onClick: () => this.removeParticipant(item),
-                              },
-                              {
-                                label: "No",
-                                onClick: () => null,
-                              },
-                            ],
-                          })
-                        }
-                      >
-                        <MdRemoveCircle />
-                      </Button>
-                    </div>
-                    <div className="project-participant-name text-center">
-                      {item.firstName}
-                    </div>
-                    <div className="project-participant-name text-center">
-                      {item.lastName}
+                    <div
+                      className="participant-orient"
+                      style={{ display: "flex" }}
+                    >
+                      <Row>
+                        <Col style={{ padding: 0 }}>
+                          <OverlayTrigger
+                            key={item.id}
+                            placement={"top-start"}
+                            overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
+                          >
+                            <Image
+                              className={
+                                "project-participant-image " +
+                                roleName +
+                                "-border"
+                              }
+                              src={
+                                item.profileImage
+                                  ? item.profileImage
+                                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                              }
+                            />
+                          </OverlayTrigger>
+                          <div className="project-participant-name text-center">
+                            {item.firstName}
+                          </div>
+                          <div className="project-participant-name text-center">
+                            {item.lastName}
+                          </div>
+                        </Col>
+                        <Col style={{ padding: 0 }}>
+                          <Button
+                            className={"remove-p " + visibleClass}
+                            onClick={() =>
+                              confirmAlert({
+                                title: "Warning!",
+                                message:
+                                  "Are you sure you want to remove " +
+                                  item.fullName +
+                                  " from project?",
+                                buttons: [
+                                  {
+                                    label: "Yes",
+                                    onClick: () => this.removeParticipant(item),
+                                  },
+                                  {
+                                    label: "No",
+                                    onClick: () => null,
+                                  },
+                                ],
+                              })
+                            }
+                          >
+                            <MdRemoveCircle className="re-icon"/>
+                          </Button>
+                        </Col>
+                      </Row>
                     </div>
                   </div>
                 );
