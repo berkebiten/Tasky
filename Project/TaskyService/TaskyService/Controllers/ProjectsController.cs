@@ -55,17 +55,11 @@ namespace TaskyService.Controllers
         }
 
         [HttpPost]
-        [Route("GetMyProjects")]
-        public async Task<ActionResult<dynamic>> GetMyProjects([FromHeader(Name = "Authorization")] string token, [FromBody] Filter requestBody = null)
+        [Route("GetMyProjects/{showClosed}")]
+        public async Task<ActionResult<dynamic>> GetMyProjects(bool showClosed, [FromHeader(Name = "Authorization")] string token, [FromBody] Filter requestBody = null)
         {
-            int startIndex = -1;
-            int count = -1;
-            if (requestBody != null)
-            {
-                startIndex = requestBody.startIndex;
-                count = requestBody.count;
-            }
-            Guid id = TokenService.getUserId(token);
+
+             Guid id = TokenService.getUserId(token);
             var myProjects = _participantContext.ProjectParticipant.ToList().Where(item => item.UserId == id && item.Status == true).ToList();
             var myProjectIds = new ArrayList();
             foreach (ProjectParticipant projectParticipant in myProjects)
@@ -75,12 +69,10 @@ namespace TaskyService.Controllers
 
             var data = _context.VW_Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
             var dataSize = data.Count();
-
-            if (startIndex != -1 && count != -1)
+            data = _context.VW_Project.ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
+            if(showClosed == false)
             {
-                data = _context.VW_Project.Skip(startIndex)
-               .Take(count).ToList().Where(item => myProjectIds.Contains(item.Id)).ToList();
-
+                data = data.Where(item => item.Status == true).ToList();
             }
 
             return Ok(new { isSuccessful = true, data = new { projects = data, projectCount = dataSize } });

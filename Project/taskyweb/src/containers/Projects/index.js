@@ -29,10 +29,7 @@ import {
 } from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
-import { keys } from "@material-ui/core/styles/createBreakpoints";
-
-const startIndex = 0;
-const count = 9;
+import FormCheck from "react-bootstrap/FormCheck";
 
 export default class Projects extends Component {
   constructor(props) {
@@ -41,6 +38,7 @@ export default class Projects extends Component {
       projectFormVisibility: false,
       base64: "x",
       activePage: 1,
+      showClosedProjects: true,
     };
     if (!SessionHelper.checkIsSessionLive()) {
       props.history.push("/logout");
@@ -52,24 +50,45 @@ export default class Projects extends Component {
   };
 
   initialize = () => {
-    this.getProjects(1);
+    this.getProjects();
   };
 
   componentDidUpdate = () => {
     if (!this.state.projects) {
-      this.getProjects(1);
+      this.getProjects();
     }
   };
 
-  getProjects = async (page) => {
+  searchProjects = (event) => {
+    let keyword = event.target.value;
+    let projectList;
+    if (keyword) {
+      keyword = keyword.toLowerCase()
+      projectList = this.state.projects.filter(
+        (item) =>
+          item.name.toLowerCase().includes(keyword) ||
+          item.description.toLowerCase().includes(keyword)
+      );
+    } else {
+      projectList = this.state.projects;
+    }
+    this.setState({ filteredProjects: projectList });
+  };
+
+  getProjects = async () => {
+    let bool = "false";
+    if (this.state.showClosedProjects) {
+      bool = "true";
+    }
     let reqBody = { startIndex: 0, count: 1000 };
     await ServiceHelper.serviceHandler(
-      GET_PROJECTS_SERVICE,
+      GET_PROJECTS_SERVICE + bool,
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
     ).then((response) => {
       let update = {};
       if (response && response.data && response.isSuccessful) {
         update.projects = response.data.projects;
+        update.filteredProjects = response.data.projects;
         if (!this.state.projectCount) {
           update.projectCount = response.data.projectCount;
         }
@@ -171,7 +190,7 @@ export default class Projects extends Component {
   renderProjectCards = () => {
     return (
       <Row className="mt-5 projects-row justify-content-center">
-        {this.state.projects.map((item, key) => {
+        {this.state.filteredProjects.map((item, key) => {
           if (
             key >= (this.state.activePage - 1) * 8 &&
             key < this.state.activePage * 8
@@ -185,13 +204,17 @@ export default class Projects extends Component {
                   className="project-card mb-2 clickable"
                 >
                   <Card.Body>
-                    <Card.Title>{TextHelper.getSmallText(item.name,15)}</Card.Title>
+                    <Card.Title>
+                      {TextHelper.getSmallText(item.name, 15)}
+                    </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                       {item.projectManagerFirstName +
                         " " +
                         item.projectManagerLastName}
                     </Card.Subtitle>
-                    <Card.Text>{TextHelper.getSmallText(item.description,50)}</Card.Text>
+                    <Card.Text>
+                      {TextHelper.getSmallText(item.description, 50)}
+                    </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -221,6 +244,7 @@ export default class Projects extends Component {
                     type="text"
                     className="input-search-tasky-dark"
                     placeholder="Search Project"
+                    onChange={(keyword) => this.searchProjects(keyword)}
                   />
                   <InputGroup.Append>
                     <Button variant="" className="search-btn-bb-dark">
@@ -237,24 +261,43 @@ export default class Projects extends Component {
                 </Button>
               </Form>
             </Row>
-            {this.state.projects &&
-              this.state.projects.length > 0 &&
+            <Row className="justify-content-center">
+              <FormCheck.Label className="mt-4">
+                Show Closed Projects
+              </FormCheck.Label>
+              <Form.Check
+                className="ml-2 mt-4"
+                type="checkbox"
+                checked={this.state.showClosedProjects}
+                onChange={() =>
+                  this.setState(
+                    {
+                      showClosedProjects: !this.state.showClosedProjects,
+                    },
+                    () => this.getProjects()
+                  )
+                }
+              />
+            </Row>
+            {this.state.filteredProjects &&
+              this.state.filteredProjects.length > 0 &&
               this.renderProjectCards()}
-            {this.state.projects && this.state.projects.length > 0 && (
-              <Row className="mt-5">
-                <div class="mx-auto">
-                  <Pagination
-                    defaultActivePage={1}
-                    firstItem={null}
-                    lastItem={null}
-                    pointing
-                    secondary
-                    totalPages={this.state.projects.length / 8}
-                    onPageChange={this.handlePaginationChange}
-                  />
-                </div>
-              </Row>
-            )}
+            {this.state.filteredProjects &&
+              this.state.filteredProjects.length > 0 && (
+                <Row className="mt-5">
+                  <div class="mx-auto">
+                    <Pagination
+                      defaultActivePage={1}
+                      firstItem={null}
+                      lastItem={null}
+                      pointing
+                      secondary
+                      totalPages={this.state.filteredProjects.length / 8}
+                      onPageChange={this.handlePaginationChange}
+                    />
+                  </div>
+                </Row>
+              )}
             {this.state.projectFormVisibility && this.createProjectForm()}
           </Container>
         </div>
