@@ -155,6 +155,9 @@ export default class Profile extends Component {
         this.setState({ editProfileFormVisibility: false }, () =>
           this.getProfile()
         );
+        setTimeout(function() {
+          window.location.reload();
+        }, 100);
       } else {
         toast(response.message, {
           type: "error",
@@ -414,7 +417,7 @@ export default class Profile extends Component {
         <Helmet>
           <title>{"Profile"}</title>
         </Helmet>
-        <NavbarLogged />
+        <NavbarLogged/>
         <div className="auth-wrapper">
           <Container>
             <Col className="mx-auto">{this.createContent()}</Col>
