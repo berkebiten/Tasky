@@ -202,7 +202,9 @@ namespace TaskyService.Controllers
             var closedProjects = _projectContext.VW_ProjectParticipant.ToList().Where(item => item.UserId == id && item.ProjectStatus == false);
 
             #region recentProjects doldurma
-            var recentProjects = _context.VW_RecentProjects.ToList().Where(item => item.UserId == id).GroupBy(item => item.ProjectName).Select(x => x.FirstOrDefault());
+            var recentProjects = _context.VW_RecentProjects.ToList().Where(item => item.UserId == id).Reverse()
+                .GroupBy(item => item.ProjectName)
+                .Select(x => x.FirstOrDefault());
 
             RecentThreeProjects recent3Projects = new RecentThreeProjects();
 
