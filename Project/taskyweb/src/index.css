@@ -977,3 +977,22 @@ p + p {
   display: flex !important;
   align-items: center !important;
 }
+
+.btn-success{
+  background-color:var(--toast-success) !important;
+}
+
+.btn-danger{
+  background-color:var(--toast-error) !important;
+}
+
+.btn-invi{
+  width:263px;
+  height:50px;
+  background-color: var(--tasky-dark) !important;
+  border: 1px solid var(--tasky-project-orange) !important;
+}
+
+.btn-invi:hover{
+  background-color: var(--bs-dark) !important;
+}
