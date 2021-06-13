@@ -4,6 +4,7 @@ import "../../res/styles/kanban-board.css";
 import { Card } from "react-bootstrap";
 import { Icon } from "semantic-ui-react";
 import moment from "moment";
+import { TextHelper } from "../../util/helpers";
 
 export default class KanbanBoardView extends Component {
   constructor(props) {
@@ -14,13 +15,13 @@ export default class KanbanBoardView extends Component {
     return (
       <a href={"/task/" + item.id}>
         <Card className="react-kanban-card stretched-link">
-          <Card.Header className="rkc-header">{item.title}</Card.Header>
+          <Card.Header className="rkc-header">{TextHelper.getSmallText(item.title,19)}</Card.Header>
           <Card.Body className="rkc-body">
-            <Card.Text>{item.description}</Card.Text>
+            <Card.Text>{TextHelper.getSmallText(item.description,50)}</Card.Text>
           </Card.Body>
           <Card.Footer className="rkc-footer text-muted">
             <Icon name="user" />
-            {item.assigneeFullName}
+            {TextHelper.getSmallText(item.assigneeFullName,20)}
             <br />
             <Icon name="calendar check outline" />
             {moment(item.dueDate).format("DD/MM/YYYY")}

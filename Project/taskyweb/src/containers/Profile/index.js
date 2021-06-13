@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/modals/CustomModal";
 import EditProfileForm from "../../components/forms/EditProfileForm";
-import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
+import { FileHelper, ServiceHelper, SessionHelper,TextHelper } from "../../util/helpers";
 import {
   ACCEPT_INVITATION,
   DECLINE_INVITATION,
@@ -88,7 +88,7 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                  {this.state.recentProjects.project1.projectName}
+                {TextHelper.getSmallText(this.state.recentProjects.project1.projectName,10)}
                 </Card.Body>
               </Card>
             </Col>
@@ -104,7 +104,7 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                  {this.state.recentProjects.project2.projectName}
+                {TextHelper.getSmallText(this.state.recentProjects.project2.projectName,10)}
                 </Card.Body>
               </Card>
             </Col>
@@ -120,7 +120,7 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                  {this.state.recentProjects.project3.projectName}
+                {TextHelper.getSmallText(this.state.recentProjects.project3.projectName,10)}
                 </Card.Body>
               </Card>
             </Col>

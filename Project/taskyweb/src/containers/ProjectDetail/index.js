@@ -18,7 +18,7 @@ import {
   Image,
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
+import { FileHelper, ServiceHelper, SessionHelper,TextHelper } from "../../util/helpers";
 import {
   GET_PARTICIPANT_ROLE,
   GET_PROJECT_DETAIL,
@@ -986,7 +986,7 @@ export default class ProjectDetail extends Component {
             <SideBar
               menuItems={menuItems}
               title={
-                this.state.project ? this.state.project.name : "Project Detail"
+                this.state.project ? TextHelper.getSmallText(this.state.project.name,20) : "Project Detail"
               }
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}

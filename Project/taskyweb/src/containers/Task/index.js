@@ -4,7 +4,12 @@ import SideBar from "../../components/SideBar";
 import TableView from "../../components/views/TableView";
 import { Card, Col, Row, Container, Badge, Button } from "react-bootstrap";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FileHelper, ServiceHelper, SessionHelper } from "../../util/helpers";
+import {
+  FileHelper,
+  ServiceHelper,
+  SessionHelper,
+  TextHelper,
+} from "../../util/helpers";
 import { Divider, Image } from "semantic-ui-react";
 import { Helmet } from "react-helmet";
 import { Icon } from "semantic-ui-react";
@@ -189,7 +194,7 @@ export default class Task extends Component {
 
           this.getTaskDetail();
         } else {
-          toast(response ? response.message : '',{
+          toast(response ? response.message : "", {
             type: "error",
           });
         }
@@ -288,7 +293,7 @@ export default class Task extends Component {
                 </div>
               </Col>
               <Col md={5} className="task-title">
-                <h2> {title} </h2>
+                <h2> {TextHelper.getSmallText(title,20)} </h2>
               </Col>
               <Col md={2}></Col>
               <Col md={3} className="task-title">
@@ -383,9 +388,9 @@ export default class Task extends Component {
     return (
       <Card.Body>
         {projectName
-          ? this.renderDetailRow(projectName, "Project", "mt-0")
+          ? this.renderDetailRow(TextHelper.getSmallText(projectName,30), "Project", "mt-0")
           : null}
-        {description ? this.renderDetailRow(description, "Description") : null}
+        {description ? this.renderDetailRow(TextHelper.getSmallText(description,40), "Description") : null}
         {created ? this.renderDetailRow(created, "Created Date") : null}
         {due ? this.renderDetailRow(due, "Due Date") : null}
         {reporter ? this.renderDetailRow(reporter, "Reporter") : null}
@@ -408,7 +413,7 @@ export default class Task extends Component {
         this.getTaskDetail();
         this.setState({ fileUpload: false });
       } else {
-        toast(response ? response.message : '', {
+        toast(response ? response.message : "", {
           type: "error",
         });
       }
@@ -474,8 +479,7 @@ export default class Task extends Component {
           <Image
             className="task-d-pp-image"
             src={
-              participant[0] &&
-              participant[0].profileImage
+              participant[0] && participant[0].profileImage
                 ? participant[0].profileImage
                 : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
             }
@@ -625,7 +629,7 @@ export default class Task extends Component {
         this.setState({ workLogFormVisibility: false });
         this.fetchActivities();
       } else {
-        toast(response ? response.message : '', {
+        toast(response ? response.message : "", {
           type: "error",
         });
       }
@@ -676,7 +680,7 @@ export default class Task extends Component {
         this.setState({ taskFormVisibility: false });
         this.fetchSubtasks();
       } else {
-        toast(response ? response.message : '', {
+        toast(response ? response.message : "", {
           type: "error",
         });
       }
@@ -809,7 +813,7 @@ export default class Task extends Component {
           <Col className="project-detail-left" md={2}>
             <SideBar
               menuItems={menuItems}
-              title={this.state.task ? this.state.task.title : "Task Detail"}
+              title={this.state.task ? TextHelper.getSmallText(this.state.task.title,20) : "Task Detail"}
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}
             />

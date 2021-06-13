@@ -1,6 +1,7 @@
 import moment from "moment";
 import { Tag, Space } from "antd";
 import { Button } from "react-bootstrap";
+import { TextHelper } from "../../util/helpers";
 export const activityTableColumns = (participants) => {
   if (participants) {
     participants.map((item, key) => {
@@ -10,15 +11,22 @@ export const activityTableColumns = (participants) => {
   }
   return [
     {
-      title: "Task",
+      title: "Task Title",
       dataIndex: "taskTitle",
       key: "taskTitle",
+      render: (text, record) => {
+        let id = record.taskId.toString();
+        return <a href={"/task/" + id}>{TextHelper.getSmallText(text,35)}</a>;
+      },
     },
     {
       title: "Description",
       dataIndex: "description",
       key: "description",
       ellipsis: true,
+      render: (text, record) => {
+        return TextHelper.getSmallText(text,35);
+      },
     },
     {
       title: "Team Member",
@@ -50,13 +58,13 @@ export const taskTableColumns = (participants) => {
   }
   return [
     {
-      title: "Title",
+      title: "Task Title",
       dataIndex: "title",
       key: "title",
       render: (text, record) => {
         console.log(record.id);
         let id = record.id.toString();
-        return <a href={"/task/" + id}>{text}</a>;
+        return <a href={"/task/" + id}>{TextHelper.getSmallText(text,35)}</a>;
       },
     },
     {
