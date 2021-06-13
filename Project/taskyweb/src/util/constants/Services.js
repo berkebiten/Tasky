@@ -33,3 +33,5 @@ export const SET_READ_NOTIFICATION = "/Users/SetReadNotification/";
 export const UPDATE_PROJECT = "/Projects/Update/";
 export const ACCEPT_INVITATION = "/Projects/Accept/";
 export const DECLINE_INVITATION = "/Projects/Decline/";
+export const RESET_PASSWORD_MAIL = "/Users/SendResetPasswordUrl/"
+export const RESET_PASSWORD = "/Users/ResetPassword/"

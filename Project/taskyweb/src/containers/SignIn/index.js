@@ -4,23 +4,63 @@ import {
   ServiceHelper,
   SessionHelper,
 } from "../../util/helpers";
-import { LOGIN_SERVICE } from "../../util/constants/Services";
+import { LOGIN_SERVICE, RESET_PASSWORD_MAIL } from "../../util/constants/Services";
 import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
 import LoginForm from "../../components/forms/LoginForm";
 import { Col, Row } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import logo from "../../res/images/tasky-logo-1920.png";
 import logoDark from "../../res/images/tasky-logo-dark.png";
-import {Helmet} from 'react-helmet'
+import { Helmet } from "react-helmet";
+import CustomModal from "../../components/modals/CustomModal";
+import ForgotPasswordForm from "../../components/forms/ForgotPasswordForm";
 export default class SignIn extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      forgotPsw: false,
+    };
     let a = SessionHelper.checkIsSessionLive();
     if (a) {
       props.history.push("/projects");
     }
   }
+
+  forgotPassword = async (data) => {
+    await ServiceHelper.serviceHandler(
+      RESET_PASSWORD_MAIL + data.email,
+      ServiceHelper.createOptionsJson(null, "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        this.setState({ forgotPsw: false });
+        toast("Reset Password Mail Sent.", {
+          type: "success",
+        });
+      } else {
+        this.setState({ forgotPsw: false });
+        toast(response ? response.message : "", {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  createForgotPasswordModal = () => {
+    return (
+      <CustomModal
+        title="Forgot Password"
+        isVisible={this.state.forgotPsw}
+        onClose={() => this.setState({ forgotPsw: false })}
+        content={
+          <ForgotPasswordForm
+            onSubmit={this.forgotPassword}
+            initialValues={null}
+          />
+        }
+      />
+    );
+  };
+
   signIn = async (data) => {
     let loginObject = {
       email: data.email,
@@ -63,9 +103,21 @@ export default class SignIn extends Component {
               <Col xs={6} md={3} />
             </Row>
             <LoginForm onSubmit={this.signIn} initialValues={null} />
-            <p className="forgot-password text-right">
-              Don't have an account? <a href="sign-up">Register</a>
-            </p>
+            {this.state.forgotPsw && this.createForgotPasswordModal()}
+            <Row>
+              <Col md={5}>
+                <p className="forgot-password text-left">
+                  <a onClick={() => this.setState({ forgotPsw: true })}>
+                    Forgot Password
+                  </a>
+                </p>
+              </Col>
+              <Col md={7}>
+                <p className="forgot-password text-left">
+                  Don't have an account? <a href="sign-up">Register</a>
+                </p>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
