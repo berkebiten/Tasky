@@ -12,6 +12,7 @@ import Settings from './containers/Settings'
 import Logout from './containers/Logout'
 import VerifyEmail from "./containers/VerifyEmail";
 import Notifications from "./containers/Notifications";
+import ResetPassword from './containers/ResetPassword'
 
 import { Spin } from "antd";
 import { ToastContainer } from "react-toastify";
@@ -73,6 +74,7 @@ function App(props) {
           <Route path="/settings" component={Settings} />
           <Route path="/logout" component={Logout} />
           <Route path="/notifications" component={Notifications} />
+          <Route path="/ResetPassword/:email" render={(props) => <ResetPassword {...props} />} />
         </Switch>
       </Router>
     </Spin>

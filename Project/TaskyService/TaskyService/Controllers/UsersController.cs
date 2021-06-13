@@ -135,6 +135,7 @@ namespace TaskyService.Controllers
         [Route("Register")]
         [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(User user)
+
         {
             user.ActivationStatus = false;
             user.Status = true;
@@ -421,6 +422,46 @@ namespace TaskyService.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("SendResetPasswordUrl/{email}")]
+        public IActionResult SendResetPassworUrl(string email)
+        {
+            var user = _context.User.ToList().Where(item => item.Email == email).FirstOrDefault();
+            if(user == null)
+            {
+                return Ok(new { isSuccessfull = false, message = "No users found registered with this email." });
+            }
+
+            #region send activation email
+            Hashtable ht = new Hashtable();
+                ht.Add("[FIRSTNAME]", user.FirstName);
+                ht.Add("[LINK]", directory + "ResetPassword/" + email);
+                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("reset_password", user.Email, "", ht);
+            #endregion
+            return Ok(new { isSuccessfull = true });
+        }
+
+        [HttpPut]
+        [Route("ResetPassword")]
+        public IActionResult ResetPassword(ResetPswModel model)
+        {
+
+            User oldUser = _context.User.ToList().Where(item => item.Email == model.Email).FirstOrDefault();
+
+            oldUser.Password = BC.HashPassword(model.Password);
+            _context.Entry(oldUser).State = EntityState.Modified;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok(new { isSuccessful = true, message = "Updated." });
+        }
+
 
         [HttpGet]
         [Route("GetNotifications")]
@@ -502,6 +543,12 @@ namespace TaskyService.Controllers
     {
         public string oldPassword { get; set; }
         public string newPassword { get; set; }
+    }
+
+    public class ResetPswModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 
 }
