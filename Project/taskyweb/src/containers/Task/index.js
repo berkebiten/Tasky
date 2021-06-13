@@ -189,7 +189,7 @@ export default class Task extends Component {
 
           this.getTaskDetail();
         } else {
-          toast(response.message, {
+          toast(response ? response.message : '',{
             type: "error",
           });
         }
@@ -408,7 +408,7 @@ export default class Task extends Component {
         this.getTaskDetail();
         this.setState({ fileUpload: false });
       } else {
-        toast(response.message, {
+        toast(response ? response.message : '', {
           type: "error",
         });
       }
@@ -474,6 +474,7 @@ export default class Task extends Component {
           <Image
             className="task-d-pp-image"
             src={
+              participant[0] &&
               participant[0].profileImage
                 ? participant[0].profileImage
                 : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
@@ -624,7 +625,7 @@ export default class Task extends Component {
         this.setState({ workLogFormVisibility: false });
         this.fetchActivities();
       } else {
-        toast(response.message, {
+        toast(response ? response.message : '', {
           type: "error",
         });
       }
@@ -675,7 +676,7 @@ export default class Task extends Component {
         this.setState({ taskFormVisibility: false });
         this.fetchSubtasks();
       } else {
-        toast(response.message, {
+        toast(response ? response.message : '', {
           type: "error",
         });
       }

@@ -239,11 +239,17 @@ namespace TaskyService.Controllers
                 participant.Role = participantObj.role;
                 if (!ParticipantExists(participantId.Id, id))
                 {
-                    var notification = NotificationService.PROJECT_INVITATION;
-                    notification.Body = String.Format(notification.Body, project.ProjectManagerFirstName + " " + project.ProjectManagerLastName);
-                    notification.DataId = project.Id;
-                    notification.UserId = participant.UserId;
-                    notification.WebUrl = String.Format(notification.WebUrl, id);
+                    var notification = new Notification
+                    {
+                        DataId = project.Id,
+                        Title = NotificationService.PROJECT_INVITATION.Title,
+                        Body = String.Format(NotificationService.PROJECT_INVITATION.Body, project.ProjectManagerFirstName + " " + project.ProjectManagerLastName),
+                        UserId = participant.UserId,
+                        WebUrl = String.Format(NotificationService.PROJECT_INVITATION.WebUrl, id),
+                        MobileScreen = "PROJECT",
+                        RegDate = DateTime.Now,
+
+                    };
                     _notificationContext.Add(notification);
                     _participantContext.Add(participant);
                 }

@@ -198,13 +198,17 @@ namespace TaskyService.Controllers
             var reporter = _userContext.User.Find(task.ReporterId);
             var user = _userContext.User.Find(TokenService.getUserId(token));
 
-            var notification = NotificationService.TASK_UPDATE;
-            notification.Id = new Guid();
-            notification.DataId = id;
-            notification.Body = String.Format(notification.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status));
-            notification.UserId = reporter.Id;
-            notification.WebUrl = String.Format(notification.WebUrl, task.Id);
-            notification.RegDate = DateTime.Now;
+            var notification = new Notification
+            {
+                DataId = id,
+                Title = NotificationService.TASK_UPDATE.Title,
+                Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
+                UserId = reporter.Id,
+                WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
+                MobileScreen = "TASK",
+                RegDate = DateTime.Now,
+
+            };
             _notificationContext.Add(notification);
 
             TaskOperation operation = new TaskOperation();
@@ -285,12 +289,17 @@ namespace TaskyService.Controllers
             _context.Add(task);
 
             #region send notification to assignee
-            var notification = NotificationService.ASSIGN_TASK;
-            notification.Title = String.Format(notification.Title, reporter_.FirstName + " " + reporter_.LastName);
-            notification.Body = String.Format(notification.Body, task.Title);
-            notification.DataId = task.Id;
-            notification.WebUrl = String.Format(notification.WebUrl, task.Id);
-            notification.UserId = task.AssigneeId;
+            var notification = new Notification
+            {
+                DataId = task.Id,
+                Title = String.Format(NotificationService.ASSIGN_TASK.Title, reporter_.FirstName + " " + reporter_.LastName),
+                Body = String.Format(NotificationService.ASSIGN_TASK.Body, task.Title),
+                UserId = task.AssigneeId,
+                WebUrl = String.Format(NotificationService.ASSIGN_TASK.WebUrl, task.Id),
+                MobileScreen = "TASK",
+                RegDate = DateTime.Now,
+
+            };
             _notificationContext.Add(notification);
             #endregion
 
