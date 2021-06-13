@@ -71,7 +71,6 @@ export default class ReportView extends Component {
       this.state.report.participantRep &&
       this.state.report.participantRep.length > 0
     ) {
-      console.log(this.state.report);
       return (
         <ResponsiveContainer width="100%" height={250}>
           <RadialBarChart
@@ -131,7 +130,6 @@ export default class ReportView extends Component {
       this.buildTsByMemberData(
         this.state.report.taskStatusReportByMember.memberTaskStatuses
       );
-      console.log(this.state.ts_bymember);
       return (
         <BarChart width={730} height={250} data={this.state.ts_bymember}>
           <CartesianGrid strokeDasharray="4 4" />
@@ -169,8 +167,6 @@ export default class ReportView extends Component {
   };
 
   render() {
-    console.log(this.state.report);
-
     if (this.state.report) {
       return (
         <Container className="dark-overview-container">

@@ -34,7 +34,6 @@ export const activityTableColumns = (participants) => {
       key: "memberFullName",
       filters: participants,
       onFilter: (value, record) => {
-        console.log(value, record);
         return record.memberFullName.toLowerCase() === value.toLowerCase();
       },
     },
@@ -62,7 +61,6 @@ export const taskTableColumns = (participants) => {
       dataIndex: "title",
       key: "title",
       render: (text, record) => {
-        console.log(record.id);
         let id = record.id.toString();
         return <a href={"/task/" + id}>{TextHelper.getSmallText(text, 35)}</a>;
       },
@@ -73,7 +71,6 @@ export const taskTableColumns = (participants) => {
       key: "assigneeFullName",
       filters: participants,
       onFilter: (value, record) => {
-        console.log(value, record);
         return record.assigneeFullName.toLowerCase() === value.toLowerCase();
       },
     },

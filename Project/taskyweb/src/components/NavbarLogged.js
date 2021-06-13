@@ -24,7 +24,6 @@ class NavbarLogged extends Component {
     };
   }
   render() {
-    console.log(this.state.user);
     return (
       <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="/projects">

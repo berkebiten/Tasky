@@ -53,7 +53,6 @@ export default class Settings extends Component {
 
     if (newPassword === newPasswordAgain) {
       let model = { oldPassword: currentPassword, newPassword: newPassword };
-      console.log(model);
       await ServiceHelper.serviceHandler(
         CHANGE_PASSWORD_SERVICE + this.state.user.id,
         ServiceHelper.createOptionsJson(JSON.stringify(model), "PUT")

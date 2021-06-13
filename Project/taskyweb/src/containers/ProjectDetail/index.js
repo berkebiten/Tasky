@@ -62,7 +62,6 @@ import UpdateProjectForm from "../../components/forms/UpdateProjectForm";
 export default class ProjectDetail extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       user: SessionHelper.loadUser(),
       activePage: props.location.state

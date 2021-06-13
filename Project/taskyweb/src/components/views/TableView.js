@@ -111,7 +111,6 @@ export default class TableView extends Component {
         newColumns.push(data);
       });
     }
-    console.log(newColumns);
     return newColumns;
   };
 
