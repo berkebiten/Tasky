@@ -301,6 +301,38 @@ namespace TaskyService.Controllers
                 ht.Add("[PROJECTOWNERNAME]", projectOwner.FirstName + " " + projectOwner.LastName);
                 string response = new MailService(_mailTemplateContext).SendMailFromTemplate("removed_from_project", user.Email, "", ht);
                 #endregion
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessful = true, message = "User Removed From Project." });
+        }
+
+        [HttpDelete]
+        [Route("LeaveProject/{projectId}/{userId}")]
+        public IActionResult LeaveProject(Guid projectId, Guid userId)
+        {
+            var participant = _participantContext.ProjectParticipant.ToList().Where(
+                item => item.UserId == userId && item.ProjectId == projectId &&
+                item.Status == true
+                ).FirstOrDefault();
+            if (participant == null)
+            {
+                return NotFound();
+            }
+
+            _participantContext.Remove(participant);
+
+            try
+            {
+                _participantContext.SaveChanges();
+
+                var user = _userContext.User.Find(participant.UserId);
+                var project = _context.Project.Find(participant.ProjectId);
+                var projectOwner = _userContext.User.Find(project.ProjectManagerId);
+
 
                 #region send mail to project owner
                 Hashtable ht2 = new Hashtable();
@@ -316,7 +348,7 @@ namespace TaskyService.Controllers
                 throw;
             }
 
-            return Ok(new { isSuccessful = true, message = "User Removed From Project." });
+            return Ok(new { isSuccessful = true, message = "You left the project." });
         }
 
 

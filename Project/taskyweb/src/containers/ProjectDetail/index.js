@@ -4,8 +4,10 @@ import SideBar from "../../components/SideBar";
 import KanbanBoardView from "../../components/views/KanbanBoardView";
 import TableView from "../../components/views/TableView";
 import ReportView from "../../components/views/ReportView";
+import { BsBoxArrowLeft } from "react-icons/bs";
 import { MdRemoveCircle } from "react-icons/md";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import CancelIcon from '@material-ui/icons/Cancel';
 import {
   Card,
   Col,
@@ -31,6 +33,7 @@ import {
   UPDATE_TASK_STATUS_SERVICE,
   UPLOAD_PROJECT_FILE,
   REMOVE_PARTICIPANT,
+  LEAVE_PROJECT
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -489,6 +492,24 @@ export default class ProjectDetail extends Component {
     });
   };
 
+  leaveProject = async () => {
+    await ServiceHelper.serviceHandler(
+      LEAVE_PROJECT + this.state.projectId + "/" + this.state.user.id,
+      ServiceHelper.createOptionsJson(null, "DELETE")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast(response.message, {
+          type: "success",
+        });
+        window.location.reload();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
   createOverview = () => {
     if (
       !this.state.projectParticipants ||
@@ -550,15 +571,15 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole !== "Watcher" &&
+          {this.state.userRole === "ProjectManager" &&
             this.state.project.status !== false && (
               <Button
-                className="ml-2 delete-project"
+                className="ml-2 delete-project btn-w-icon"
                 variant="dark"
                 onClick={() =>
                   confirmAlert({
                     title: "Warning!",
-                    message: "Are you sure to delete the project?",
+                    message: "Are you sure to close the project?",
                     buttons: [
                       {
                         label: "Yes",
@@ -572,7 +593,32 @@ export default class ProjectDetail extends Component {
                   })
                 }
               >
-                <Badge variant="primary">x</Badge> Close Project
+                <CancelIcon className="pr-icons"/> Close Project
+              </Button>
+            )}
+            {this.state.userRole !== "ProjectManager" &&
+            this.state.project.status !== false && (
+              <Button
+                className="ml-2 delete-project btn-w-icon"
+                variant="dark"
+                onClick={() =>
+                  confirmAlert({
+                    title: "Warning!",
+                    message: "Are you sure to leave the project?",
+                    buttons: [
+                      {
+                        label: "Yes",
+                        onClick: () => this.leaveProject(),
+                      },
+                      {
+                        label: "No",
+                        onClick: () => null,
+                      },
+                    ],
+                  })
+                }
+              >
+                <BsBoxArrowLeft className="pr-icons"/> Leave Project
               </Button>
             )}
         </Row>

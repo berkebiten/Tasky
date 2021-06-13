@@ -959,3 +959,13 @@ p + p {
 .react-confirm-alert-overlay{
   background-color:rgba(87, 96, 114, 0.9) !important;
 }
+.pr-icons{
+  font-size:15px !important;
+  color:var(--toast-error);
+  margin-right:4px;
+}
+
+.btn-w-icon{
+  display: flex !important;
+  align-items: center !important;
+}
