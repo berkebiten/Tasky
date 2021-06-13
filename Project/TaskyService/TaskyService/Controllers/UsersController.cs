@@ -144,7 +144,12 @@ namespace TaskyService.Controllers
             user.RegistrationDate = DateTime.Now.Date;
             user.Password = BC.HashPassword(user.Password);
             _context.User.Add(user);
-            if(user.ProjectId != null)
+            if (UserExists(user.Id, user.Email))
+            {
+                return Conflict(new { isSuccesful = false, message = "You have already registered." });
+            }
+
+            if (user.ProjectId != null)
             {
                 var invitation = _invitationContext.ProjectInvitation.ToList().Where(item =>
                                  item.Email == user.Email && item.ProjectId == user.ProjectId).FirstOrDefault();
@@ -180,7 +185,7 @@ namespace TaskyService.Controllers
             {
                 if (UserExists(user.Id))
                 {
-                    return Conflict();
+                    return Conflict(new { isSuccesful = false, message = "You have already registered."});
                 }
                 else
                 {
@@ -531,7 +536,12 @@ namespace TaskyService.Controllers
 
         private bool UserExists(Guid id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return UserExists(id, null);
+        }
+
+        private bool UserExists(Guid id, string email)
+        {
+            return _context.User.Any(e => e.Id == id || e.Email == email);
         }
 
 
