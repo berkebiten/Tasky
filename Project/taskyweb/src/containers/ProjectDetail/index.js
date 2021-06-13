@@ -7,7 +7,8 @@ import ReportView from "../../components/views/ReportView";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { MdRemoveCircle } from "react-icons/md";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import CancelIcon from '@material-ui/icons/Cancel';
+import CancelIcon from "@material-ui/icons/Cancel";
+import EditIcon from "@material-ui/icons/Edit";
 import {
   Card,
   Col,
@@ -20,7 +21,12 @@ import {
   Image,
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { FileHelper, ServiceHelper, SessionHelper,TextHelper } from "../../util/helpers";
+import {
+  FileHelper,
+  ServiceHelper,
+  SessionHelper,
+  TextHelper,
+} from "../../util/helpers";
 import {
   GET_PARTICIPANT_ROLE,
   GET_PROJECT_DETAIL,
@@ -33,7 +39,7 @@ import {
   UPDATE_TASK_STATUS_SERVICE,
   UPLOAD_PROJECT_FILE,
   REMOVE_PARTICIPANT,
-  LEAVE_PROJECT
+  LEAVE_PROJECT,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -42,32 +48,16 @@ import moment from "moment";
 import {
   activityTableColumns,
   taskTableColumns,
+  menuItems,
+  taskBoardExtractor,
 } from "../../util/constants/Constants";
-import { Icon, Label } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import { InviteParticipantView } from "../../components/views/InviteParticipantView";
 import WorkLogForm from "../../components/forms/WorkLogForm";
 import { Loader } from "rsuite";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
-const menuItems = [
-  {
-    title: "Overview",
-    icon: "dashboard",
-  },
-  {
-    title: "Board",
-    icon: "th",
-  },
-  {
-    title: "Task List",
-    icon: "tasks",
-  },
-  {
-    title: "Activity List",
-    icon: "list",
-  },
-];
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import UpdateProjectForm from "../../components/forms/UpdateProjectForm";
 
 export default class ProjectDetail extends Component {
   constructor(props) {
@@ -91,6 +81,7 @@ export default class ProjectDetail extends Component {
       inviteParticipant: false,
       workLogModal: false,
       selectedWorkLog: null,
+      updateProject: false,
     };
     let a = SessionHelper.checkIsSessionLive();
     if (!a) {
@@ -467,7 +458,30 @@ export default class ProjectDetail extends Component {
         });
         this.getProjectDetail();
       } else {
-        toast(response.message, {
+        toast(response ? response.message : "", {
+          type: "error",
+        });
+      }
+    });
+  };
+
+  updateProject = async (data) => {
+    let body = {
+      ...this.state.project,
+      name: data.name,
+      description: data.description,
+    };
+    await ServiceHelper.serviceHandler(
+      UPDATE_PROJECT + this.state.projectId,
+      ServiceHelper.createOptionsJson(JSON.stringify(body), "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        toast("Project Updated.", {
+          type: "success",
+        });
+        this.setState({ updateProject: false }, () => this.getProjectDetail());
+      } else {
+        toast(response ? response.message : "", {
           type: "error",
         });
       }
@@ -508,6 +522,22 @@ export default class ProjectDetail extends Component {
         });
       }
     });
+  };
+
+  createUpdateProjectForm = () => {
+    return (
+      <CustomModal
+        title="Update Project"
+        onClose={() => this.setState({ updateProject: false })}
+        isVisible={this.state.updateProject}
+        content={
+          <UpdateProjectForm
+            onSubmit={this.updateProject}
+            initialValues={this.state.project}
+          />
+        }
+      />
+    );
   };
 
   createOverview = () => {
@@ -573,30 +603,39 @@ export default class ProjectDetail extends Component {
         <Row className="mt-2 project-detail-row mx-auto">
           {this.state.userRole === "ProjectManager" &&
             this.state.project.status !== false && (
-              <Button
-                className="ml-2 delete-project btn-w-icon"
-                variant="dark"
-                onClick={() =>
-                  confirmAlert({
-                    title: "Warning!",
-                    message: "Are you sure to close the project?",
-                    buttons: [
-                      {
-                        label: "Yes",
-                        onClick: () => this.closeProject(),
-                      },
-                      {
-                        label: "No",
-                        onClick: () => null,
-                      },
-                    ],
-                  })
-                }
-              >
-                <CancelIcon className="pr-icons"/> Close Project
-              </Button>
+              <>
+                <Button
+                  className="delete-project btn-w-icon"
+                  variant="dark"
+                  onClick={() =>
+                    confirmAlert({
+                      title: "Warning!",
+                      message: "Are you sure to close the project?",
+                      buttons: [
+                        {
+                          label: "Yes",
+                          onClick: () => this.closeProject(),
+                        },
+                        {
+                          label: "No",
+                          onClick: () => null,
+                        },
+                      ],
+                    })
+                  }
+                >
+                  <CancelIcon className="pr-icons" /> Close Project
+                </Button>
+                <Button
+                  className="ml-2 delete-project btn-w-icon"
+                  variant="dark"
+                  onClick={() => this.setState({ updateProject: true })}
+                >
+                  <EditIcon className="pr-icons" /> Update Project
+                </Button>
+              </>
             )}
-            {this.state.userRole !== "ProjectManager" &&
+          {this.state.userRole !== "ProjectManager" &&
             this.state.project.status !== false && (
               <Button
                 className="ml-2 delete-project btn-w-icon"
@@ -618,9 +657,10 @@ export default class ProjectDetail extends Component {
                   })
                 }
               >
-                <BsBoxArrowLeft className="pr-icons"/> Leave Project
+                <BsBoxArrowLeft className="pr-icons" /> Leave Project
               </Button>
             )}
+          {this.state.updateProject && this.createUpdateProjectForm()}
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
@@ -784,20 +824,25 @@ export default class ProjectDetail extends Component {
 
                       <Button
                         className={"remove-p " + visibleClass}
-                        onClick={() => confirmAlert({
-                          title: "Warning!",
-                          message: "Are you sure you want to remove "+ item.fullName +" from project?",
-                          buttons: [
-                            {
-                              label: "Yes",
-                              onClick: () => this.removeParticipant(item),
-                            },
-                            {
-                              label: "No",
-                              onClick: () => null,
-                            },
-                          ],
-                        })}
+                        onClick={() =>
+                          confirmAlert({
+                            title: "Warning!",
+                            message:
+                              "Are you sure you want to remove " +
+                              item.fullName +
+                              " from project?",
+                            buttons: [
+                              {
+                                label: "Yes",
+                                onClick: () => this.removeParticipant(item),
+                              },
+                              {
+                                label: "No",
+                                onClick: () => null,
+                              },
+                            ],
+                          })
+                        }
                       >
                         <MdRemoveCircle />
                       </Button>
@@ -893,7 +938,7 @@ export default class ProjectDetail extends Component {
           <KanbanBoardView
             boardData={this.state.boardData ? this.state.boardData : []}
             onCardDragEnd={this.onCardDragEnd}
-            boardExtractor={(tasks) => this.taskBoardExtractor(tasks)}
+            boardExtractor={(tasks) => taskBoardExtractor(tasks)}
             disableCardDrag={
               this.state.userRole === "Watcher" || !this.state.project.status
             }
@@ -964,33 +1009,6 @@ export default class ProjectDetail extends Component {
     }
   };
 
-  taskBoardExtractor = (tasks) => {
-    return {
-      columns: [
-        {
-          id: 0,
-          title: "TO-DO",
-          cards: tasks.filter((item) => item.status === 0),
-        },
-        {
-          id: 1,
-          title: "ACTIVE",
-          cards: tasks.filter((item) => item.status === 1),
-        },
-        {
-          id: 2,
-          title: "RESOLVED",
-          cards: tasks.filter((item) => item.status === 2),
-        },
-        {
-          id: 3,
-          title: "CLOSED",
-          cards: tasks.filter((item) => item.status === 3),
-        },
-      ],
-    };
-  };
-
   fetchTaskList = async () => {
     let reqBody = {
       projectId: this.state.project
@@ -1002,7 +1020,7 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(JSON.stringify(reqBody), "POST")
     ).then((response) => {
       if (response && response.data && response.isSuccessful) {
-        let boardData = this.taskBoardExtractor(response.data.tasks);
+        let boardData = taskBoardExtractor(response.data.tasks);
         this.setState({
           boardData: boardData,
           tableData: response.data.tasks ? response.data.tasks : [],
@@ -1032,7 +1050,9 @@ export default class ProjectDetail extends Component {
             <SideBar
               menuItems={menuItems}
               title={
-                this.state.project ? TextHelper.getSmallText(this.state.project.name,20) : "Project Detail"
+                this.state.project
+                  ? TextHelper.getSmallText(this.state.project.name, 20)
+                  : "Project Detail"
               }
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}

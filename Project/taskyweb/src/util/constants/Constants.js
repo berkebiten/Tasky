@@ -16,7 +16,7 @@ export const activityTableColumns = (participants) => {
       key: "taskTitle",
       render: (text, record) => {
         let id = record.taskId.toString();
-        return <a href={"/task/" + id}>{TextHelper.getSmallText(text,35)}</a>;
+        return <a href={"/task/" + id}>{TextHelper.getSmallText(text, 35)}</a>;
       },
     },
     {
@@ -25,7 +25,7 @@ export const activityTableColumns = (participants) => {
       key: "description",
       ellipsis: true,
       render: (text, record) => {
-        return TextHelper.getSmallText(text,35);
+        return TextHelper.getSmallText(text, 35);
       },
     },
     {
@@ -64,7 +64,7 @@ export const taskTableColumns = (participants) => {
       render: (text, record) => {
         console.log(record.id);
         let id = record.id.toString();
-        return <a href={"/task/" + id}>{TextHelper.getSmallText(text,35)}</a>;
+        return <a href={"/task/" + id}>{TextHelper.getSmallText(text, 35)}</a>;
       },
     },
     {
@@ -171,3 +171,49 @@ export const invitationTableColumns = (accept, decline) => [
     ),
   },
 ];
+
+export const menuItems = [
+  {
+    title: "Overview",
+    icon: "dashboard",
+  },
+  {
+    title: "Board",
+    icon: "th",
+  },
+  {
+    title: "Task List",
+    icon: "tasks",
+  },
+  {
+    title: "Activity List",
+    icon: "list",
+  },
+];
+
+export const taskBoardExtractor = (tasks) => {
+  return {
+    columns: [
+      {
+        id: 0,
+        title: "TO-DO",
+        cards: tasks.filter((item) => item.status === 0),
+      },
+      {
+        id: 1,
+        title: "ACTIVE",
+        cards: tasks.filter((item) => item.status === 1),
+      },
+      {
+        id: 2,
+        title: "RESOLVED",
+        cards: tasks.filter((item) => item.status === 2),
+      },
+      {
+        id: 3,
+        title: "CLOSED",
+        cards: tasks.filter((item) => item.status === 3),
+      },
+    ],
+  };
+};
