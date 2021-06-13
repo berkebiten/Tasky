@@ -123,6 +123,9 @@ export default class CustomFormElement extends Component {
   };
 
   createFilePicker = (element) => {
+    if(element.control.isHidden){
+      return null
+    }
     return (
       <Form.Group>
         <Form.Label>{element.label}</Form.Label>

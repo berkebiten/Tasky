@@ -53,6 +53,7 @@ function TaskForm(props) {
       control: {
         type: "file",
         name: "file",
+        isHidden: props.hideFilePicker ? props.hideFilePicker : false,
       },
     },
   ];

@@ -9,7 +9,7 @@ export const GET_TASK_DETAIL = "/Tasks/GetById/";
 export const GET_PROJECT_PARTICIPANTS_SERVICE =
   "/Projects/GetProjectParticipants";
 export const INSERT_TASK_SERVICE = "/Tasks/Insert";
-export const UPDATE_TASK_SERVICE = "/Tasks/Update";
+export const UPDATE_TASK_SERVICE = "/Tasks/Update/";
 export const UPDATE_TASK_STATUS_SERVICE = "/Tasks/UpdateTaskStatus";
 export const GET_PROJECT_DETAIL = "/Projects/GetById/";
 export const GET_TASK_WORK_LOGS = "/WorkLogs/GetWorkLogs";

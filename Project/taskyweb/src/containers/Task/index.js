@@ -24,6 +24,7 @@ import {
   GET_TASK_TIMELINE,
   UPLOAD_TASK_FILE,
   UPDATE_TASK_STATUS_SERVICE,
+  UPDATE_TASK_SERVICE,
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import { toast } from "react-toastify";
@@ -37,6 +38,7 @@ import TaskForm from "../../components/forms/TaskForm";
 import { Loader, Timeline } from "rsuite";
 import { Dropdown } from "rsuite";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import EditIcon from "@material-ui/icons/Edit";
 
 const menuItems = [
   {
@@ -246,6 +248,13 @@ export default class Task extends Component {
           >
             <RiArrowGoBackFill /> Go to Project Task List
           </Button>
+          <Button
+            onClick={() => this.setState({ updateTask: true })}
+            className="new-task ml-2"
+            variant="dark"
+          >
+            <EditIcon /> Update Task
+          </Button>
         </Row>
         <Card className="ml-5 task-detail-card" style={{ width: "91%" }}>
           <Card.Header>
@@ -293,7 +302,7 @@ export default class Task extends Component {
                 </div>
               </Col>
               <Col md={5} className="task-title">
-                <h2> {TextHelper.getSmallText(title,20)} </h2>
+                <h2> {TextHelper.getSmallText(title, 20)} </h2>
               </Col>
               <Col md={2}></Col>
               <Col md={3} className="task-title">
@@ -388,9 +397,18 @@ export default class Task extends Component {
     return (
       <Card.Body>
         {projectName
-          ? this.renderDetailRow(TextHelper.getSmallText(projectName,30), "Project", "mt-0")
+          ? this.renderDetailRow(
+              TextHelper.getSmallText(projectName, 30),
+              "Project",
+              "mt-0"
+            )
           : null}
-        {description ? this.renderDetailRow(TextHelper.getSmallText(description,40), "Description") : null}
+        {description
+          ? this.renderDetailRow(
+              TextHelper.getSmallText(description, 40),
+              "Description"
+            )
+          : null}
         {created ? this.renderDetailRow(created, "Created Date") : null}
         {due ? this.renderDetailRow(due, "Due Date") : null}
         {reporter ? this.renderDetailRow(reporter, "Reporter") : null}
@@ -473,7 +491,6 @@ export default class Task extends Component {
       participant = this.state.projectParticipants.filter(
         (participant) => participant.fullName === info.toString()
       );
-      console.log(participant);
       if (title === "Assignee" || title === "Reporter") {
         return (
           <Image
@@ -494,9 +511,6 @@ export default class Task extends Component {
 
     if (title == "Due Date") {
       let dateNow = new Date().setHours(0, 0, 0, 0);
-      console.log(new Date(info).setHours(0, 0, 0, 0));
-      console.log(dateNow);
-      console.log(new Date(info).setHours(0, 0, 0, 0) < dateNow);
       if (new Date(info).setHours(0, 0, 0, 0) < dateNow) {
         dueClass = "-passed";
       } else if (new Date(info).setHours(0, 0, 0, 0) === dateNow) {
@@ -517,7 +531,6 @@ export default class Task extends Component {
 
   createTimeLine = () => {
     if (this.state.taskTimeline) {
-      console.log(this.state.taskTimeline);
       return (
         <Card.Body className="ml-2">
           <Timeline className="custom-timeline">
@@ -728,6 +741,7 @@ export default class Task extends Component {
               handleSubmit={(submit) => (this.updateTask = submit)}
               onSubmit={this.updateTask}
               initialValues={task}
+              hideFilePicker={true}
               participants={
                 this.state.projectParticipants &&
                 this.state.projectParticipants.length > 0
@@ -744,8 +758,28 @@ export default class Task extends Component {
     );
   };
 
-  updateTask = (data) => {
-    console.log(data);
+  updateTask = async (data) => {
+    let date = moment(data.dueDate).format("YYYY-MM-DD");
+    let insertObject = {
+      ...this.state.task,
+      ...data,
+      dueDate: date,
+    };
+    await ServiceHelper.serviceHandler(
+      UPDATE_TASK_SERVICE + this.state.taskId,
+      ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "PUT")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast("Task Updated.", {
+          type: "success",
+        });
+        this.setState({ updateTask: false }, () => this.getTaskDetail());
+      } else {
+        toast(response ? response.message : "", {
+          type: "error",
+        });
+      }
+    });
   };
 
   createContent = () => {
@@ -760,7 +794,6 @@ export default class Task extends Component {
   };
 
   onMenuItemSelect = (item) => {
-    console.log(this.state);
     this.setState({ activePage: menuItems[parseInt(item)].title });
   };
 
@@ -807,13 +840,16 @@ export default class Task extends Component {
               : "Görev Detayı"}
           </title>
         </Helmet>
-
         <NavbarLogged />
         <Row>
           <Col className="project-detail-left" md={2}>
             <SideBar
               menuItems={menuItems}
-              title={this.state.task ? TextHelper.getSmallText(this.state.task.title,20) : "Task Detail"}
+              title={
+                this.state.task
+                  ? TextHelper.getSmallText(this.state.task.title, 20)
+                  : "Task Detail"
+              }
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}
             />
