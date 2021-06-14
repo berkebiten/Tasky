@@ -146,25 +146,30 @@ export const invitationTableColumns = (accept, decline) => [
     title: "Project Name",
     dataIndex: "projectName",
     key: "projectName",
+    render: (text) => (
+      <p style={{ "font-weight": "bold", color: "var(--bs-dark)" }}>{text}</p>
+    ),
   },
   {
     title: "Action",
     key: "action",
     render: (text, record) => (
-      <Space size="middle">
+      <>
         <Button
+          style={{ "margin-right": "16px", color: "var(--bs-dark)" }}
+          variant="success"
           onClick={() => accept(record.id)}
-          style={{ backgroundColor: "green" }}
         >
           Accept
         </Button>
         <Button
+          style={{ color: "var(--bs-light)" }}
+          variant="danger"
           onClick={() => decline(record.id)}
-          style={{ backgroundColor: "red" }}
         >
           Decline
         </Button>
-      </Space>
+      </>
     ),
   },
 ];

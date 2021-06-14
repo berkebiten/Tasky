@@ -6,7 +6,12 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import CustomModal from "../../components/modals/CustomModal";
 import EditProfileForm from "../../components/forms/EditProfileForm";
-import { FileHelper, ServiceHelper, SessionHelper,TextHelper } from "../../util/helpers";
+import {
+  FileHelper,
+  ServiceHelper,
+  SessionHelper,
+  TextHelper,
+} from "../../util/helpers";
 import {
   ACCEPT_INVITATION,
   DECLINE_INVITATION,
@@ -88,7 +93,10 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                {TextHelper.getSmallText(this.state.recentProjects.project1.projectName,10)}
+                  {TextHelper.getSmallText(
+                    this.state.recentProjects.project1.projectName,
+                    10
+                  )}
                 </Card.Body>
               </Card>
             </Col>
@@ -104,7 +112,10 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                {TextHelper.getSmallText(this.state.recentProjects.project2.projectName,10)}
+                  {TextHelper.getSmallText(
+                    this.state.recentProjects.project2.projectName,
+                    10
+                  )}
                 </Card.Body>
               </Card>
             </Col>
@@ -120,7 +131,10 @@ export default class Profile extends Component {
                 }
               >
                 <Card.Body>
-                {TextHelper.getSmallText(this.state.recentProjects.project3.projectName,10)}
+                  {TextHelper.getSmallText(
+                    this.state.recentProjects.project3.projectName,
+                    10
+                  )}
                 </Card.Body>
               </Card>
             </Col>
@@ -155,7 +169,7 @@ export default class Profile extends Component {
         this.setState({ editProfileFormVisibility: false }, () =>
           this.getProfile()
         );
-        setTimeout(function() {
+        setTimeout(function () {
           window.location.reload();
         }, 100);
       } else {
@@ -394,14 +408,18 @@ export default class Profile extends Component {
               </Col>
             </Row>
             {this.state.invitations && this.state.invitations.length > 0 && (
-              <Row className="mx-auto mt-4 ml-4 ">
-                <Button
-                  variant="primary"
-                  onClick={() => this.setState({ showInvitations: true })}
-                >
-                  Project Invitations{"  "}
-                  <Badge variant="light">{this.state.invitations.length}</Badge>
-                </Button>
+              <Row className="mt-4 ml-1 mr-1">
+                <Col className="tasky-profile-stat-col">
+                  <Button
+                    className="btn-invi clickable-pc"
+                    onClick={() => this.setState({ showInvitations: true })}
+                  >
+                    Project Invitations{"  "}
+                    <Badge variant="light">
+                      {this.state.invitations.length}
+                    </Badge>
+                  </Button>
+                </Col>
                 {this.createInvitations()}
               </Row>
             )}
@@ -417,7 +435,7 @@ export default class Profile extends Component {
         <Helmet>
           <title>{"Profile"}</title>
         </Helmet>
-        <NavbarLogged/>
+        <NavbarLogged />
         <div className="auth-wrapper">
           <Container>
             <Col className="mx-auto">{this.createContent()}</Col>
