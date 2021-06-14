@@ -305,6 +305,7 @@ namespace TaskyService.Controllers
             task.Status = 0;
             var reporter_ = _userContext.User.Find(task.ReporterId);
             var user = _userContext.User.Find(TokenService.getUserId(token));
+            var assigneeUser = _userContext.User.Find(task.AssigneeId);
             _context.Add(task);
 
             #region send notification to assignee
@@ -321,6 +322,10 @@ namespace TaskyService.Controllers
                     RegDate = DateTime.Now,
 
                 };
+                if(assigneeUser.FirebaseToken != null)
+                {
+                FirebaseNotificationService.PushNotification(new FBNotification { Body = reporter_.FirstName + " " + reporter_.LastName + " assigned you a task.", Title = "A Task is Assigned To You.", To = assigneeUser.FirebaseToken });
+                }
                 _notificationContext.Add(notification);
             }
             #endregion
