@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
 import { Container } from "react-bootstrap";
-import { ServiceHelper, SessionHelper } from "../../util/helpers";
+import { ServiceHelper, SessionHelper, TextHelper } from "../../util/helpers";
 import { Helmet } from "react-helmet";
 import { GET_ACTIVITY_STREAM } from "../../util/constants/Services";
 import { activityTableColumns } from "../../util/constants/Constants";
@@ -38,9 +38,24 @@ export default class ActivityStream extends Component {
   };
 
   createActivityStream = () => {
+    let columns = [
+      {
+        title: "Project Name",
+        dataIndex: "projectName",
+        key: "projectName",
+        render: (text, record) => {
+          return (
+            <a href={"/project/" + record.projectId}>
+              {TextHelper.getSmallText(text, 35)}
+            </a>
+          );
+        },
+      },
+      ...activityTableColumns(),
+    ];
     return (
       <TableView
-        columns={activityTableColumns()}
+        columns={columns}
         tableData={this.state.activities}
         loading={!this.state.activities}
       />

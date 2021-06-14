@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NavbarLogged from "../../components/NavbarLogged";
 import { Container } from "react-bootstrap";
-import { ServiceHelper, SessionHelper } from "../../util/helpers";
+import { ServiceHelper, SessionHelper, TextHelper } from "../../util/helpers";
 import { Helmet } from "react-helmet";
 import { GET_MY_TASKS } from "../../util/constants/Services";
 import { taskTableColumns } from "../../util/constants/Constants";
@@ -51,9 +51,24 @@ export default class Tasks extends Component {
   };
 
   createTasks = () => {
+    let columns = [
+      {
+        title: "Project Name",
+        dataIndex: "project_Title",
+        key: "project_Title",
+        render: (text, record) => {
+          return (
+            <a href={"/project/" + record.projectId}>
+              {TextHelper.getSmallText(text, 35)}
+            </a>
+          );
+        },
+      },
+      ...taskTableColumns(),
+    ];
     return (
       <TableView
-        columns={taskTableColumns()}
+        columns={columns}
         tableData={this.state.tasks}
         loading={!this.state.tasks}
       />
