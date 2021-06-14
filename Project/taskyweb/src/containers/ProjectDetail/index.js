@@ -142,7 +142,10 @@ export default class ProjectDetail extends Component {
       if (response && response.isSuccessful) {
         let projectParticipants = response.data.participants;
         let invitations = response.data.invitations;
-        let participants = projectParticipants.filter((item) => item.status);
+        let participants = projectParticipants
+          .filter((item) => item.status);
+
+        participants.sort((a, b) => this.compareRoles(a.role, b.role))
         let participantInvitations = projectParticipants.filter(
           (item) => !item.status
         );
@@ -152,6 +155,16 @@ export default class ProjectDetail extends Component {
         });
       }
     });
+  };
+
+  compareRoles = (a, b) => {
+    let xa = a === 0 ? 1.5 : a;
+    let xb = b === 0 ? 1.5 : b;
+    if (xa > xb) {
+      return 1;
+    } else {
+      return -1;
+    }
   };
 
   fetchActivities = async () => {
@@ -658,29 +671,29 @@ export default class ProjectDetail extends Component {
             </>
           )}
           {this.state.userRole !== "ProjectManager" && (
-              <Button
-                className="ml-2 delete-project btn-w-icon"
-                variant="dark"
-                onClick={() =>
-                  confirmAlert({
-                    title: "Warning!",
-                    message: "Are you sure to leave the project?",
-                    buttons: [
-                      {
-                        label: "Yes",
-                        onClick: () => this.leaveProject(),
-                      },
-                      {
-                        label: "No",
-                        onClick: () => null,
-                      },
-                    ],
-                  })
-                }
-              >
-                <BsBoxArrowLeft className="pr-icons" /> Leave Project
-              </Button>
-            )}
+            <Button
+              className="ml-2 delete-project btn-w-icon"
+              variant="dark"
+              onClick={() =>
+                confirmAlert({
+                  title: "Warning!",
+                  message: "Are you sure to leave the project?",
+                  buttons: [
+                    {
+                      label: "Yes",
+                      onClick: () => this.leaveProject(),
+                    },
+                    {
+                      label: "No",
+                      onClick: () => null,
+                    },
+                  ],
+                })
+              }
+            >
+              <BsBoxArrowLeft className="pr-icons" /> Leave Project
+            </Button>
+          )}
           {this.state.updateProject && this.createUpdateProjectForm()}
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
@@ -934,60 +947,36 @@ export default class ProjectDetail extends Component {
                   ? "visible"
                   : "invisible";
               return (
-                <div className="project-participant-card ml-3">
-                  <div
-                    className="participant-orient"
-                    style={{ display: "flex" }}
-                  >
-                    <Row>
-                      <Col style={{ padding: 0 }}>
-                        <OverlayTrigger
-                          key={item.id}
-                          placement={"top-start"}
-                          overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
-                        >
-                          <Image
-                            className={
-                              "project-participant-image " +
-                              roleName +
-                              "-border"
-                            }
-                            src={
-                              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
-                            }
-                          />
-                        </OverlayTrigger>
-                        <div className="project-participant-name text-center">
-                          {item.email}
-                        </div>
-                      </Col>
-                      <Col style={{ padding: 0 }}>
-                        <Button
-                          className={"remove-p " + visibleClass}
-                          onClick={() =>
-                            confirmAlert({
-                              title: "Warning!",
-                              message:
-                                "Are you sure you want to cancel invitation? ",
-                              buttons: [
-                                {
-                                  label: "Yes",
-                                  onClick: () => this.removeParticipant(item),
-                                },
-                                {
-                                  label: "No",
-                                  onClick: () => null,
-                                },
-                              ],
-                            })
-                          }
-                        >
-                          <MdRemoveCircle className="re-icon" />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
-                </div>
+                <Row style={{ "margin-top": "5px" }}>
+                    <Col className="ml-1" md={2}>
+                      <h3>{item.email}</h3>
+                    </Col>
+                    <Col md={1}>
+                      <Button
+                        className={"remove-p " + visibleClass}
+                        onClick={() =>
+                          confirmAlert({
+                            title: "Warning!",
+                            message:
+                              "Are you sure you want to cancel invitation? ",
+                            buttons: [
+                              {
+                                label: "Yes",
+                                onClick: () => this.removeParticipant(item),
+                              },
+                              {
+                                label: "No",
+                                onClick: () => null,
+                              },
+                            ],
+                          })
+                        }
+                      >
+                        <MdRemoveCircle className="re-icon" />
+                      </Button>
+                    </Col>
+                  <Col></Col>
+                </Row>
               );
             })}
           </Card.Body>
