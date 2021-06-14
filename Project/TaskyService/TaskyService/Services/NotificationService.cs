@@ -9,7 +9,7 @@ namespace TaskyService.Services
             Title = "Project Invitation",
             Body = "{0} invited you to a project.",
             IsRead = false,
-            WebUrl = "/project/{0}",
+            WebUrl = "/profile/{0}",
             MobileScreen = "PROJECT"
         };
 

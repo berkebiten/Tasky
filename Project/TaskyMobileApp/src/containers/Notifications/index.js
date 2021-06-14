@@ -39,7 +39,7 @@ export default class Notifications extends Component {
       SET_READ_NOTIFICATION + id,
       ServiceHelper.createOptionsJson(null, 'PUT'),
     );
-    if (responseData) {
+    if (responseData && screen) {
       NavigationHelper.navigate(screen, params);
     }
   };
@@ -52,7 +52,9 @@ export default class Notifications extends Component {
           itemWidth={Metrics.WIDTH * 0.95}
           onPress={() =>
             this.onPressNotification(
-              SCREEN_ENUMS[item.item.mobileScreen],
+              item.item.mobileScreen
+                ? SCREEN_ENUMS[item.item.mobileScreen]
+                : null,
               {
                 task: {id: item.item.dataId},
               },

@@ -12,7 +12,7 @@ namespace TaskyService.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public string WebUrl { get; set; }
-        public string MobileScreen { get; set; }
+        public string? MobileScreen { get; set; }
         public bool IsRead { get; set; }
         public DateTime RegDate { get; set; }
     }

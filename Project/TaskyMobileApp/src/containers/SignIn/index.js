@@ -8,10 +8,9 @@ import {
   ImageBackground,
   Platform,
   StatusBar,
-  BackHandler,
   I18nManager,
 } from 'react-native';
-import {Container, Right, Header, Left, Body, Toast} from 'native-base';
+import {Container, Right, Header, Left, Toast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CheckBox from 'react-native-check-box';
@@ -20,19 +19,22 @@ import images from '../../res/styles/images';
 import NavigationHelper from '../../util/helpers/NavigationHelper';
 import {SCREEN_ENUMS} from '../../util/constants/Enums';
 import {ServiceHelper} from '../../util/helpers';
-import {LOGIN_SERVICE} from '../../util/constants/Services';
+import {LOGIN_SERVICE, RESET_PASSWORD} from '../../util/constants/Services';
 import {
   loadLoginObject,
   saveLoginObject,
   saveUser,
 } from '../../util/storage/AsyncStorage';
 import {NavigationActions, StackActions} from 'react-navigation';
+import ResetPasswordForm from '../../components/forms/ResetPasswordForm';
+import CustomModal from '../../components/modals/CustomModal';
 
 export default class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rememberMe: false,
+      forgotPsw: false,
     };
   }
 
@@ -42,10 +44,10 @@ export default class SignIn extends Component {
 
   initialize = async () => {
     let loginObject = await loadLoginObject();
-    if(loginObject){
-      loginObject = JSON.parse(loginObject)
-      this.setState({email: loginObject.email, password: loginObject.password})
-      this.signIn()
+    if (loginObject) {
+      loginObject = JSON.parse(loginObject);
+      this.setState({email: loginObject.email, password: loginObject.password});
+      this.signIn();
     }
   };
 
@@ -95,6 +97,39 @@ export default class SignIn extends Component {
     }
   };
 
+  forgotPassword = async (data) => {
+    await ServiceHelper.serviceHandler(
+      RESET_PASSWORD + data.email,
+      ServiceHelper.createOptionsJson(null, 'PUT'),
+    ).then((response) => {
+      if (response && response.isSuccessfull) {
+        this.setState({forgotPsw: false});
+        Toast.show({text: 'Reset Password Mail Sent.', type: 'success'});
+      } else {
+        this.setState({forgotPsw: false});
+        Toast.show({text: response ? response.message : '', type: 'error'});
+      }
+    });
+  };
+
+  createResetPasswordForm = () => {
+    return (
+      <CustomModal
+        title="Reset Password"
+        isVisible={this.state.forgotPsw}
+        toggleModal={() => this.setState({forgotPsw: false})}
+        content={
+          <View style={{height: '100%'}}>
+            <ResetPasswordForm
+              initialValues={this.state.userData}
+              onSubmit={(data) => this.forgotPassword(data)}
+            />
+          </View>
+        }
+      />
+    );
+  };
+
   render() {
     StatusBar.setBarStyle('light-content', true);
     if (Platform.OS === 'android') {
@@ -120,7 +155,6 @@ export default class SignIn extends Component {
                 />
               </TouchableOpacity>
             </Left>
-
             <Right style={styles.right} />
           </Header>
           <View>
@@ -137,7 +171,6 @@ export default class SignIn extends Component {
                 onChangeText={(text) => this.setState({email: text})}
                 value={this.state.email}
               />
-
               <TextInput
                 style={styles.textInput}
                 secureTextEntry={true}
@@ -176,7 +209,8 @@ export default class SignIn extends Component {
               />
               <Text style={styles.textRememberMe}>Remember me</Text>
               <Right>
-                <TouchableOpacity onPress={() => alert('Forgot password')}>
+                <TouchableOpacity
+                  onPress={() => this.setState({forgotPsw: true})}>
                   <Text style={styles.textForgotPwd}>Forgot password?</Text>
                 </TouchableOpacity>
               </Right>
@@ -196,6 +230,7 @@ export default class SignIn extends Component {
               </TouchableOpacity>
             </View>
           </View>
+          {this.state.forgotPsw && this.createResetPasswordForm()}
         </ImageBackground>
       </Container>
     );

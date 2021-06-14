@@ -263,8 +263,8 @@ namespace TaskyService.Controllers
                         Title = NotificationService.PROJECT_INVITATION.Title,
                         Body = String.Format(NotificationService.PROJECT_INVITATION.Body, project.ProjectManagerFirstName + " " + project.ProjectManagerLastName),
                         UserId = participant.UserId,
-                        WebUrl = String.Format(NotificationService.PROJECT_INVITATION.WebUrl, id),
-                        MobileScreen = "PROJECT",
+                        WebUrl = String.Format(NotificationService.PROJECT_INVITATION.WebUrl, participantId.Id),
+                        MobileScreen = null,
                         RegDate = DateTime.Now,
 
                     };
