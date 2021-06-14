@@ -28,6 +28,7 @@ import {
 import {NavigationActions, StackActions} from 'react-navigation';
 import ResetPasswordForm from '../../components/forms/ResetPasswordForm';
 import CustomModal from '../../components/modals/CustomModal';
+import messaging from '@react-native-firebase/messaging';
 
 export default class SignIn extends Component {
   constructor(props) {
@@ -43,11 +44,21 @@ export default class SignIn extends Component {
   };
 
   initialize = async () => {
+    let token = await messaging().getToken();
     let loginObject = await loadLoginObject();
     if (loginObject) {
       loginObject = JSON.parse(loginObject);
-      this.setState({email: loginObject.email, password: loginObject.password});
-      this.signIn();
+      loginObject.firebaseToken = token;
+      this.setState(
+        {
+          email: loginObject.email,
+          password: loginObject.password,
+          firebaseToken: token,
+        },
+        () => this.signIn(),
+      );
+    } else {
+      this.setState({firebaseToken: token});
     }
   };
 
@@ -55,6 +66,7 @@ export default class SignIn extends Component {
     let loginObject = {
       email: this.state.email,
       password: this.state.password,
+      fcmToken: this.state.firebaseToken
     };
 
     const responseData = await ServiceHelper.serviceHandler(
