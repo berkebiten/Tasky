@@ -9,6 +9,7 @@ import { MdRemoveCircle } from "react-icons/md";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import CancelIcon from "@material-ui/icons/Cancel";
 import EditIcon from "@material-ui/icons/Edit";
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import {
   Card,
   Col,
@@ -442,17 +443,21 @@ export default class ProjectDetail extends Component {
     );
   };
 
-  closeProject = async () => {
+  changeProjectStatus = async (bool) => {
     let body = {
       ...this.state.project,
-      status: false,
+      status: bool,
     };
     await ServiceHelper.serviceHandler(
       UPDATE_PROJECT + this.state.projectId,
       ServiceHelper.createOptionsJson(JSON.stringify(body), "PUT")
     ).then((response) => {
       if (response && response.isSuccessfull) {
-        toast("Project Closed.", {
+        let text = "Project is Closed.";
+        if (bool) {
+          text = "Project is Activated.";
+        }
+        toast(text, {
           type: "success",
         });
         this.getProjectDetail();
@@ -600,40 +605,49 @@ export default class ProjectDetail extends Component {
     return (
       <Container className="dark-overview-container">
         <Row className="mt-2 project-detail-row mx-auto">
-          {this.state.userRole === "ProjectManager" &&
-            this.state.project.status !== false && (
-              <>
-                <Button
-                  className="delete-project btn-w-icon"
-                  variant="dark"
-                  onClick={() =>
-                    confirmAlert({
-                      title: "Warning!",
-                      message: "Are you sure to close the project?",
-                      buttons: [
-                        {
-                          label: "Yes",
-                          onClick: () => this.closeProject(),
-                        },
-                        {
-                          label: "No",
-                          onClick: () => null,
-                        },
-                      ],
-                    })
-                  }
-                >
-                  <CancelIcon className="pr-icons" /> Close Project
-                </Button>
-                <Button
-                  className="ml-2 delete-project btn-w-icon"
-                  variant="dark"
-                  onClick={() => this.setState({ updateProject: true })}
-                >
-                  <EditIcon className="pr-icons" /> Update Project
-                </Button>
-              </>
-            )}
+          {this.state.userRole === "ProjectManager" && (
+            <>
+              <Button
+                className="delete-project btn-w-icon"
+                variant="dark"
+                onClick={() =>
+                  confirmAlert({
+                    title: "Warning!",
+                    message: this.state.project.status
+                      ? "Are you sure to close the project?"
+                      : "Are you sure to activate the project?",
+                    buttons: [
+                      {
+                        label: "Yes",
+                        onClick: () =>
+                          this.changeProjectStatus(!this.state.project.status),
+                      },
+                      {
+                        label: "No",
+                        onClick: () => null,
+                      },
+                    ],
+                  })
+                }
+              >
+                {this.state.project.status ? (
+                  <CancelIcon className="pr-icons" />
+                ) : (
+                  <LockOpenIcon className="pr-icons" />
+                )}
+                {this.state.project.status
+                  ? "Close Project"
+                  : "Activate Project"}
+              </Button>
+              <Button
+                className="ml-2 delete-project btn-w-icon"
+                variant="dark"
+                onClick={() => this.setState({ updateProject: true })}
+              >
+                <EditIcon className="pr-icons" /> Update Project
+              </Button>
+            </>
+          )}
           {this.state.userRole !== "ProjectManager" &&
             this.state.project.status !== false && (
               <Button
@@ -857,7 +871,7 @@ export default class ProjectDetail extends Component {
                               })
                             }
                           >
-                            <MdRemoveCircle className="re-icon"/>
+                            <MdRemoveCircle className="re-icon" />
                           </Button>
                         </Col>
                       </Row>

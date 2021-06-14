@@ -322,7 +322,7 @@ CREATE TABLE Notification(
     Body NVARCHAR(MAX) NOT NULL,
     Title NVARCHAR(MAX) NOT NULL,
     WebUrl NVARCHAR(MAX) NOT NULL,
-    MobileScreen NVARCHAR(MAX) NOT NULL,
+    MobileScreen NVARCHAR(MAX) NULL,
     DataId UNIQUEIDENTIFIER NULL,
     IsRead BIT NOT NULL,
     FOREIGN KEY (UserId) REFERENCES [dbo].[User](id)
