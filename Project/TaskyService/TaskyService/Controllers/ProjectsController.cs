@@ -449,13 +449,19 @@ namespace TaskyService.Controllers
         public async Task<IActionResult> GetProjectParticipants(Guid id)
         {
             var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id).ToList();
+            var invitations = _invitationContext.ProjectInvitation.ToList().Where(item => item.ProjectId == id).ToList();
             foreach (VW_ProjectParticipant item in participants)
             {
                 item.RoleTitle = Enum.GetName(typeof(RoleTitles), item.Role);
                 item.FullName = item.FirstName + " " + item.LastName;
             }
 
-            return Ok(new { isSuccessful = true, data = participants });
+            foreach (ProjectInvitation item in invitations)
+            {
+                item.RoleTitle = Enum.GetName(typeof(RoleTitles), item.Role);
+            }
+
+            return Ok(new { isSuccessful = true, data = new { Participants = participants, Invitations = invitations } });
         }
 
         private bool ProjectExists(Guid id)

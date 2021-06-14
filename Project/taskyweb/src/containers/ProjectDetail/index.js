@@ -9,7 +9,7 @@ import { MdRemoveCircle } from "react-icons/md";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import CancelIcon from "@material-ui/icons/Cancel";
 import EditIcon from "@material-ui/icons/Edit";
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 import {
   Card,
   Col,
@@ -140,7 +140,16 @@ export default class ProjectDetail extends Component {
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
       if (response && response.isSuccessful) {
-        this.setState({ projectParticipants: response.data });
+        let projectParticipants = response.data.participants;
+        let invitations = response.data.invitations;
+        let participants = projectParticipants.filter((item) => item.status);
+        let participantInvitations = projectParticipants.filter(
+          (item) => !item.status
+        );
+        this.setState({
+          projectParticipants: participants,
+          participantInvitations: [...participantInvitations, ...invitations],
+        });
       }
     });
   };
@@ -648,8 +657,7 @@ export default class ProjectDetail extends Component {
               </Button>
             </>
           )}
-          {this.state.userRole !== "ProjectManager" &&
-            this.state.project.status !== false && (
+          {this.state.userRole !== "ProjectManager" && (
               <Button
                 className="ml-2 delete-project btn-w-icon"
                 variant="dark"
@@ -792,21 +800,8 @@ export default class ProjectDetail extends Component {
         </Row>
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
-            <Card.Header>
-              Participants
-              {this.state.userRole === "ProjectManager" &&
-                this.state.project.status && (
-                  <Button
-                    onClick={() => this.setState({ inviteParticipant: true })}
-                    className="pull-right"
-                  >
-                    Invite Participant
-                  </Button>
-                )}
-            </Card.Header>
+            <Card.Header>Participants</Card.Header>
             <Card.Body>
-              {this.state.inviteParticipant &&
-                this.createInviteParticipantModal()}
               {overview_participants.map((item, key) => {
                 var roleName =
                   this.getParticipantRoleName(item).toString() + "";
@@ -882,6 +877,8 @@ export default class ProjectDetail extends Component {
             </Card.Body>
           </Card>
         </Row>
+        {this.state.userRole === "ProjectManager" &&
+          this.createParticipantRequests()}
         <Row className="mt-4 project-detail-row mx-auto">
           <Card className="project-detail-card">
             <Card.Header style={{ width: "100%" }}>
@@ -908,6 +905,94 @@ export default class ProjectDetail extends Component {
         </Row>
         {this.state.fileUpload && this.createFileUploadModal()}
       </Container>
+    );
+  };
+
+  createParticipantRequests = () => {
+    return (
+      <Row className="mt-4 project-detail-row mx-auto">
+        <Card className="project-detail-card">
+          <Card.Header>
+            Invitations
+            {this.state.project.status && (
+              <Button
+                onClick={() => this.setState({ inviteParticipant: true })}
+                className="pull-right"
+              >
+                Invite Participant
+              </Button>
+            )}
+          </Card.Header>
+          <Card.Body>
+            {this.state.inviteParticipant &&
+              this.createInviteParticipantModal()}
+            {this.state.participantInvitations.map((item, key) => {
+              var roleName = this.getParticipantRoleName(item).toString() + "";
+              let visibleClass =
+                roleName !== "owner" &&
+                this.state.project.projectManagerId === this.state.user.id
+                  ? "visible"
+                  : "invisible";
+              return (
+                <div className="project-participant-card ml-3">
+                  <div
+                    className="participant-orient"
+                    style={{ display: "flex" }}
+                  >
+                    <Row>
+                      <Col style={{ padding: 0 }}>
+                        <OverlayTrigger
+                          key={item.id}
+                          placement={"top-start"}
+                          overlay={<Ttip id={item.id}>{item.roleTitle}</Ttip>}
+                        >
+                          <Image
+                            className={
+                              "project-participant-image " +
+                              roleName +
+                              "-border"
+                            }
+                            src={
+                              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"
+                            }
+                          />
+                        </OverlayTrigger>
+                        <div className="project-participant-name text-center">
+                          {item.email}
+                        </div>
+                      </Col>
+                      <Col style={{ padding: 0 }}>
+                        <Button
+                          className={"remove-p " + visibleClass}
+                          onClick={() =>
+                            confirmAlert({
+                              title: "Warning!",
+                              message:
+                                "Are you sure you want to cancel invitation? ",
+                              buttons: [
+                                {
+                                  label: "Yes",
+                                  onClick: () => this.removeParticipant(item),
+                                },
+                                {
+                                  label: "No",
+                                  onClick: () => null,
+                                },
+                              ],
+                            })
+                          }
+                        >
+                          <MdRemoveCircle className="re-icon" />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                </div>
+              );
+            })}
+          </Card.Body>
+        </Card>
+      </Row>
     );
   };
 

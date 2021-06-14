@@ -133,8 +133,10 @@ namespace TaskyService.Controllers
 
         [HttpPut]
         [Route("Update/{id}")]
-        public ActionResult PutTask(Guid id, Models.Task task)
+        public ActionResult PutTask(Guid id, Models.Task task, [FromHeader(Name = "Authorization")] String token)
         {
+
+            var user = _userContext.User.Find(TokenService.getUserId(token));
             if (id != task.Id)
             {
                 return NotFound(new { isSuccessful = false, message = "Task is Not Found!" });
@@ -147,6 +149,9 @@ namespace TaskyService.Controllers
                 _context.SaveChanges();
 
 
+                if(user.Id != task.AssigneeId)
+                {
+
                 #region send mail to assignee
                 var assignee = _userContext.User.Find(task.AssigneeId);
                 Hashtable ht = new Hashtable();
@@ -155,6 +160,10 @@ namespace TaskyService.Controllers
                 ht.Add("[TASKNAME]", task.Title);
                 string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
                 #endregion
+                }
+
+                if(user.Id != task.ReporterId)
+                {
 
                 #region send mail to reporter
                 if (task.AssigneeId != task.ReporterId)
@@ -165,6 +174,7 @@ namespace TaskyService.Controllers
                     ht2.Add("[LINK]", directory + "task/" + task.Id);
                     ht2.Add("[TASKNAME]", task.Title);
                     string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+                }
                 }
                 #endregion
             }
@@ -198,18 +208,22 @@ namespace TaskyService.Controllers
             var reporter = _userContext.User.Find(task.ReporterId);
             var user = _userContext.User.Find(TokenService.getUserId(token));
 
-            var notification = new Notification
+            if(user.Id != reporter.Id)
             {
-                DataId = id,
-                Title = NotificationService.TASK_UPDATE.Title,
-                Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
-                UserId = reporter.Id,
-                WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
-                MobileScreen = "TASK",
-                RegDate = DateTime.Now,
+                var notification = new Notification
+                {
+                    DataId = id,
+                    Title = NotificationService.TASK_UPDATE.Title,
+                    Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
+                    UserId = reporter.Id,
+                    WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
+                    MobileScreen = "TASK",
+                    RegDate = DateTime.Now,
 
-            };
-            _notificationContext.Add(notification);
+                };
+                _notificationContext.Add(notification);
+
+            }
 
             TaskOperation operation = new TaskOperation();
             operation.Id = new Guid();
@@ -227,6 +241,9 @@ namespace TaskyService.Controllers
                 _operationContext.SaveChanges();
                 _notificationContext.SaveChanges();
 
+                if(user.Id != assignee.Id)
+                {
+
                 #region send mail to assignee
                 Hashtable ht = new Hashtable();
                 ht.Add("[FIRSTNAME]", assignee.FirstName);
@@ -234,10 +251,11 @@ namespace TaskyService.Controllers
                 ht.Add("[TASKNAME]", task.Title);
                 string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
                 #endregion
+                } 
 
 
                 #region send mail to reporter
-                if (task.AssigneeId != task.ReporterId)
+                if (task.AssigneeId != task.ReporterId && user.Id != task.ReporterId)
                 {
                     Hashtable ht2 = new Hashtable();
                     ht2.Add("[FIRSTNAME]", reporter.FirstName);
@@ -281,26 +299,30 @@ namespace TaskyService.Controllers
 
         [HttpPost]
         [Route("Insert")]
-        public ActionResult<Models.Task> PostProject(Models.Task task, [FromHeader(Name = "Authorization")] String token)
+        public ActionResult<Models.Task> PostTask(Models.Task task, [FromHeader(Name = "Authorization")] String token)
         {
             task.CreatedDate = DateTime.Now.Date;
             task.Status = 0;
-            var reporter_ = _userContext.User.Find(TokenService.getUserId(token));
+            var reporter_ = _userContext.User.Find(task.ReporterId);
+            var user = _userContext.User.Find(TokenService.getUserId(token));
             _context.Add(task);
 
             #region send notification to assignee
-            var notification = new Notification
+            if(user.Id != task.AssigneeId)
             {
-                DataId = task.Id,
-                Title = String.Format(NotificationService.ASSIGN_TASK.Title, reporter_.FirstName + " " + reporter_.LastName),
-                Body = String.Format(NotificationService.ASSIGN_TASK.Body, task.Title),
-                UserId = task.AssigneeId,
-                WebUrl = String.Format(NotificationService.ASSIGN_TASK.WebUrl, task.Id),
-                MobileScreen = "TASK",
-                RegDate = DateTime.Now,
+                var notification = new Notification
+                {
+                    DataId = task.Id,
+                    Title = String.Format(NotificationService.ASSIGN_TASK.Title, reporter_.FirstName + " " + reporter_.LastName),
+                    Body = String.Format(NotificationService.ASSIGN_TASK.Body, task.Title),
+                    UserId = task.AssigneeId,
+                    WebUrl = String.Format(NotificationService.ASSIGN_TASK.WebUrl, task.Id),
+                    MobileScreen = "TASK",
+                    RegDate = DateTime.Now,
 
-            };
-            _notificationContext.Add(notification);
+                };
+                _notificationContext.Add(notification);
+            }
             #endregion
 
             foreach (File64 file64 in task.Files)
@@ -323,17 +345,20 @@ namespace TaskyService.Controllers
 
                 string projectName = _projectContext.Project.Find(task.ProjectId).Name;
 
-                #region send mail to assignee
-                var assignee = _userContext.User.Find(task.AssigneeId);
-                Hashtable ht = new Hashtable();
-                ht.Add("[FIRSTNAME]", assignee.FirstName);
-                ht.Add("[LINK]", directory + "task/" + task.Id);
-                ht.Add("[PROJECTNAME]", projectName);
-                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_assigned", assignee.Email, "", ht);
-                #endregion
+                if(task.AssigneeId != reporter_.Id && task.AssigneeId != user.Id)
+                {
+                    #region send mail to assignee
+                    var assignee = _userContext.User.Find(task.AssigneeId);
+                    Hashtable ht = new Hashtable();
+                    ht.Add("[FIRSTNAME]", assignee.FirstName);
+                    ht.Add("[LINK]", directory + "task/" + task.Id);
+                    ht.Add("[PROJECTNAME]", projectName);
+                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_assigned", assignee.Email, "", ht);
+                    #endregion
+                }
 
                 #region send mail to reporter
-                if (task.AssigneeId != task.ReporterId)
+                if (user.Id != task.ReporterId)
                 {
                     var reporter = _userContext.User.Find(task.ReporterId);
                     Hashtable ht2 = new Hashtable();

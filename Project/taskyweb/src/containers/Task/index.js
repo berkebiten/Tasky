@@ -152,8 +152,8 @@ export default class Task extends Component {
       GET_PROJECT_PARTICIPANTS_SERVICE + "/" + this.state.projectId,
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
-      if (response && response.isSuccessful) {
-        this.setState({ projectParticipants: response.data });
+      if (response && response.isSuccessful && response.data) {
+        this.setState({ projectParticipants: response.data.participants });
       }
     });
   };
@@ -248,13 +248,15 @@ export default class Task extends Component {
           >
             <RiArrowGoBackFill /> Go to Project Task List
           </Button>
-          <Button
-            onClick={() => this.setState({ updateTask: true })}
-            className="new-task ml-2"
-            variant="dark"
-          >
-            <EditIcon /> Update Task
-          </Button>
+          {this.state.userRole !== "Watcher" && this.state.task.projectStatus && (
+            <Button
+              onClick={() => this.setState({ updateTask: true })}
+              className="new-task ml-2"
+              variant="dark"
+            >
+              <EditIcon /> Update Task
+            </Button>
+          )}
         </Row>
         <Card className="ml-5 task-detail-card" style={{ width: "91%" }}>
           <Card.Header>
