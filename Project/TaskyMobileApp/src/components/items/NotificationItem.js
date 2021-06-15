@@ -17,9 +17,7 @@ export default class NotificationItem extends Component {
         <View>
           <View style={styles.ratingDateView}>
             <View style={styles.ratingStar}>
-              <Text style={styles.user}>
-                {this.props.item.title}
-              </Text>
+              <Text style={styles.user}>{this.props.item.title}</Text>
             </View>
             <Right>
               <Text style={styles.rowDateTxt}>
@@ -48,9 +46,7 @@ export default class NotificationItem extends Component {
 
   createContent = () => {
     return (
-      <TouchableOpacity
-        style={this.getContainerStyle()}
-        onPress={() => this.props.onPress()}>
+      <TouchableOpacity style={this.getContainerStyle()}>
         {this.createHeader()}
       </TouchableOpacity>
     );
@@ -151,7 +147,7 @@ const styles = StyleSheet.create({
     color: Colors.darktext,
     fontWeight: 'bold',
     width: Metrics.WIDTH * 0.45,
-    marginTop: 5
+    marginTop: 5,
   },
 
   rowDateTxt: {
