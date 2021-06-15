@@ -241,15 +241,20 @@ namespace TaskyService.Controllers
         [Route("UpdateTaskStatus/{id}")]
         public ActionResult UpdateTaskStatus(Guid id, Models.Task task, [FromHeader(Name = "Authorization")] string token)
         {
+            var reporterUser = _userContext.User.Find(task.ReporterId);
             if (id != task.Id)
             {
                 return NotFound(new { isSuccessful = false, message = "Task is Not Found!" });
             }
-
             var oldTask = _context.VW_Task.ToList().Where(item => item.Id == task.Id).FirstOrDefault();
             var assignee = _userContext.User.Find(task.AssigneeId);
             var reporter = _userContext.User.Find(task.ReporterId);
             var user = _userContext.User.Find(TokenService.getUserId(token));
+
+            if (reporterUser.FirebaseToken != null)
+            {
+                FirebaseNotificationService.PushNotification(new FBNotification { Body = user.FirstName + " " + user.LastName + " assigned you a task.", Title = "A Task is Assigned To You.", To = reporterUser.FirebaseToken });
+            }
 
             if (user.Id != reporter.Id)
             {
