@@ -42,7 +42,8 @@ import {
   REMOVE_PARTICIPANT,
   LEAVE_PROJECT,
   UPDATE_PROJECT_STATUS,
-  DELETE_PROJECT
+  DELETE_PROJECT,
+  REMOVE_INVITATION
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -550,6 +551,24 @@ export default class ProjectDetail extends Component {
     });
   };
 
+  removeInvitation = async (item) => {
+    await ServiceHelper.serviceHandler(
+      REMOVE_INVITATION + item.id,
+      ServiceHelper.createOptionsJson(null, "DELETE")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        toast(response.message, {
+          type: "success",
+        });
+        window.location.reload();
+      } else {
+        toast(response.message, {
+          type: "error",
+        });
+      }
+    });
+  };
+
   leaveProject = async () => {
     await ServiceHelper.serviceHandler(
       LEAVE_PROJECT + this.state.projectId + "/" + this.state.user.id,
@@ -1003,7 +1022,7 @@ export default class ProjectDetail extends Component {
                           buttons: [
                             {
                               label: "Yes",
-                              onClick: () => this.removeParticipant(item),
+                              onClick: () => this.removeInvitation(item),
                             },
                             {
                               label: "No",

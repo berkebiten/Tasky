@@ -38,3 +38,4 @@ export const RESET_PASSWORD_MAIL = "/Users/SendResetPasswordUrl/"
 export const RESET_PASSWORD = "/Users/ResetPassword/"
 export const UPDATE_PROJECT_STATUS = "/Projects/UpdateProjectStatus/"
 export const DELETE_PROJECT = "/Projects/DeleteProject/";
+export const REMOVE_INVITATION = "/Projects/RemoveInvitation/";

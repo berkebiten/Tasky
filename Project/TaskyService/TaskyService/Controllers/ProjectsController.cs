@@ -426,6 +426,30 @@ namespace TaskyService.Controllers
 
             return Ok(new { isSuccessful = true, message = "Project Deleted." });
         }
+        [HttpDelete]
+        [Route("RemoveInvitation/{invitationId}")]
+        public IActionResult RemoveInvitation(Guid invitationId)
+        {
+            var invitation = _invitationContext.ProjectInvitation.ToList().Where(item=> item.Id == invitationId).FirstOrDefault();
+            if (invitation == null)
+            {
+                return NotFound();
+            }
+
+            _invitationContext.Remove(invitation);
+
+            try
+            {
+
+                _invitationContext.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessful = true, message = "Invitation Cancelled." });
+        }
 
         [HttpDelete]
         [Route("RemoveParticipant/{participantId}")]
