@@ -142,10 +142,9 @@ export default class ProjectDetail extends Component {
       if (response && response.isSuccessful) {
         let projectParticipants = response.data.participants;
         let invitations = response.data.invitations;
-        let participants = projectParticipants
-          .filter((item) => item.status);
+        let participants = projectParticipants.filter((item) => item.status);
 
-        participants.sort((a, b) => this.compareRoles(a.role, b.role))
+        participants.sort((a, b) => this.compareRoles(a.role, b.role));
         let participantInvitations = projectParticipants.filter(
           (item) => !item.status
         );
@@ -907,7 +906,7 @@ export default class ProjectDetail extends Component {
                 {this.state.project &&
                   this.state.project.files &&
                   this.state.project.files.map((item, key) => {
-                    return <Col md={3}>{this.renderFile(item)}</Col>;
+                    return <Col md="auto">{this.renderFile(item)}</Col>;
                   })}
               </Row>
             </Card.Body>
@@ -945,33 +944,33 @@ export default class ProjectDetail extends Component {
                   : "invisible";
               return (
                 <Row style={{ "margin-top": "5px" }}>
-                    <Col className="ml-1" md={2}>
-                      <h3>{item.email}</h3>
-                    </Col>
-                    <Col md={1}>
-                      <Button
-                        className={"remove-p " + visibleClass}
-                        onClick={() =>
-                          confirmAlert({
-                            title: "Warning!",
-                            message:
-                              "Are you sure you want to cancel invitation? ",
-                            buttons: [
-                              {
-                                label: "Yes",
-                                onClick: () => this.removeParticipant(item),
-                              },
-                              {
-                                label: "No",
-                                onClick: () => null,
-                              },
-                            ],
-                          })
-                        }
-                      >
-                        <MdRemoveCircle className="re-icon" />
-                      </Button>
-                    </Col>
+                  <Col className="ml-1" md={2}>
+                    <h3>{item.email}</h3>
+                  </Col>
+                  <Col md={1}>
+                    <Button
+                      className={"remove-p " + visibleClass}
+                      onClick={() =>
+                        confirmAlert({
+                          title: "Warning!",
+                          message:
+                            "Are you sure you want to cancel invitation? ",
+                          buttons: [
+                            {
+                              label: "Yes",
+                              onClick: () => this.removeParticipant(item),
+                            },
+                            {
+                              label: "No",
+                              onClick: () => null,
+                            },
+                          ],
+                        })
+                      }
+                    >
+                      <MdRemoveCircle className="re-icon" />
+                    </Button>
+                  </Col>
                   <Col></Col>
                 </Row>
               );
@@ -984,21 +983,21 @@ export default class ProjectDetail extends Component {
 
   renderFile = (file) => {
     return (
-      <a href={file.data} download>
-        <Card className="react-kanban-card stretched-link">
-          <Card.Title className="file-text">{file.name}</Card.Title>
-          <Card.Body className="file-card row">
-            <Icon name="file" size="huge" />
-          </Card.Body>
-          <Card.Footer className="rkc-footer text-muted">
-            <Icon name="user" />
-            {file.userFullName}
-            <br />
-            <Icon name="calendar check outline" />
-            {moment(file.date).format("DD/MM/YYYY")}
-          </Card.Footer>
-        </Card>
-      </a>
+        <a style={{"display":"inline-block"}} href={file.data} download>
+          <Card className="react-kanban-card stretched-link">
+            <Card.Title>{TextHelper.getSmallText(file.name, 15)}</Card.Title>
+            <Card.Body className="file-card row">
+              <Icon name="file" size="huge" />
+            </Card.Body>
+            <Card.Footer className="rkc-footer text-muted">
+              <Icon name="user" />
+              {file.userFullName}
+              <br />
+              <Icon name="calendar check outline" />
+              {moment(file.date).format("DD/MM/YYYY")}
+            </Card.Footer>
+          </Card>
+        </a>
     );
   };
 
@@ -1144,9 +1143,7 @@ export default class ProjectDetail extends Component {
             <SideBar
               menuItems={menuItems}
               title={
-                this.state.project
-                  ? TextHelper.getSmallText(this.state.project.name, 20)
-                  : "Project Detail"
+                this.state.project ? this.state.project.name : "Project Detail"
               }
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}
