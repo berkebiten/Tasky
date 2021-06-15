@@ -907,7 +907,7 @@ export default class ProjectDetail extends Component {
                 {this.state.project &&
                   this.state.project.files &&
                   this.state.project.files.map((item, key) => {
-                    return <Col md={3}>{this.renderFile(item)}</Col>;
+                    return <Col md="auto">{this.renderFile(item)}</Col>;
                   })}
               </Row>
             </Card.Body>
@@ -984,21 +984,21 @@ export default class ProjectDetail extends Component {
 
   renderFile = (file) => {
     return (
-      <a href={file.data} download>
-        <Card className="react-kanban-card stretched-link">
-          <Card.Title className="file-text">{file.name}</Card.Title>
-          <Card.Body className="file-card row">
-            <Icon name="file" size="huge" />
-          </Card.Body>
-          <Card.Footer className="rkc-footer text-muted">
-            <Icon name="user" />
-            {file.userFullName}
-            <br />
-            <Icon name="calendar check outline" />
-            {moment(file.date).format("DD/MM/YYYY")}
-          </Card.Footer>
-        </Card>
-      </a>
+        <a style={{"display":"inline-block"}} href={file.data} download>
+          <Card className="react-kanban-card stretched-link">
+            <Card.Title>{TextHelper.getSmallText(file.name, 15)}</Card.Title>
+            <Card.Body className="file-card row">
+              <Icon name="file" size="huge" />
+            </Card.Body>
+            <Card.Footer className="rkc-footer text-muted">
+              <Icon name="user" />
+              {file.userFullName}
+              <br />
+              <Icon name="calendar check outline" />
+              {moment(file.date).format("DD/MM/YYYY")}
+            </Card.Footer>
+          </Card>
+        </a>
     );
   };
 
@@ -1144,9 +1144,7 @@ export default class ProjectDetail extends Component {
             <SideBar
               menuItems={menuItems}
               title={
-                this.state.project
-                  ? TextHelper.getSmallText(this.state.project.name, 20)
-                  : "Project Detail"
+                this.state.project ? this.state.project.name : "Project Detail"
               }
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}

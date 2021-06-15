@@ -282,6 +282,7 @@ html,
   text-align: center;
   background-color: var(--tasky-dark);
   color: var(--main-light-blue);
+  line-break:anywhere;
 }
 
 .tasky-project-sidenav .sidenav-header-text {
@@ -474,31 +475,26 @@ html,
   background-color: var(--bs-light);
   color: var(--main-light-blue);
   font-weight: bold;
-  font-size: medium !important;
 }
 .state-bar-todo {
   background-color: var(--to-do);
   color: var(--main-light-blue);
   font-weight: bold;
-  font-size: medium !important;
 }
 .state-bar-active {
   background-color: var(--active);
   color: var(--main-light-blue);
   font-weight: bold;
-  font-size: medium !important;
 }
 .state-bar-resolved {
   background-color: var(--resolved);
   color: var(--main-light-blue);
   font-weight: bold;
-  font-size: medium !important;
 }
 .state-bar-closed {
   background-color: var(--closed);
   color: var(--main-light-blue);
   font-weight: bold;
-  font-size: medium !important;
 }
 
 .task-title h2,
@@ -996,3 +992,8 @@ p + p {
 .btn-invi:hover{
   background-color: var(--bs-dark) !important;
 }
+
+.project-st{
+  right:0 !important;
+}
+

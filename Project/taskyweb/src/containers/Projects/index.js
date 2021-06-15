@@ -118,7 +118,7 @@ export default class Projects extends Component {
       }
     });
   };
-  
+
   createProjectForm = () => {
     return (
       <CustomModal
@@ -126,9 +126,7 @@ export default class Projects extends Component {
         onClose={() => this.setState({ projectFormVisibility: false })}
         content={
           <div>
-            <CreateProjectForm
-              onSubmit={(data) => this.onSubmit(data)}
-            />
+            <CreateProjectForm onSubmit={(data) => this.onSubmit(data)} />
           </div>
         }
         title={"CREATE NEW PROJECT"}
@@ -164,8 +162,17 @@ export default class Projects extends Component {
                   className="project-card mb-2 clickable"
                 >
                   <Card.Body>
-                    <Card.Title>
+                    <Card.Title style={{"display":"flex"}}>
+                      <Col style={{"padding":0}} md={9}>
                       {TextHelper.getSmallText(item.name, 15)}
+                      </Col>
+                      <Col md={3} style={{"padding":0}}>
+                      {item.status === true ? (
+                        <Badge className="project-st" variant="success">OPEN</Badge>
+                      ) : (
+                        <Badge className="project-st" variant="danger">CLOSED</Badge>
+                      )}
+                      </Col>
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                       {item.projectManagerFirstName +

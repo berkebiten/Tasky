@@ -55,7 +55,7 @@ namespace TaskyService.Controllers
 
         private ParticipantReport[] GetParticipantReport(Guid id)
         {
-            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id);
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Status == true);
             ParticipantReport[] participantReport = new ParticipantReport[3];
             ParticipantReport manager = new ParticipantReport();
             manager.Count = 0;
@@ -159,7 +159,7 @@ namespace TaskyService.Controllers
         private WorkHoursReport[] GetWorkHours(Guid id)
         {
             double workHour = 0;
-            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2).ToList();
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2 && item.Status == true).ToList();
             WorkHoursReport[] workHoursReports = new WorkHoursReport[participants.Count];
             int index = 0;
             foreach (VW_ProjectParticipant participant in participants)
@@ -194,7 +194,7 @@ namespace TaskyService.Controllers
 
         private TaskStatusReportByMember GetTaskStatusReportByMember(Guid id)
         {
-            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2).ToList();
+            var participants = _participantContext.VW_ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Role != 2 && item.Status == true).ToList();
             TaskStatusReportByMember taskStatusReportByMember = new TaskStatusReportByMember();
 
             taskStatusReportByMember.memberTaskStatuses = new MemberTaskStatus[participants.Count];

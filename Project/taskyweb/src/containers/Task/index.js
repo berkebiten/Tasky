@@ -261,47 +261,49 @@ export default class Task extends Component {
         <Card className="ml-5 task-detail-card" style={{ width: "91%" }}>
           <Card.Header>
             <Row className="mx-auto">
-              <Col md={1} className={"state-bar-" + stateName}>
+              <Col md={1} style={{fontSize: 14}} className={"state-bar-" + stateName}>
                 <p className="centered">{stateName.toUpperCase()}</p>
               </Col>
               <Col className="task-d-us" md={1}>
-                <div className="dd-wrapper">
-                  <Dropdown
-                    className="dark-dd"
-                    W
-                    noCaret
-                    icon={<ArrowForwardIosIcon></ArrowForwardIosIcon>}
-                  >
-                    <Dropdown.Item
-                      disabled={stateName.toUpperCase() === "TODO"}
-                      onSelect={() => this.updateTaskStatus(0)}
-                      className="state-bar-todo"
+                {this.state.userRole !== "Watcher" && (
+                  <div className="dd-wrapper">
+                    <Dropdown
+                      className="dark-dd"
+                      W
+                      noCaret
+                      icon={<ArrowForwardIosIcon></ArrowForwardIosIcon>}
                     >
-                      ToDo
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      disabled={stateName.toUpperCase() === "ACTIVE"}
-                      onSelect={() => this.updateTaskStatus(1)}
-                      className="state-bar-active"
-                    >
-                      Active
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      disabled={stateName.toUpperCase() === "RESOLVED"}
-                      onSelect={() => this.updateTaskStatus(2)}
-                      className="state-bar-resolved"
-                    >
-                      Resolved
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      disabled={stateName.toUpperCase() === "CLOSED"}
-                      onSelect={() => this.updateTaskStatus(3)}
-                      className="state-bar-closed"
-                    >
-                      Closed
-                    </Dropdown.Item>
-                  </Dropdown>
-                </div>
+                      <Dropdown.Item
+                        disabled={stateName.toUpperCase() === "TODO"}
+                        onSelect={() => this.updateTaskStatus(0)}
+                        className="state-bar-todo"
+                      >
+                        ToDo
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        disabled={stateName.toUpperCase() === "ACTIVE"}
+                        onSelect={() => this.updateTaskStatus(1)}
+                        className="state-bar-active"
+                      >
+                        Active
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        disabled={stateName.toUpperCase() === "RESOLVED"}
+                        onSelect={() => this.updateTaskStatus(2)}
+                        className="state-bar-resolved"
+                      >
+                        Resolved
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        disabled={stateName.toUpperCase() === "CLOSED"}
+                        onSelect={() => this.updateTaskStatus(3)}
+                        className="state-bar-closed"
+                      >
+                        Closed
+                      </Dropdown.Item>
+                    </Dropdown>
+                  </div>
+                )}
               </Col>
               <Col md={5} className="task-title">
                 <h2> {TextHelper.getSmallText(title, 20)} </h2>
@@ -331,9 +333,9 @@ export default class Task extends Component {
 
   renderFile = (file) => {
     return (
-      <a href={file.data} download>
+      <a style={{"display":"inline-block"}} href={file.data} download>
         <Card className="react-kanban-card stretched-link">
-          <Card.Title className="file-text">{file.name}</Card.Title>
+          <Card.Title >{TextHelper.getSmallText(file.name, 15)}</Card.Title>
           <Card.Body className="file-card row">
             <Icon name="file" size="huge" />
           </Card.Body>
@@ -351,8 +353,8 @@ export default class Task extends Component {
 
   createFilesCard = () => {
     return (
-      <Row className="mt-3 project-detail-row mx-auto">
-        <Card className="ml-3 task-detail-card" style={{ width: "96%" }}>
+      <Row className="mt-3 mb-3 ml-5">
+        <Card className="task-detail-card" style={{ width: "93%" }}>
           <Card.Header>
             Files
             {this.state.userRole !== "Watcher" &&
@@ -370,7 +372,7 @@ export default class Task extends Component {
               {this.state.task &&
                 this.state.task.files &&
                 this.state.task.files.map((item, key) => {
-                  return <Col md={3}>{this.renderFile(item)}</Col>;
+                  return <Col md="auto">{this.renderFile(item)}</Col>;
                 })}
             </Row>
           </Card.Body>
@@ -534,7 +536,7 @@ export default class Task extends Component {
   createTimeLine = () => {
     if (this.state.taskTimeline) {
       return (
-        <Card.Body className="ml-2">
+        <Card.Body className="ml-2" style={{"overflow-y":"auto","max-height":"500px"}}>
           <Timeline className="custom-timeline">
             {this.state.taskTimeline.map((item, index) => {
               let statusTitle = " " + item.newStatusTitle.toString();
@@ -843,7 +845,7 @@ export default class Task extends Component {
               menuItems={menuItems}
               title={
                 this.state.task
-                  ? TextHelper.getSmallText(this.state.task.title, 20)
+                  ? this.state.task.title
                   : "Task Detail"
               }
               activePage={this.state.activePage}
