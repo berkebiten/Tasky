@@ -11,6 +11,7 @@ function TaskForm(props) {
         name: "duration",
         validation: "\\d[hHmMdD]$",
         validationMessage: "Invalid time duration entered. (eg. 1d 2h 30m)",
+        maxLen: 10
       },
     },
     {

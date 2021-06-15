@@ -20,22 +20,34 @@ export function CustomForm(props) {
       case "password":
       case "picker":
       case "date":
-        return yup.string().nullable()
+        return yup.string().nullable();
       case "checkbox":
-        return yup.bool()
+        return yup.bool();
       case "email":
-        return yup.string()
-          .email("Please Write a Valid Email!")
+        return yup.string().email("Please Write a Valid Email!");
       case "file":
-        yup.string()
+        yup.string();
     }
   };
   let elements = {};
 
   props.formElements.map((item, key) => {
     elements[item.control.name] = getValidation(item.control.type);
-    if(item.control.required){
-      elements[item.control.name] = elements[item.control.name].required("Required Field!")
+    if (item.control.required) {
+      elements[item.control.name] =
+        elements[item.control.name].required("Required Field!");
+    }
+    if (item.control.maxLen) {
+      elements[item.control.name] = elements[item.control.name].max(
+        item.control.maxLen
+      );
+    }
+    if (item.control.min || item.control.min === 0) {
+      console.log("abc")
+      elements[item.control.name] = elements[item.control.name].min(
+        item.control.min,
+        item.control.minMessage
+      );
     }
     if (item.control.validation) {
       elements[item.control.name] = elements[item.control.name].matches(
@@ -66,7 +78,7 @@ export function CustomForm(props) {
         isValid,
         errors,
         setFieldValue,
-        submitCount
+        submitCount,
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>

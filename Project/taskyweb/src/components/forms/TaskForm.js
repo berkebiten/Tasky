@@ -5,14 +5,14 @@ function TaskForm(props) {
   const formElements = [
     {
       label: "Task Title",
-      control: { type: "text", name: "title", required: true },
+      control: { type: "text", name: "title", required: true, maxLen: 50 },
     },
     {
       label: "Task Description",
       control: {
         type: "textarea",
         name: "description",
-        required: true
+        required: true,
       },
     },
     {
@@ -21,7 +21,7 @@ function TaskForm(props) {
         onChange: (date) => props.onChangeDueDate(date),
         type: "date",
         name: "dueDate",
-        required: true
+        required: true,
       },
     },
     {
@@ -32,6 +32,8 @@ function TaskForm(props) {
         name: "assigneeId",
         displayKey: "fullName",
         key: "userId",
+        min: 0,
+        minMessage: "Please select an assignee!",
         options: [
           { userId: -20, fullName: "Please Select an Assignee!" },
           ...props.participants,
@@ -46,6 +48,8 @@ function TaskForm(props) {
         name: "reporterId",
         displayKey: "fullName",
         key: "userId",
+        min: 0,
+        minMessage: "Please select a reporter!",
         options: [
           { userId: -20, fullName: "Please Select an Reporter!" },
           ...props.participants,

@@ -26,7 +26,7 @@ export default function CreateProjectForm(props) {
   };
 
   let elements = {
-    name: yup.string().required("Required Field!").nullable(),
+    name: yup.string().required("Required Field!").nullable().max(50),
     description: yup.string().required("Required Field"),
   };
 
@@ -107,6 +107,7 @@ export default function CreateProjectForm(props) {
         isValid,
         errors,
         setFieldValue,
+        submitCount,
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>
@@ -119,7 +120,7 @@ export default function CreateProjectForm(props) {
                 value={values.name || ""}
                 onChange={handleChange}
                 isValid={touched.name && !errors.name}
-                isInvalid={touched.name && !!errors.name}
+                isInvalid={(touched.name || submitCount > 0) && !!errors.name}
                 row={3}
               />
               <Form.Control.Feedback type="invalid">
@@ -135,7 +136,10 @@ export default function CreateProjectForm(props) {
                 value={values && values.description ? values.description : null}
                 onChange={handleChange}
                 isValid={touched.description && !errors.description}
-                isInvalid={!!errors.description}
+                isInvalid={
+                  (touched.description || submitCount > 0) &&
+                  !!errors.description
+                }
               />
               <Form.Control.Feedback type="invalid">
                 {errors.description}
@@ -166,7 +170,11 @@ export default function CreateProjectForm(props) {
                         touched["participantEmail" + key.toString()] &&
                         !errors["participantEmail" + key.toString()]
                       }
-                      isInvalid={!!errors["participantEmail" + key.toString()]}
+                      isInvalid={
+                        (touched["participantEmail" + key.toString()] ||
+                          submitCount > 0) &&
+                        !!errors["participantEmail" + key.toString()]
+                      }
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors["participantEmail" + key.toString()]}
@@ -186,7 +194,10 @@ export default function CreateProjectForm(props) {
                         touched["role" + key.toString()] &&
                         !errors["role" + key.toString()]
                       }
-                      isInvalid={!!errors["role" + key.toString()]}
+                      isInvalid={
+                        (touched["role" + key.toString()] || submitCount > 0) &&
+                        !!errors["role" + key.toString()]
+                      }
                     >
                       <option value={-1}>Select Role...</option>
                       <option value={0}>Team Member</option>

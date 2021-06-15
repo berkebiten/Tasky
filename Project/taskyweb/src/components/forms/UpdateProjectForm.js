@@ -3,20 +3,20 @@ import { withRouter } from "react-router-dom";
 import { CustomForm } from "./CustomForms/CustomForm";
 
 function UpdateProjectForm(props) {
-    const formElements = [
-        {
-          label: "Project Name",
-          control: { type: "text", name: "name", required:true },
-        },
-        {
-          label: "Project Description",
-          control: {
-            required:true,
-            type: "textarea",
-            name: "description",
-          },
-        }
-      ];
+  const formElements = [
+    {
+      label: "Project Name",
+      control: { type: "text", name: "name", required: true, maxLen: 50 },
+    },
+    {
+      label: "Project Description",
+      control: {
+        required: true,
+        type: "textarea",
+        name: "description",
+      },
+    },
+  ];
 
   return (
     <div>
