@@ -269,7 +269,7 @@ namespace TaskyService.Controllers
 
             try
             {
-                
+
                 if (user.Id != assignee.Id)
                 {
                     if (assignee.SendEmail)
@@ -401,7 +401,7 @@ namespace TaskyService.Controllers
             {
                 _context.SaveChanges();
                 _fileContext.SaveChanges();
-                
+
 
                 string projectName = _projectContext.Project.Find(task.ProjectId).Name;
 
@@ -467,21 +467,7 @@ namespace TaskyService.Controllers
             return Ok(new { isSuccessful = true, message = "Task is Created Successfuly." });
         }
 
-        [HttpDelete]
-        [Route("Delete/{id}")]
-        public ActionResult DeleteTask(Guid id)
-        {
-            var project = _context.Task.Find(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
 
-            _context.Task.Remove(project);
-            _context.SaveChanges();
-
-            return NoContent();
-        }
 
         [HttpPost]
         [Route("GetMyTasks")]

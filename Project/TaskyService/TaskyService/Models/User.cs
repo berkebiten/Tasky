@@ -14,7 +14,6 @@ namespace TaskyService.Models
         public string Email { get; set; }
         public string ProfileImage { get; set; }
         public bool ActivationStatus { get; set; }
-        public bool Status { get; set; }
         public DateTime RegistrationDate { get; set; }
         public string FirebaseToken { get; set; }
         public bool SendEmail { get; set; }

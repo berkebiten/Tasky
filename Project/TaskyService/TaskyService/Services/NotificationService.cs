@@ -76,6 +76,24 @@ namespace TaskyService.Services
             MobileScreen = "PROJECT"
         };
 
+        public static Notification PROJECT_DELETED = new()
+        {
+            Title = "Project Deleted",
+            Body = "Project: {0} is deleted.",
+            IsRead = false,
+            WebUrl = "projects",
+            MobileScreen = "PROJECT"
+        };
+
+        public static Notification TASK_DELETED = new()
+        {
+            Title = "Task Deleted",
+            Body = "Task: {0} is deleted.",
+            IsRead = false,
+            WebUrl = "projects",
+            MobileScreen = "PROJECT"
+        };
+
         public static Notification REMOVED = new()
         {
             Title = "Removed from Project",

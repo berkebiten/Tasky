@@ -17,7 +17,6 @@ namespace TaskyService.Models
         public string Description { get; set; }
         public string Project_Title { get; set; }
         public Int16 Status { get; set; }
-        public Int16 Priority { get; set; }
         public string AssigneeFirstName { get; set; }
         public string AssigneeLastName { get; set; }
         public string ReporterFirstName { get; set; }

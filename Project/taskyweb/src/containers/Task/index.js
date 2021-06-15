@@ -24,7 +24,7 @@ import {
   GET_TASK_TIMELINE,
   UPLOAD_TASK_FILE,
   UPDATE_TASK_STATUS_SERVICE,
-  UPDATE_TASK_SERVICE,
+  UPDATE_TASK_SERVICE
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import { toast } from "react-toastify";
@@ -211,6 +211,8 @@ export default class Task extends Component {
     });
   };
 
+  
+
   createDetail = () => {
     if (!this.state.task || !this.state.taskTimeline) {
       return (
@@ -249,19 +251,25 @@ export default class Task extends Component {
             <RiArrowGoBackFill /> Go to Project Task List
           </Button>
           {this.state.userRole !== "Watcher" && this.state.task.projectStatus && (
-            <Button
-              onClick={() => this.setState({ updateTask: true })}
-              className="new-task ml-2"
-              variant="dark"
-            >
-              <EditIcon /> Update Task
-            </Button>
+            <>
+              <Button
+                onClick={() => this.setState({ updateTask: true })}
+                className="new-task ml-2"
+                variant="dark"
+              >
+                <EditIcon /> Update Task
+              </Button>
+            </>
           )}
         </Row>
         <Card className="ml-5 task-detail-card" style={{ width: "91%" }}>
           <Card.Header>
             <Row className="mx-auto">
-              <Col md={1} style={{fontSize: 14}} className={"state-bar-" + stateName}>
+              <Col
+                md={1}
+                style={{ fontSize: 14 }}
+                className={"state-bar-" + stateName}
+              >
                 <p className="centered">{stateName.toUpperCase()}</p>
               </Col>
               <Col className="task-d-us" md={1}>
@@ -333,9 +341,9 @@ export default class Task extends Component {
 
   renderFile = (file) => {
     return (
-      <a style={{"display":"inline-block"}} href={file.data} download>
+      <a style={{ display: "inline-block" }} href={file.data} download>
         <Card className="react-kanban-card stretched-link">
-          <Card.Title >{TextHelper.getSmallText(file.name, 15)}</Card.Title>
+          <Card.Title>{TextHelper.getSmallText(file.name, 15)}</Card.Title>
           <Card.Body className="file-card row">
             <Icon name="file" size="huge" />
           </Card.Body>
@@ -536,7 +544,10 @@ export default class Task extends Component {
   createTimeLine = () => {
     if (this.state.taskTimeline) {
       return (
-        <Card.Body className="ml-2" style={{"overflow-y":"auto","max-height":"500px"}}>
+        <Card.Body
+          className="ml-2"
+          style={{ "overflow-y": "auto", "max-height": "500px" }}
+        >
           <Timeline className="custom-timeline">
             {this.state.taskTimeline.map((item, index) => {
               let statusTitle = " " + item.newStatusTitle.toString();
@@ -843,11 +854,7 @@ export default class Task extends Component {
           <Col className="project-detail-left" md={2}>
             <SideBar
               menuItems={menuItems}
-              title={
-                this.state.task
-                  ? this.state.task.title
-                  : "Task Detail"
-              }
+              title={this.state.task ? this.state.task.title : "Task Detail"}
               activePage={this.state.activePage}
               onMenuItemSelect={this.onMenuItemSelect}
             />

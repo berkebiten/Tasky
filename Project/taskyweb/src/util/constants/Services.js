@@ -37,3 +37,4 @@ export const DECLINE_INVITATION = "/Projects/Decline/";
 export const RESET_PASSWORD_MAIL = "/Users/SendResetPasswordUrl/"
 export const RESET_PASSWORD = "/Users/ResetPassword/"
 export const UPDATE_PROJECT_STATUS = "/Projects/UpdateProjectStatus/"
+export const DELETE_PROJECT = "/Projects/DeleteProject/";

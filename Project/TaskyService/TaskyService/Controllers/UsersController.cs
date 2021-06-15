@@ -140,7 +140,6 @@ namespace TaskyService.Controllers
 
         {
             user.ActivationStatus = false;
-            user.Status = true;
             user.RegistrationDate = DateTime.Now.Date;
             user.Password = BC.HashPassword(user.Password);
             _context.User.Add(user);

@@ -367,6 +367,67 @@ namespace TaskyService.Controllers
         }
 
         [HttpDelete]
+        [Route("DeleteProject/{id}")]
+        public async Task<IActionResult> DeleteProject(Guid id)
+        {
+            var project = await _context.Project.FindAsync(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var participants = _participantContext.ProjectParticipant.ToList().Where(item => item.ProjectId == id && item.Status == true);
+                var projectOwner = _userContext.User.Find(project.ProjectManagerId);
+                foreach (var part in participants)
+                {
+                    var user = _userContext.User.Find(part.UserId);
+
+                    if (user != null && user.SendEmail)
+                    {
+                        #region send mail to removed user
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", user.FirstName);
+                        ht.Add("[PROJECTNAME]", project.Name);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("project_closed", user.Email, "", ht);
+                        #endregion
+                    }
+
+                    if (user != null && user.SendNotification)
+                    {
+                        #region send notification to removed user
+                        var notification = new Notification
+                        {
+                            DataId = projectOwner.Id,
+                            Title = String.Format(NotificationService.PROJECT_DELETED.Title),
+                            Body = String.Format(NotificationService.PROJECT_DELETED.Body, project.Name),
+                            UserId = user.Id,
+                            WebUrl = String.Format(NotificationService.PROJECT_DELETED.WebUrl, "projects"),
+                            MobileScreen = "PROJECT",
+                            RegDate = DateTime.Now,
+                        };
+
+                        _notificationContext.Add(notification);
+                        _notificationContext.SaveChanges();
+                        #endregion
+                    }
+                }
+
+                _context.Remove(project);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Ok(new { isSuccessful = true, message = "Project Deleted." });
+        }
+
+        [HttpDelete]
         [Route("RemoveParticipant/{participantId}")]
         public IActionResult InviteParticipant(Guid participantId)
         {
@@ -516,21 +577,6 @@ namespace TaskyService.Controllers
 
         }
 
-        [HttpDelete]
-        [Route("Delete/{id}")]
-        public async Task<IActionResult> DeleteProject(Guid id)
-        {
-            var project = await _context.Project.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            _context.Project.Remove(project);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
 
         [HttpPost]
         [Route("Accept/{id}")]

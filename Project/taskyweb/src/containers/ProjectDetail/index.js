@@ -41,7 +41,8 @@ import {
   UPLOAD_PROJECT_FILE,
   REMOVE_PARTICIPANT,
   LEAVE_PROJECT,
-  UPDATE_PROJECT_STATUS
+  UPDATE_PROJECT_STATUS,
+  DELETE_PROJECT
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -463,6 +464,25 @@ export default class ProjectDetail extends Component {
     );
   };
 
+  deleteProject = async () => {
+    await ServiceHelper.serviceHandler(
+      DELETE_PROJECT + this.state.projectId,
+      ServiceHelper.createOptionsJson(null, "DELETE")
+    ).then((response) => {
+      if (response && response.isSuccessful) {
+        let text = "Project is Deleted.";
+        toast(text, {
+          type: "success",
+        });
+        this.props.history.push("/projects");
+      } else {
+        toast(response ? response.message : "", {
+          type: "error",
+        });
+      }
+    });
+  };
+
   changeProjectStatus = async (bool) => {
     let body = {
       ...this.state.project,
@@ -665,6 +685,29 @@ export default class ProjectDetail extends Component {
                 onClick={() => this.setState({ updateProject: true })}
               >
                 <EditIcon className="pr-icons" /> Update Project
+              </Button>
+
+              <Button
+                className="ml-2 delete-project btn-w-icon"
+                variant="dark"
+                onClick={() =>
+                  confirmAlert({
+                    title: "Warning!",
+                    message: "Are you sure to delete the project permanently?",
+                    buttons: [
+                      {
+                        label: "Yes",
+                        onClick: () => this.deleteProject(),
+                      },
+                      {
+                        label: "No",
+                        onClick: () => null,
+                      },
+                    ],
+                  })
+                }
+              >
+                <CancelIcon className="pr-icons" /> Delete Project
               </Button>
             </>
           )}
@@ -985,21 +1028,21 @@ export default class ProjectDetail extends Component {
 
   renderFile = (file) => {
     return (
-        <a style={{"display":"inline-block"}} href={file.data} download>
-          <Card className="react-kanban-card stretched-link">
-            <Card.Title>{TextHelper.getSmallText(file.name, 15)}</Card.Title>
-            <Card.Body className="file-card row">
-              <Icon name="file" size="huge" />
-            </Card.Body>
-            <Card.Footer className="rkc-footer text-muted">
-              <Icon name="user" />
-              {file.userFullName}
-              <br />
-              <Icon name="calendar check outline" />
-              {moment(file.date).format("DD/MM/YYYY")}
-            </Card.Footer>
-          </Card>
-        </a>
+      <a style={{ display: "inline-block" }} href={file.data} download>
+        <Card className="react-kanban-card stretched-link">
+          <Card.Title>{TextHelper.getSmallText(file.name, 15)}</Card.Title>
+          <Card.Body className="file-card row">
+            <Icon name="file" size="huge" />
+          </Card.Body>
+          <Card.Footer className="rkc-footer text-muted">
+            <Icon name="user" />
+            {file.userFullName}
+            <br />
+            <Icon name="calendar check outline" />
+            {moment(file.date).format("DD/MM/YYYY")}
+          </Card.Footer>
+        </Card>
+      </a>
     );
   };
 
