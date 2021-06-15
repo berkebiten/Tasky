@@ -1,74 +1,74 @@
-import { Platform, StyleSheet } from "react-native";
-import { Fonts, Metrics, Colors } from "../../res/styles";
+import {Platform, StyleSheet} from 'react-native';
+import {Fonts, Metrics, Colors} from '../../res/styles';
 
 const styles = StyleSheet.create({
   screenBg: {
     width: Metrics.WIDTH,
-    height: Metrics.HEIGHT
+    height: Metrics.HEIGHT,
   },
 
   header: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     height: 56,
     borderBottomWidth: 0,
     ...Platform.select({
       ios: {},
       android: {
-        paddingTop: 10
-      }
+        paddingTop: 10,
+      },
     }),
     elevation: 0,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   left: {
     flex: 0.5,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   backArrow: {
     width: 50,
-    alignItems: "center"
+    alignItems: 'center',
   },
   body: {
     flex: 2,
-    alignItems: "center",
-    backgroundColor: "transparent",
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
 
   right: {
-    flex: 0.5
+    flex: 0.5,
   },
   logostyle: {
-    alignSelf: "center",
+    alignSelf: 'center',
     width: Metrics.WIDTH * 0.6,
     height: Metrics.WIDTH * 0.5,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   container: {
-    alignItems: "center"
+    alignItems: 'center',
   },
 
   buttondialogsignup: {
     backgroundColor: Colors.loginGreen,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 20,
     borderRadius: 40,
     width: Metrics.WIDTH * 0.8,
     height: Metrics.HEIGHT * 0.07,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
 
   formContainer: {
     marginTop: 20,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: Metrics.WIDTH * 0.8,
   },
 
   itememail: {
-    alignSelf: "center",
+    alignSelf: 'center',
     height: Metrics.HEIGHT * 0.08,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
 
   input: {
@@ -77,27 +77,52 @@ const styles = StyleSheet.create({
   },
 
   buttonSignUp: {
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 15,
     fontFamily: Fonts.type.SFUIDisplaySemibold,
-    color: "white"
+    color: 'white',
   },
   buttontext: {
     fontFamily: Fonts.type.SFUIDisplayRegular,
-    color: "white",
+    color: 'white',
     fontSize: 17,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
 
   bottomTxtBg: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: Metrics.WIDTH,
-    justifyContent: "center",
-    marginTop: 20
+    justifyContent: 'center',
+    marginTop: 20,
   },
 
   signUpTxt: {
-    paddingLeft: Metrics.WIDTH * 0.01
-  }
+    paddingLeft: Metrics.WIDTH * 0.01,
+  },
+
+  errorTxt: {
+    margin: 5,
+    color: 'red',
+  },
+
+  inputFieldSec: {
+    width: Metrics.WIDTH,
+    height: Metrics.HEIGHT * 0.15,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: Metrics.HEIGHT * 0.2,
+  },
+  textInput: {
+    backgroundColor: Colors.snow,
+    borderRadius: 5,
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
+    alignSelf: 'center',
+    width: Metrics.WIDTH * 0.84,
+    fontSize: Fonts.moderateScale(14),
+  },
 });
 export default styles;

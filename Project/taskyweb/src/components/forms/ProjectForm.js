@@ -20,6 +20,7 @@ function ProjectForm(props) {
       control: {
         type: "file",
         name: "file",
+        multiple: true
       },
     },
   ];

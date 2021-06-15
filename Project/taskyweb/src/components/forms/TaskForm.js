@@ -61,6 +61,7 @@ function TaskForm(props) {
       control: {
         type: "file",
         name: "file",
+        multiple: true,
         isHidden: props.hideFilePicker ? props.hideFilePicker : false,
       },
     },
