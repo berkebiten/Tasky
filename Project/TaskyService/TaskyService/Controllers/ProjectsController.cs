@@ -113,48 +113,71 @@ namespace TaskyService.Controllers
             {
                 return BadRequest();
             }
+            _context.Entry(project).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            var oldProject = _context.Project.Find(project.Id);
+            return Ok(new { isSuccessfull = true });
+        }
+
+        [HttpPut]
+        [Route("UpdateProjectStatus/{id}")]
+        public async Task<IActionResult> UpdateProjectStatus(Guid id, Project project)
+        {
+            if (id != project.Id)
+            {
+                return BadRequest();
+            }
 
             _context.Entry(project).State = EntityState.Modified;
 
             try
             {
-                if (oldProject.Status == true && project.Status == false)
+                var participants = _participantContext.ProjectParticipant.ToList().Where(item => item.ProjectId == project.Id && item.Role != 1 && item.Status == true);
+
+                foreach (var part in participants)
                 {
-                    var participants = _participantContext.ProjectParticipant.ToList().Where(item => item.ProjectId == project.Id && item.Role != 1 && item.Status == true);
+                    var user = _userContext.User.Find(part.UserId);
 
-                    foreach (var part in participants)
+                    if (user.SendEmail)
                     {
-                        var user = _userContext.User.Find(part.UserId);
+                        #region send email to participant
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", user.FirstName);
+                        ht.Add("[PROJECTNAME]", project.Name);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("project_closed", user.Email, "", ht);
+                        #endregion
+                    }
 
-                        if (user.SendEmail)
+                    if (user.SendNotification)
+                    {
+                        #region send notification to participant
+                        var notification = new Notification
                         {
-                            #region send email to participant
-                            Hashtable ht = new Hashtable();
-                            ht.Add("[FIRSTNAME]", "");
-                            ht.Add("[PROJECTNAME]", oldProject.Name);
-                            string response = new MailService(_mailTemplateContext).SendMailFromTemplate("project_closed", user.Email, "", ht);
-                            #endregion
-                        }
+                            DataId = project.Id,
+                            Title = String.Format(NotificationService.PROJECT_CLOSED.Title),
+                            Body = String.Format(NotificationService.PROJECT_CLOSED.Body, project.Name),
+                            UserId = user.Id,
+                            WebUrl = String.Format(NotificationService.PROJECT_CLOSED.WebUrl, project.Id),
+                            MobileScreen = "PROJECT",
+                            RegDate = DateTime.Now,
+                        };
 
-                        if (user.SendNotification)
-                        {
-                            #region send notification to participant
-                            var notification = new Notification
-                            {
-                                DataId = oldProject.Id,
-                                Title = String.Format(NotificationService.PROJECT_CLOSED.Title),
-                                Body = String.Format(NotificationService.PROJECT_CLOSED.Body, project.Name),
-                                UserId = user.Id,
-                                WebUrl = String.Format(NotificationService.PROJECT_CLOSED.WebUrl, project.Id),
-                                MobileScreen = "PROJECT",
-                                RegDate = DateTime.Now,
-                            };
-
-                            _notificationContext.Add(notification);
-                            #endregion
-                        }
+                        _notificationContext.Add(notification);
+                        #endregion
                     }
                 }
 
@@ -176,6 +199,8 @@ namespace TaskyService.Controllers
 
             return Ok(new { isSuccessfull = true });
         }
+
+
 
         [HttpPost]
         [Route("Insert")]
@@ -379,7 +404,7 @@ namespace TaskyService.Controllers
                     {
                         DataId = projectOwner.Id,
                         Title = String.Format(NotificationService.REMOVED.Title),
-                        Body = String.Format(NotificationService.REMOVED.Body, projectOwner.FirstName + " " + projectOwner.LastName,project.Name),
+                        Body = String.Format(NotificationService.REMOVED.Body, projectOwner.FirstName + " " + projectOwner.LastName, project.Name),
                         UserId = user.Id,
                         WebUrl = String.Format(NotificationService.REMOVED.WebUrl, "projects"),
                         MobileScreen = "PROJECT",
@@ -601,7 +626,7 @@ namespace TaskyService.Controllers
             _participantContext.ProjectParticipant.Remove(participant);
             _participantContext.SaveChanges();
 
-            
+
             return Ok(new { isSuccessfull = true });
         }
 

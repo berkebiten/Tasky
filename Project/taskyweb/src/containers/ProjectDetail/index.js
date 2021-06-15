@@ -41,6 +41,7 @@ import {
   UPLOAD_PROJECT_FILE,
   REMOVE_PARTICIPANT,
   LEAVE_PROJECT,
+  UPDATE_PROJECT_STATUS
 } from "../../util/constants/Services";
 import CustomModal from "../../components/modals/CustomModal";
 import TaskForm from "../../components/forms/TaskForm";
@@ -468,7 +469,7 @@ export default class ProjectDetail extends Component {
       status: bool,
     };
     await ServiceHelper.serviceHandler(
-      UPDATE_PROJECT + this.state.projectId,
+      UPDATE_PROJECT_STATUS + this.state.projectId,
       ServiceHelper.createOptionsJson(JSON.stringify(body), "PUT")
     ).then((response) => {
       if (response && response.isSuccessfull) {

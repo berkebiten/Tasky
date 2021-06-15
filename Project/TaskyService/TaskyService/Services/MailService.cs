@@ -15,7 +15,7 @@ namespace TaskyService.Services
         private readonly MailboxAddress from = new MailboxAddress("Tasky", "taskydev@gmail.com");
         private readonly string authId = "taskydev@gmail.com";
         private readonly string authPw = "12122012aA";
-        private readonly bool UseTestEmail = true;
+        private readonly bool UseTestEmail = false;
         private readonly string TestEmail = "berkesgs4@gmail.com";
 
         private readonly MailTemplateContext _context;
