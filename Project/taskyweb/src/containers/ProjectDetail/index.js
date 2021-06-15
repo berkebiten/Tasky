@@ -65,9 +65,10 @@ export default class ProjectDetail extends Component {
     super(props);
     this.state = {
       user: SessionHelper.loadUser(),
-      activePage: props.location.state
-        ? props.location.state.activePage
-        : "Overview",
+      activePage:
+        props.location.state && props.location.state.activePage
+          ? props.location.state.activePage
+          : "Overview",
       project: props.location.state ? props.location.state.project : null,
       taskFormVisibility: false,
       projectId:
@@ -142,10 +143,9 @@ export default class ProjectDetail extends Component {
       if (response && response.isSuccessful) {
         let projectParticipants = response.data.participants;
         let invitations = response.data.invitations;
-        let participants = projectParticipants
-          .filter((item) => item.status);
+        let participants = projectParticipants.filter((item) => item.status);
 
-        participants.sort((a, b) => this.compareRoles(a.role, b.role))
+        participants.sort((a, b) => this.compareRoles(a.role, b.role));
         let participantInvitations = projectParticipants.filter(
           (item) => !item.status
         );
@@ -945,33 +945,33 @@ export default class ProjectDetail extends Component {
                   : "invisible";
               return (
                 <Row style={{ "margin-top": "5px" }}>
-                    <Col className="ml-1" md={2}>
-                      <h3>{item.email}</h3>
-                    </Col>
-                    <Col md={1}>
-                      <Button
-                        className={"remove-p " + visibleClass}
-                        onClick={() =>
-                          confirmAlert({
-                            title: "Warning!",
-                            message:
-                              "Are you sure you want to cancel invitation? ",
-                            buttons: [
-                              {
-                                label: "Yes",
-                                onClick: () => this.removeParticipant(item),
-                              },
-                              {
-                                label: "No",
-                                onClick: () => null,
-                              },
-                            ],
-                          })
-                        }
-                      >
-                        <MdRemoveCircle className="re-icon" />
-                      </Button>
-                    </Col>
+                  <Col className="ml-1" md={2}>
+                    <h3>{item.email}</h3>
+                  </Col>
+                  <Col md={1}>
+                    <Button
+                      className={"remove-p " + visibleClass}
+                      onClick={() =>
+                        confirmAlert({
+                          title: "Warning!",
+                          message:
+                            "Are you sure you want to cancel invitation? ",
+                          buttons: [
+                            {
+                              label: "Yes",
+                              onClick: () => this.removeParticipant(item),
+                            },
+                            {
+                              label: "No",
+                              onClick: () => null,
+                            },
+                          ],
+                        })
+                      }
+                    >
+                      <MdRemoveCircle className="re-icon" />
+                    </Button>
+                  </Col>
                   <Col></Col>
                 </Row>
               );
