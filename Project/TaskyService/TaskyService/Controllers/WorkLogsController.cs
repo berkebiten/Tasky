@@ -23,18 +23,21 @@ namespace TaskyService.Controllers
         private readonly TaskContext _taskContext;
         private readonly MailTemplateContext _mailTemplateContext;
         private readonly UserContext _userContext;
+        private readonly NotificationContext _notificationContext;
 
 
         private readonly string directory = Settings.WebDirectory;
 
         public WorkLogsController(WorkLogContext context, ProjectParticipantContext participantContext, 
-            MailTemplateContext mailTemplateContext, TaskContext taskContext, UserContext usercontext)
+            MailTemplateContext mailTemplateContext, TaskContext taskContext, UserContext usercontext,
+            NotificationContext notificationContext)
         {
             _context = context;
             _participantContext = participantContext;
             _mailTemplateContext = mailTemplateContext;
             _taskContext = taskContext;
             _userContext = usercontext;
+            _notificationContext = notificationContext;
         }
 
         [HttpPost]
@@ -136,22 +139,48 @@ namespace TaskyService.Controllers
         {
             workLog.CreatedDate = DateTime.Now.Date;
             workLog.UserId = TokenService.getUserId(token);
-
+            var user = _userContext.User.Find(TokenService.getUserId(token));
+            var task = _taskContext.Task.Find(workLog.TaskId);
+            var reporter = _userContext.User.Find(task.ReporterId);
             _context.Add(workLog);
 
             try
             {
                 await _context.SaveChangesAsync();
 
-                #region send mail to task reporter
-                var task = _taskContext.Task.Find(workLog.TaskId);
-                var reporter = _userContext.User.Find(task.ReporterId);
-                Hashtable ht = new Hashtable();
-                ht.Add("[FIRSTNAME]", reporter.FirstName);
-                ht.Add("[LINK]", directory + "task/" + task.Id);
-                ht.Add("[TASKNAME]", task.Title);
-                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("worklog_entry", reporter.Email, "", ht);
-                #endregion
+                if( task.ReporterId != workLog.UserId)
+                {
+                    if (reporter.SendEmail)
+                    {
+                        #region send mail to task reporter
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", reporter.FirstName);
+                        ht.Add("[LINK]", directory + "task/" + task.Id);
+                        ht.Add("[TASKNAME]", task.Title);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("worklog_entry", reporter.Email, "", ht);
+                        #endregion
+                    }
+
+                    if (reporter.SendNotification)
+                    {
+                        #region send notification to task reporter
+                        var notification = new Notification
+                        {
+                            DataId = workLog.Id,
+                            Title = String.Format(NotificationService.WORK_LOGGED.Title),
+                            Body = String.Format(NotificationService.WORK_LOGGED.Body, user.FirstName + " " + user.LastName ,task.Title),
+                            UserId = task.ReporterId,
+                            WebUrl = String.Format(NotificationService.WORK_LOGGED.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+                        };
+                        _notificationContext.Add(notification);
+                        _notificationContext.SaveChanges();
+                        #endregion
+                    }
+                }
+
+
             }
             catch (DbUpdateException)
             {

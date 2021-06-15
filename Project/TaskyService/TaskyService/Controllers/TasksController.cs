@@ -146,37 +146,80 @@ namespace TaskyService.Controllers
 
             try
             {
-                _context.SaveChanges();
 
-
-                if(user.Id != task.AssigneeId)
+                if (user.Id != task.AssigneeId)
                 {
+                    var assignee = _userContext.User.Find(task.AssigneeId);
 
-                #region send mail to assignee
-                var assignee = _userContext.User.Find(task.AssigneeId);
-                Hashtable ht = new Hashtable();
-                ht.Add("[FIRSTNAME]", assignee.FirstName);
-                ht.Add("[LINK]", directory + "task/" + task.Id);
-                ht.Add("[TASKNAME]", task.Title);
-                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
-                #endregion
+                    if (assignee.SendEmail)
+                    {
+                        #region send mail to assignee
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", assignee.FirstName);
+                        ht.Add("[LINK]", directory + "task/" + task.Id);
+                        ht.Add("[TASKNAME]", task.Title);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
+                        #endregion
+                    }
+                    if (assignee.SendNotification)
+                    {
+                        #region send notification to assignee
+                        var notification = new Notification
+                        {
+                            DataId = id,
+                            Title = NotificationService.TASK_I_UPDATE.Title,
+                            Body = String.Format(NotificationService.TASK_I_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title),
+                            UserId = assignee.Id,
+                            WebUrl = String.Format(NotificationService.TASK_I_UPDATE.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+
+                        };
+                        _notificationContext.Add(notification);
+                        #endregion
+                    }
                 }
 
-                if(user.Id != task.ReporterId)
-                {
-
-                #region send mail to reporter
-                if (task.AssigneeId != task.ReporterId)
+                if (user.Id != task.ReporterId)
                 {
                     var reporter = _userContext.User.Find(task.ReporterId);
-                    Hashtable ht2 = new Hashtable();
-                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
-                    ht2.Add("[LINK]", directory + "task/" + task.Id);
-                    ht2.Add("[TASKNAME]", task.Title);
-                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+
+                    if (reporter.SendEmail)
+                    {
+                        #region send mail to reporter
+                        if (task.AssigneeId != task.ReporterId)
+                        {
+                            Hashtable ht2 = new Hashtable();
+                            ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                            ht2.Add("[LINK]", directory + "task/" + task.Id);
+                            ht2.Add("[TASKNAME]", task.Title);
+                            string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+                        }
+                        #endregion
+                    }
+
+                    if (reporter.SendNotification)
+                    {
+                        #region send notification to assignee
+                        var notification = new Notification
+                        {
+                            DataId = id,
+                            Title = NotificationService.TASK_I_UPDATE.Title,
+                            Body = String.Format(NotificationService.TASK_I_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title),
+                            UserId = reporter.Id,
+                            WebUrl = String.Format(NotificationService.TASK_I_UPDATE.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+
+                        };
+                        _notificationContext.Add(notification);
+                        #endregion
+                    }
                 }
-                }
-                #endregion
+
+                _context.SaveChanges();
+                _notificationContext.SaveChanges();
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -208,20 +251,9 @@ namespace TaskyService.Controllers
             var reporter = _userContext.User.Find(task.ReporterId);
             var user = _userContext.User.Find(TokenService.getUserId(token));
 
-            if(user.Id != reporter.Id)
+            if (user.Id != reporter.Id)
             {
-                var notification = new Notification
-                {
-                    DataId = id,
-                    Title = NotificationService.TASK_UPDATE.Title,
-                    Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
-                    UserId = reporter.Id,
-                    WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
-                    MobileScreen = "TASK",
-                    RegDate = DateTime.Now,
 
-                };
-                _notificationContext.Add(notification);
 
             }
 
@@ -237,33 +269,78 @@ namespace TaskyService.Controllers
 
             try
             {
+                
+                if (user.Id != assignee.Id)
+                {
+                    if (assignee.SendEmail)
+                    {
+                        #region send mail to assignee
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", assignee.FirstName);
+                        ht.Add("[LINK]", directory + "task/" + task.Id);
+                        ht.Add("[TASKNAME]", task.Title);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
+                        #endregion
+                    }
+
+                    if (assignee.SendNotification)
+                    {
+                        #region send notification to assignee
+                        var notification = new Notification
+                        {
+                            DataId = id,
+                            Title = NotificationService.TASK_UPDATE.Title,
+                            Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
+                            UserId = assignee.Id,
+                            WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+
+                        };
+                        _notificationContext.Add(notification);
+                        #endregion
+                    }
+                }
+
+                if (user.Id != reporter.Id)
+                {
+                    if (reporter.SendEmail)
+                    {
+                        #region send mail to reporter
+                        if (task.AssigneeId != task.ReporterId && user.Id != task.ReporterId)
+                        {
+                            Hashtable ht2 = new Hashtable();
+                            ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                            ht2.Add("[LINK]", directory + "task/" + task.Id);
+                            ht2.Add("[TASKNAME]", task.Title);
+                            string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
+                        }
+                        #endregion
+                    }
+
+                    if (assignee.SendNotification)
+                    {
+                        #region send notification to reporter
+                        var notification = new Notification
+                        {
+                            DataId = id,
+                            Title = NotificationService.TASK_UPDATE.Title,
+                            Body = String.Format(NotificationService.TASK_UPDATE.Body, user.FirstName + " " + user.LastName, task.Title, Enum.GetName(typeof(TaskStatuses), task.Status)),
+                            UserId = reporter.Id,
+                            WebUrl = String.Format(NotificationService.TASK_UPDATE.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+
+                        };
+                        _notificationContext.Add(notification);
+                        #endregion
+                    }
+                }
+
                 _context.SaveChanges();
                 _operationContext.SaveChanges();
                 _notificationContext.SaveChanges();
 
-                if(user.Id != assignee.Id)
-                {
-
-                #region send mail to assignee
-                Hashtable ht = new Hashtable();
-                ht.Add("[FIRSTNAME]", assignee.FirstName);
-                ht.Add("[LINK]", directory + "task/" + task.Id);
-                ht.Add("[TASKNAME]", task.Title);
-                string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", assignee.Email, "", ht);
-                #endregion
-                } 
-
-
-                #region send mail to reporter
-                if (task.AssigneeId != task.ReporterId && user.Id != task.ReporterId)
-                {
-                    Hashtable ht2 = new Hashtable();
-                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
-                    ht2.Add("[LINK]", directory + "task/" + task.Id);
-                    ht2.Add("[TASKNAME]", task.Title);
-                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_updated", reporter.Email, "", ht2);
-                }
-                #endregion
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -308,28 +385,6 @@ namespace TaskyService.Controllers
             var assigneeUser = _userContext.User.Find(task.AssigneeId);
             _context.Add(task);
 
-            #region send notification to assignee
-            if(user.Id != task.AssigneeId)
-            {
-                var notification = new Notification
-                {
-                    DataId = task.Id,
-                    Title = String.Format(NotificationService.ASSIGN_TASK.Title, reporter_.FirstName + " " + reporter_.LastName),
-                    Body = String.Format(NotificationService.ASSIGN_TASK.Body, task.Title),
-                    UserId = task.AssigneeId,
-                    WebUrl = String.Format(NotificationService.ASSIGN_TASK.WebUrl, task.Id),
-                    MobileScreen = "TASK",
-                    RegDate = DateTime.Now,
-
-                };
-                if(assigneeUser.FirebaseToken != null)
-                {
-                FirebaseNotificationService.PushNotification(new FBNotification { Body = reporter_.FirstName + " " + reporter_.LastName + " assigned you a task.", Title = "A Task is Assigned To You.", To = assigneeUser.FirebaseToken });
-                }
-                _notificationContext.Add(notification);
-            }
-            #endregion
-
             foreach (File64 file64 in task.Files)
             {
                 var _file = new File();
@@ -346,33 +401,63 @@ namespace TaskyService.Controllers
             {
                 _context.SaveChanges();
                 _fileContext.SaveChanges();
-                _notificationContext.SaveChanges();
+                
 
                 string projectName = _projectContext.Project.Find(task.ProjectId).Name;
 
-                if(task.AssigneeId != reporter_.Id && task.AssigneeId != user.Id)
+                if (task.AssigneeId != user.Id)
                 {
-                    #region send mail to assignee
-                    var assignee = _userContext.User.Find(task.AssigneeId);
-                    Hashtable ht = new Hashtable();
-                    ht.Add("[FIRSTNAME]", assignee.FirstName);
-                    ht.Add("[LINK]", directory + "task/" + task.Id);
-                    ht.Add("[PROJECTNAME]", projectName);
-                    string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_assigned", assignee.Email, "", ht);
+                    if (assigneeUser.SendNotification)
+                    {
+                        #region send notification to assignee
+                        var notification = new Notification
+                        {
+                            DataId = task.Id,
+                            Title = String.Format(NotificationService.ASSIGN_TASK.Title, user.FirstName + " " + user.LastName),
+                            Body = String.Format(NotificationService.ASSIGN_TASK.Body, task.Title),
+                            UserId = task.AssigneeId,
+                            WebUrl = String.Format(NotificationService.ASSIGN_TASK.WebUrl, task.Id),
+                            MobileScreen = "TASK",
+                            RegDate = DateTime.Now,
+
+                        };
+                        if (assigneeUser.FirebaseToken != null)
+                        {
+                            FirebaseNotificationService.PushNotification(new FBNotification { Body = user.FirstName + " " + user.LastName + " assigned you a task.", Title = "A Task is Assigned To You.", To = assigneeUser.FirebaseToken });
+                        }
+                        _notificationContext.Add(notification);
+                        _notificationContext.SaveChanges();
+                        #endregion
+                    }
+
+                    if (assigneeUser.SendEmail)
+                    {
+                        #region send mail to assignee
+                        var assignee = _userContext.User.Find(task.AssigneeId);
+                        Hashtable ht = new Hashtable();
+                        ht.Add("[FIRSTNAME]", assignee.FirstName);
+                        ht.Add("[LINK]", directory + "task/" + task.Id);
+                        ht.Add("[PROJECTNAME]", projectName);
+                        string response = new MailService(_mailTemplateContext).SendMailFromTemplate("task_assigned", assignee.Email, "", ht);
+                        #endregion
+                    }
+                }
+
+                if (task.ReporterId != user.Id && task.ReporterId != task.AssigneeId && reporter_.SendEmail)
+                {
+                    #region send mail to reporter
+                    if (user.Id != task.ReporterId)
+                    {
+                        var reporter = _userContext.User.Find(task.ReporterId);
+                        Hashtable ht2 = new Hashtable();
+                        ht2.Add("[FIRSTNAME]", reporter.FirstName);
+                        ht2.Add("[LINK]", directory + "task/" + task.Id);
+                        ht2.Add("[PROJECTNAME]", projectName);
+                        string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_created", reporter.Email, "", ht2);
+                    }
                     #endregion
                 }
 
-                #region send mail to reporter
-                if (user.Id != task.ReporterId)
-                {
-                    var reporter = _userContext.User.Find(task.ReporterId);
-                    Hashtable ht2 = new Hashtable();
-                    ht2.Add("[FIRSTNAME]", reporter.FirstName);
-                    ht2.Add("[LINK]", directory + "task/" + task.Id);
-                    ht2.Add("[PROJECTNAME]", projectName);
-                    string response2 = new MailService(_mailTemplateContext).SendMailFromTemplate("task_created", reporter.Email, "", ht2);
-                }
-                #endregion
             }
             catch (DbUpdateException)
             {
