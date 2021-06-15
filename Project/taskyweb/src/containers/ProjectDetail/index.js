@@ -65,9 +65,10 @@ export default class ProjectDetail extends Component {
     super(props);
     this.state = {
       user: SessionHelper.loadUser(),
-      activePage: props.location.state
-        ? props.location.state.activePage
-        : "Overview",
+      activePage:
+        props.location.state && props.location.state.activePage
+          ? props.location.state.activePage
+          : "Overview",
       project: props.location.state ? props.location.state.project : null,
       taskFormVisibility: false,
       projectId:

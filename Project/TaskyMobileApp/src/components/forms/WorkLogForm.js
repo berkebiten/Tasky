@@ -16,7 +16,7 @@ let elements = {
     .string()
     .required('Required Field!')
     .matches(
-      '\\d[hHmMdD]',
+      '\\d[hHmMdD]$',
       'Invalid time duration entered. (eg. 1d 2h 30m)',
     ),
   description: yup.string().required('Required Field!'),
