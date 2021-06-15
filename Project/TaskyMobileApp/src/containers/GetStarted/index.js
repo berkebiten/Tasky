@@ -33,7 +33,7 @@ export default class GetStarted extends Component {
             <Right style={styles.right} />
           </Header>
           <Image
-            resizeMode="cover"
+            resizeMode="contain"
             source={images.taskyLogo}
             style={styles.logo10}
           />

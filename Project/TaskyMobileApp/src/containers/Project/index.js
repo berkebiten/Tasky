@@ -84,8 +84,8 @@ export default class Project extends Component {
       GET_PROJECT_PARTICIPANTS_SERVICE + '/' + this.state.project.id,
       ServiceHelper.createOptionsJson(null, 'GET'),
     );
-    if (responseData && responseData.isSuccessful) {
-      this.setState({participants: responseData.data});
+    if (responseData && responseData.isSuccessful && responseData.data.participants) {
+      this.setState({participants: responseData.data.participants});
     }
   };
 
