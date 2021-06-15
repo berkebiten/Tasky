@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import { Pagination } from "semantic-ui-react";
 import { BsSearch, BsPlus } from "react-icons/bs";
-import ProjectForm from "../../components/forms/ProjectForm";
+import CreateProjectForm from "../../components/forms/CreateProjectForm";
 import CustomModal from "../../components/modals/CustomModal";
 import {
   FileHelper,
@@ -63,7 +63,7 @@ export default class Projects extends Component {
     let keyword = event.target.value;
     let projectList;
     if (keyword) {
-      keyword = keyword.toLowerCase()
+      keyword = keyword.toLowerCase();
       projectList = this.state.projects.filter(
         (item) =>
           item.name.toLowerCase().includes(keyword) ||
@@ -98,17 +98,7 @@ export default class Projects extends Component {
     RootViewHelper.stopLoading();
   };
 
-  onSubmit = async (data) => {
-    let participants = [];
-    for (let i = 0; i < Object.keys(data).length / 2; i++) {
-      let participantObj = {
-        email: data["participantEmail" + i.toString()],
-        role: parseInt(data["role" + i.toString()]),
-      };
-      participants.push(participantObj);
-    }
-    let projectObject = this.state.formObject;
-    projectObject.participants = participants;
+  onSubmit = async (projectObject) => {
     await ServiceHelper.serviceHandler(
       INSERT_PROJECT_SERVICE,
       ServiceHelper.createOptionsJson(JSON.stringify(projectObject), "POST")
@@ -127,20 +117,8 @@ export default class Projects extends Component {
         });
       }
     });
-    RootViewHelper.stopLoading();
   };
-
-  submitProjectForm = (data) => {
-    let files = FileHelper.getFiles();
-    let projectObject = {
-      name: data.name,
-      description: data.description,
-      files: files ? files : [],
-    };
-    this.setState({ formObject: projectObject });
-    this.submitParticipants();
-  };
-
+  
   createProjectForm = () => {
     return (
       <CustomModal
@@ -148,27 +126,9 @@ export default class Projects extends Component {
         onClose={() => this.setState({ projectFormVisibility: false })}
         content={
           <div>
-            <ProjectForm
-              handleSubmit={(submit) => (this.submitProjectForm = submit)}
-              onSubmit={this.submitProjectForm}
-              initialValues={null}
+            <CreateProjectForm
+              onSubmit={(data) => this.onSubmit(data)}
             />
-            <InviteParticipantView
-              onSubmit={this.onSubmit}
-              handleSubmit={(submit) => {
-                this.submitParticipants = submit;
-              }}
-            />
-            <Button
-              variant="dark"
-              size="lg"
-              onClick={() => {
-                this.submitProjectForm();
-              }}
-              block
-            >
-              Create
-            </Button>
           </div>
         }
         title={"CREATE NEW PROJECT"}

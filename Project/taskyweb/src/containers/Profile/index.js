@@ -188,7 +188,7 @@ export default class Profile extends Component {
         content={
           <div>
             <EditProfileForm
-              handleSubmit={(submit) => (this.submitEditProfileForm = submit)}
+              // handleSubmit={(submit) => (this.submitEditProfileForm = submit)}
               onSubmit={this.submitEditProfileForm}
               initialValues={
                 this.state.user

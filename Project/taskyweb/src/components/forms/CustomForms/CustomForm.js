@@ -2,18 +2,15 @@ import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import CustomFormElement from "./CustomFormElement";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function CustomForm(props) {
   let formRef;
 
   useEffect(() => {
-    if (props.handleSubmit) {
-      props.handleSubmit(formRef.handleSubmit);
-    }
-    if (props.handleReset) {
-      props.handleReset(() => formRef.resetForm());
-    }
+    // if (props.handleSubmit) {
+    //   props.handleSubmit(formRef.handleSubmit);
+    // }
   }, []);
 
   const getValidation = (type) => {
@@ -68,9 +65,6 @@ export function CustomForm(props) {
         isValid,
         errors,
         setFieldValue,
-        resetForm,
-        setValues,
-        handleReset,
       }) => {
         return (
           <Form noValidate onSubmit={handleSubmit}>

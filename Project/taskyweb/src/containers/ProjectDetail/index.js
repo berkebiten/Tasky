@@ -188,7 +188,6 @@ export default class ProjectDetail extends Component {
         toast("Task Created.", {
           type: "success",
         });
-        this.resetTaskForm();
         FileHelper.clearFiles();
         this.setState({ taskFormVisibility: false });
         this.fetchTaskList();
@@ -216,8 +215,7 @@ export default class ProjectDetail extends Component {
         content={
           <div>
             <TaskForm
-              handleSubmit={(submit) => (this.submitTaskForm = submit)}
-              handleReset={(reset) => (this.resetTaskForm = reset)}
+              // handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={this.submitTaskForm}
               initialValues={null}
               participants={
@@ -430,8 +428,7 @@ export default class ProjectDetail extends Component {
         content={
           <div>
             <WorkLogForm
-              handleSubmit={(submit) => (this.submitTaskForm = submit)}
-              handleReset={(reset) => (this.resetTaskForm = reset)}
+              // handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={null}
               initialValues={{
                 ...workLog,

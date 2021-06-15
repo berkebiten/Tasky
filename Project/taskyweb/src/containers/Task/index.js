@@ -659,8 +659,7 @@ export default class Task extends Component {
         content={
           <div>
             <WorkLogForm
-              handleSubmit={(submit) => (this.submitWorkLogForm = submit)}
-              handleReset={(reset) => (this.resetWorkLogForm = reset)}
+              // handleSubmit={(submit) => (this.submitWorkLogForm = submit)}
               onSubmit={this.submitWorkLogForm}
               initialValues={null}
             />
@@ -690,7 +689,6 @@ export default class Task extends Component {
         toast("Sub-task Created.", {
           type: "success",
         });
-        this.resetTaskForm();
         FileHelper.clearFiles();
         this.setState({ taskFormVisibility: false });
         this.fetchSubtasks();
@@ -710,8 +708,7 @@ export default class Task extends Component {
         content={
           <div>
             <TaskForm
-              handleSubmit={(submit) => (this.submitTaskForm = submit)}
-              handleReset={(reset) => (this.resetTaskForm = reset)}
+              // handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={this.submitTaskForm}
               initialValues={null}
               participants={
@@ -738,22 +735,20 @@ export default class Task extends Component {
         isVisible={this.state.updateTask}
         onClose={() => this.setState({ updateTask: false })}
         content={
-          <div>
-            <TaskForm
-              handleSubmit={(submit) => (this.updateTask = submit)}
-              onSubmit={this.updateTask}
-              initialValues={task}
-              hideFilePicker={true}
-              participants={
-                this.state.projectParticipants &&
-                this.state.projectParticipants.length > 0
-                  ? this.state.projectParticipants.filter(
-                      (participant) => participant.role !== 2
-                    )
-                  : []
-              }
-            />
-          </div>
+          <TaskForm
+            // handleSubmit={(submit) => (this.updateTask = submit)}
+            onSubmit={this.updateTask}
+            initialValues={task}
+            hideFilePicker={true}
+            participants={
+              this.state.projectParticipants &&
+              this.state.projectParticipants.length > 0
+                ? this.state.projectParticipants.filter(
+                    (participant) => participant.role !== 2
+                  )
+                : []
+            }
+          />
         }
         title={"LOG WORK"}
       />
@@ -763,10 +758,10 @@ export default class Task extends Component {
   updateTask = async (data) => {
     let date = moment(data.dueDate).format("YYYY-MM-DD");
     let insertObject = {
-      ...this.state.task,
       ...data,
       dueDate: date,
     };
+    console.log(data);
     await ServiceHelper.serviceHandler(
       UPDATE_TASK_SERVICE + this.state.taskId,
       ServiceHelper.createOptionsJson(JSON.stringify(insertObject), "PUT")
@@ -810,8 +805,7 @@ export default class Task extends Component {
         content={
           <div>
             <WorkLogForm
-              handleSubmit={(submit) => (this.submitTaskForm = submit)}
-              handleReset={(reset) => (this.resetTaskForm = reset)}
+              // handleSubmit={(submit) => (this.submitTaskForm = submit)}
               onSubmit={null}
               initialValues={{
                 ...workLog,
