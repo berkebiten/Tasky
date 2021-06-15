@@ -16,6 +16,8 @@ function EditProfileForm(props) {
       control: {
         type: "file",
         name: "profileImage",
+        accept:"image/*",
+        multiple:false,
       },
     },
   ];

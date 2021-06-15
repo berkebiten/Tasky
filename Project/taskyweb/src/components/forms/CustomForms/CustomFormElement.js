@@ -146,7 +146,8 @@ export default class CustomFormElement extends Component {
           type="file"
           className="file-input"
           onChange={(event) => this.onFileChange(event)}
-          multiple
+          accept={element.control.accept ? element.control.accept : null}
+          multiple={element.control.multiple}
         />
       </Form.Group>
     );
