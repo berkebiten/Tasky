@@ -6,7 +6,7 @@ function ResetPasswordForm(props) {
   const formElements = [
     {
       label: "New Password",
-      control: { type: "password", name: "password" },
+      control: { type: "password", name: "password", required:true },
     },
   ];
 

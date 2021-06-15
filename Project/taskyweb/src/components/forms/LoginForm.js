@@ -5,11 +5,12 @@ function LoginForm(props) {
   const formElements = [
     {
       label: "Email",
-      control: { type: "text", name: "email" },
+      control: { type: "email", name: "email", required: true },
     },
     {
       label: "Password",
       control: {
+        required: true,
         type: "password",
         name: "password",
       },
@@ -21,7 +22,7 @@ function LoginForm(props) {
       formElements={formElements}
       onSubmit={props.onSubmit}
       initialValues={props.initialValues ? props.initialValues : {}}
-      buttonTitle='Login'
+      buttonTitle="Login"
     />
   );
 }

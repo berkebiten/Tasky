@@ -5,13 +5,14 @@ function ProjectForm(props) {
   const formElements = [
     {
       label: "Project Name",
-      control: { type: "text", name: "name" },
+      control: { type: "text", name: "name", required: true },
     },
     {
       label: "Project Description",
       control: {
         type: "textarea",
         name: "description",
+        required: true
       },
     },
     {

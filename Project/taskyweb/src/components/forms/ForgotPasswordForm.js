@@ -5,7 +5,7 @@ function ForgotPasswordForm(props) {
   const formElements = [
     {
       label: "Email",
-      control: { type: "text", name: "email" },
+      control: { type: "text", name: "email", required:true},
     },
   ];
 

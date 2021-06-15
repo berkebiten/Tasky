@@ -111,7 +111,7 @@ export default function CreateProjectForm(props) {
         return (
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group>
-              <Form.Label>Project Name</Form.Label>
+              <Form.Label>Project Name*</Form.Label>
               <Form.Control
                 className="form-input-tasky"
                 type="text"
@@ -127,7 +127,7 @@ export default function CreateProjectForm(props) {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Project Description</Form.Label>
+              <Form.Label>Project Description*</Form.Label>
               <Form.Control
                 className="form-input-tasky"
                 as="textarea"
@@ -155,7 +155,7 @@ export default function CreateProjectForm(props) {
               return (
                 <Form.Row>
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label>Email*</Form.Label>
                     <Form.Control
                       className="form-input-tasky"
                       type="email"
@@ -173,7 +173,7 @@ export default function CreateProjectForm(props) {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group as={Col} md="4">
-                    <Form.Label>Role</Form.Label>
+                    <Form.Label>Role*</Form.Label>
                     <Form.Control
                       name={"role" + key.toString()}
                       value={values["role" + key.toString()] || ""}

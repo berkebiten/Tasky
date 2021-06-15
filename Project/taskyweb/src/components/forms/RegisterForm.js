@@ -5,19 +5,20 @@ function RegisterForm(props) {
   const formElements = [
     {
       label: "First Name",
-      control: { type: "text", name: "firstname" },
+      control: { type: "text", name: "firstname", required:true },
     },
     {
       label: "Last Name",
-      control: { type: "text", name: "lastname" },
+      control: { type: "text", name: "lastname", required:true },
     },
     {
       label: "Email",
-      control: { type: "email", name: "email" },
+      control: { type: "email", name: "email", required:true },
     },
     {
       label: "Password",
       control: {
+        required:true,
         type: "password",
         name: "password",
         validation: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,

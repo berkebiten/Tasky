@@ -6,15 +6,15 @@ function ChangePasswordForm(props) {
   const formElements = [
     {
       label: "Current Password",
-      control: { type: "password", name: "currentPassword" },
+      control: { type: "password", name: "currentPassword", required:true },
     },
     {
       label: "New Password",
-      control: { type: "password", name: "newPassword" },
+      control: { type: "password", name: "newPassword", required:true },
     },
     {
       label: "New Password Again",
-      control: { type: "password", name: "newPasswordAgain" },
+      control: { type: "password", name: "newPasswordAgain", required:true },
     },
   ];
 

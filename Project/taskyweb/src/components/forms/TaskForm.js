@@ -5,13 +5,14 @@ function TaskForm(props) {
   const formElements = [
     {
       label: "Task Title",
-      control: { type: "text", name: "title" },
+      control: { type: "text", name: "title", required: true },
     },
     {
       label: "Task Description",
       control: {
         type: "textarea",
         name: "description",
+        required: true
       },
     },
     {
@@ -20,11 +21,13 @@ function TaskForm(props) {
         onChange: (date) => props.onChangeDueDate(date),
         type: "date",
         name: "dueDate",
+        required: true
       },
     },
     {
       label: "Assignee",
       control: {
+        required: true,
         type: "picker",
         name: "assigneeId",
         displayKey: "fullName",
@@ -38,6 +41,7 @@ function TaskForm(props) {
     {
       label: "Reporter",
       control: {
+        required: true,
         type: "picker",
         name: "reporterId",
         displayKey: "fullName",

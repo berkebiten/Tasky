@@ -2,8 +2,6 @@ import { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { FileHelper } from "../../../util/helpers";
-import FormCheck from "react-bootstrap/FormCheck";
-import moment from "moment";
 
 export default class CustomFormElement extends Component {
   createElement = () => {
@@ -15,7 +13,10 @@ export default class CustomFormElement extends Component {
       case "password":
         return (
           <Form.Group>
-            <Form.Label>{element.label}</Form.Label>
+            <Form.Label>
+              {element.label}
+              {element.control.required ? "*" : ""}
+            </Form.Label>
             <Form.Control
               className="form-input-tasky"
               type={element.control.type}
@@ -27,7 +28,8 @@ export default class CustomFormElement extends Component {
                 !this.props.errors[element.control.name]
               }
               isInvalid={
-                this.props.touched[element.control.name] &&
+                (this.props.touched[element.control.name] ||
+                  this.props.submitCount > 0) &&
                 !!this.props.errors[element.control.name]
               }
               row={3}
@@ -55,19 +57,19 @@ export default class CustomFormElement extends Component {
   createCheckBox = (element, values) => {
     return (
       <>
-      <Form.Group>
-        <Form.Check
-          type="checkbox"
-          name={element.control.name}
-          label = {element.label}
-          checked={
-            values && values[element.control.name]
-              ? values[element.control.name]
-              : false
-          }
-          onChange={this.props.handleChange}
-        />
-      </Form.Group>
+        <Form.Group>
+          <Form.Check
+            type="checkbox"
+            name={element.control.name}
+            label={element.label}
+            checked={
+              values && values[element.control.name]
+                ? values[element.control.name]
+                : false
+            }
+            onChange={this.props.handleChange}
+          />
+        </Form.Group>
       </>
     );
   };
@@ -75,7 +77,10 @@ export default class CustomFormElement extends Component {
   createTextArea = (element, values) => {
     return (
       <Form.Group>
-        <Form.Label>{element.label}</Form.Label>
+        <Form.Label>
+          {element.label}
+          {element.control.required ? "*" : ""}
+        </Form.Label>
         <Form.Control
           className="form-input-tasky"
           as={element.control.type}
@@ -90,7 +95,11 @@ export default class CustomFormElement extends Component {
             this.props.touched[element.control.name] &&
             !this.props.errors[element.control.name]
           }
-          isInvalid={!!this.props.errors[element.control.name]}
+          isInvalid={
+            (this.props.touched[element.control.name] ||
+              this.props.submitCount > 0) &&
+            !!this.props.errors[element.control.name]
+          }
         />
         <Form.Control.Feedback type="invalid">
           {this.props.errors[element.control.name]}
@@ -123,12 +132,15 @@ export default class CustomFormElement extends Component {
   };
 
   createFilePicker = (element) => {
-    if(element.control.isHidden){
-      return null
+    if (element.control.isHidden) {
+      return null;
     }
     return (
       <Form.Group>
-        <Form.Label>{element.label}</Form.Label>
+        <Form.Label>
+          {element.label}
+          {element.control.required ? "*" : ""}
+        </Form.Label>
         <br />
         <input
           type="file"
@@ -159,7 +171,10 @@ export default class CustomFormElement extends Component {
   createPicker = (element, values) => {
     return (
       <Form.Group>
-        <Form.Label>{element.label}</Form.Label>
+        <Form.Label>
+          {element.label}
+          {element.control.required ? "*" : ""}
+        </Form.Label>
         <Form.Control
           as="select"
           custom
@@ -176,7 +191,8 @@ export default class CustomFormElement extends Component {
             !this.props.errors[element.control.name]
           }
           isInvalid={
-            this.props.touched[element.control.name] &&
+            (this.props.touched[element.control.name] ||
+              this.props.submitCount > 0) &&
             !!this.props.errors[element.control.name]
           }
         >
@@ -197,26 +213,34 @@ export default class CustomFormElement extends Component {
 
   createDatePicker = (element, values) => {
     return (
-      <Form.Group>
-        <Form.Label>{element.label}</Form.Label>
-        <br />
-        <DatePicker
-          onChange={(value) =>
-            this.props.setFieldValue(element.control.name, value)
-          }
-          value={
-            values && values[element.control.name]
-              ? values[element.control.name]
-              : null
-          }
-          selected={
-            values && values[element.control.name]
-              ? values[element.control.name]
-              : null
-          }
-          className="date-picker"
-        />
-      </Form.Group>
+      <div>
+        <Form.Group>
+          <Form.Label>
+            {element.label}
+            {element.control.required ? "*" : ""}
+          </Form.Label>
+          <br />
+          <DatePicker
+            onChange={(value) =>
+              this.props.setFieldValue(element.control.name, value)
+            }
+            value={
+              values && values[element.control.name]
+                ? values[element.control.name]
+                : null
+            }
+            selected={
+              values && values[element.control.name]
+                ? values[element.control.name]
+                : null
+            }
+            className="date-picker"
+          />
+        </Form.Group>
+        <Form.Control.Feedback type="invalid">
+          {this.props.errors[element.control.name]}
+        </Form.Control.Feedback>
+      </div>
     );
   };
 

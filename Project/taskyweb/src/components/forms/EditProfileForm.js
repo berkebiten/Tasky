@@ -5,11 +5,11 @@ function EditProfileForm(props) {
   const formElements = [
     {
       label: "First Name",
-      control: { type: "text", name: "firstName" },
+      control: { type: "text", name: "firstName", required:true },
     },
     {
       label: "Last Name",
-      control: { type: "text", name: "lastName" },
+      control: { type: "text", name: "lastName", required:true },
     },
     {
       label: "Profile Picture",

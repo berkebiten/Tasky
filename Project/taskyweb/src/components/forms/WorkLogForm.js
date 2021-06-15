@@ -6,15 +6,17 @@ function TaskForm(props) {
     {
       label: "Duration",
       control: {
+        required:true,
         type: "text",
         name: "duration",
-        validation: "\\d[hHmMdD]",
+        validation: "\\d[hHmMdD]$",
         validationMessage: "Invalid time duration entered. (eg. 1d 2h 30m)",
       },
     },
     {
       label: "Date",
       control: {
+        required:true,
         onChange: (date) => props.onChangeDueDate(date),
         type: "date",
         name: "createdDate",
@@ -23,6 +25,7 @@ function TaskForm(props) {
     {
       label: "Description",
       control: {
+        required:true,
         type: "textarea",
         name: "description",
       },

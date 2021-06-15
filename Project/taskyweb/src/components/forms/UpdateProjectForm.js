@@ -6,11 +6,12 @@ function UpdateProjectForm(props) {
     const formElements = [
         {
           label: "Project Name",
-          control: { type: "text", name: "name" },
+          control: { type: "text", name: "name", required:true },
         },
         {
           label: "Project Description",
           control: {
+            required:true,
             type: "textarea",
             name: "description",
           },
