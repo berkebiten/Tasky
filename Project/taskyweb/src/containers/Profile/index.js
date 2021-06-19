@@ -57,7 +57,9 @@ export default class Profile extends Component {
       ServiceHelper.createOptionsJson(null, "GET")
     ).then((response) => {
       if (response && response.isSuccessful && response.data) {
-        SessionHelper.saveUser(response.data.user);
+        if (this.state.userId === SessionHelper.loadUser().id) {
+          SessionHelper.saveUser(response.data.user);
+        }
         this.setState({
           user: response.data.user,
           stats: response.data.stats,
